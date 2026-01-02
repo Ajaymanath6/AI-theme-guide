@@ -3,5 +3,6 @@ import { DocumentViewComponent } from './components/document-view/document-view.
 
 export const routes: Routes = [
   { path: '', redirectTo: '/document-view', pathMatch: 'full' },
-  { path: 'document-view', component: DocumentViewComponent }
+  { path: 'document-view', component: DocumentViewComponent },
+  { path: '**', redirectTo: '/document-view' }
 ];
