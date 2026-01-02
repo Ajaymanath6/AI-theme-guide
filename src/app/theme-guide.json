@@ -1,0 +1,363 @@
+{
+  "themeColors": {
+    "brandcolor-primary": {
+      "hex": "#008B31",
+      "usage": "Main CTA button background, primary brand color",
+      "utilityClasses": {
+        "background": "bg-brandcolor-primary",
+        "text": "text-brandcolor-primary",
+        "border": "border-brandcolor-primary"
+      },
+      "whenToUse": [
+        "Primary/CTA buttons background",
+        "Main brand color elements",
+        "Active states",
+        "Primary actions"
+      ],
+      "examples": [
+        "Button: bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover",
+        "Active link: text-brandcolor-primary"
+      ]
+    },
+    "brandcolor-primaryhover": {
+      "hex": "#016323",
+      "usage": "Hover state for primary buttons (when background is primary)",
+      "utilityClasses": {
+        "background": "bg-brandcolor-primaryhover",
+        "text": "text-brandcolor-primaryhover",
+        "border": "border-brandcolor-primaryhover"
+      },
+      "whenToUse": [
+        "Primary button hover state",
+        "Hover on elements with primary background"
+      ],
+      "examples": [
+        "Primary button hover: hover:bg-brandcolor-primaryhover",
+        "Full primary button: bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover"
+      ],
+      "logic": "When a button or element has bg-brandcolor-primary, the hover should use bg-brandcolor-primaryhover (darker shade of primary)"
+    },
+    "brandcolor-secondary": {
+      "hex": "#2F55D9",
+      "usage": "Secondary brand color for outline/secondary buttons with border",
+      "utilityClasses": {
+        "background": "bg-brandcolor-secondary",
+        "text": "text-brandcolor-secondary",
+        "border": "border-brandcolor-secondary"
+      },
+      "whenToUse": [
+        "Secondary button background",
+        "Outline button border and text",
+        "Alternative actions"
+      ],
+      "examples": [
+        "Outline button: border-brandcolor-secondary text-brandcolor-secondary bg-transparent hover:bg-brandcolor-secondaryhover",
+        "Secondary button: bg-brandcolor-secondary text-brandcolor-white"
+      ]
+    },
+    "brandcolor-secondaryhover": {
+      "hex": "#EFEFEF",
+      "usage": "Hover state for secondary/outline buttons (NOT bg-brandcolor-fill)",
+      "utilityClasses": {
+        "background": "bg-brandcolor-secondaryhover",
+        "text": "text-brandcolor-secondaryhover",
+        "border": "border-brandcolor-secondaryhover"
+      },
+      "whenToUse": [
+        "Secondary button hover state",
+        "Outline button hover state",
+        "Hover on elements with secondary/outline style"
+      ],
+      "examples": [
+        "Secondary button hover: hover:bg-brandcolor-secondaryhover",
+        "Full outline button: border-brandcolor-secondary text-brandcolor-secondary bg-transparent hover:bg-brandcolor-secondaryhover"
+      ],
+      "logic": "When a button is secondary (outline style with border), the hover should use bg-brandcolor-secondaryhover (#EFEFEF), NOT bg-brandcolor-fill. This is a lighter gray specifically for secondary button hovers."
+    },
+    "brandcolor-textstrong": {
+      "hex": "#001A31",
+      "usage": "Headings, main headings, button text in some cases",
+      "utilityClasses": {
+        "text": "text-brandcolor-textstrong"
+      },
+      "whenToUse": [
+        "All main headings (h1, h2, h3)",
+        "Primary text content",
+        "Button text (when specified)",
+        "Important labels"
+      ],
+      "examples": [
+        "Heading: text-brandcolor-textstrong text-2xl font-bold",
+        "Button text: text-brandcolor-textstrong"
+      ]
+    },
+    "brandcolor-textweak": {
+      "hex": "#5C6166",
+      "usage": "Secondary text, secondary hierarchy after main text",
+      "utilityClasses": {
+        "text": "text-brandcolor-textweak"
+      },
+      "whenToUse": [
+        "Body text",
+        "Secondary descriptions",
+        "Helper text",
+        "Less important information"
+      ],
+      "examples": [
+        "Body text: text-brandcolor-textweak text-sm",
+        "Description: text-brandcolor-textweak"
+      ]
+    },
+    "brandcolor-strokestrong": {
+      "hex": "#737373",
+      "usage": "ALWAYS use for: Sidebar borders, input field borders, button borders, icons",
+      "utilityClasses": {
+        "border": "border-brandcolor-strokestrong",
+        "text": "text-brandcolor-strokestrong"
+      },
+      "whenToUse": [
+        "Sidebar borders (ALWAYS use strokestrong)",
+        "Input field borders (ALWAYS use strokestrong)",
+        "Button borders (ALWAYS use strokestrong)",
+        "Icon colors",
+        "Strong dividers"
+      ],
+      "examples": [
+        "Sidebar: border-brandcolor-strokestrong",
+        "Input: border-brandcolor-strokestrong",
+        "Button border: border-brandcolor-strokestrong",
+        "Icon: text-brandcolor-strokestrong"
+      ],
+      "importantNote": "ALWAYS use strokestrong for sidebar borders, input field borders, and button borders. This is a mandatory rule."
+    },
+    "brandcolor-strokeweak": {
+      "hex": "#C5C5C5",
+      "usage": "ALWAYS use for: Card borders, dividers, and all other light elements",
+      "utilityClasses": {
+        "border": "border-brandcolor-strokeweak"
+      },
+      "whenToUse": [
+        "Card borders (ALWAYS use strokeweak)",
+        "Dividers (ALWAYS use strokeweak)",
+        "Light borders",
+        "Subtle separators",
+        "Secondary button borders (ALL secondary buttons use this border color - exception to button border rule)"
+      ],
+      "examples": [
+        "Card border: border-brandcolor-strokeweak",
+        "Divider: border-t border-brandcolor-strokeweak",
+        "Secondary button border: border-brandcolor-strokeweak"
+      ],
+      "importantNote": "ALWAYS use strokeweak for card borders and dividers. Secondary buttons are an exception and also use strokeweak, but all other button borders use strokestrong."
+    },
+    "brandcolor-fill": {
+      "hex": "#F5F5F5",
+      "usage": "Layout background (NOT for secondary button hover - use brandcolor-secondaryhover instead)",
+      "utilityClasses": {
+        "background": "bg-brandcolor-fill"
+      },
+      "whenToUse": [
+        "Layout backgrounds",
+        "Section backgrounds",
+        "General fill backgrounds"
+      ],
+      "examples": [
+        "Layout bg: bg-brandcolor-fill",
+        "Section background: bg-brandcolor-fill"
+      ],
+      "importantNote": "DO NOT use this for secondary button hover - use brandcolor-secondaryhover (#EFEFEF) instead"
+    },
+    "brandcolor-white": {
+      "hex": "#FFFFFF",
+      "usage": "Background color in general wherever necessary",
+      "utilityClasses": {
+        "background": "bg-brandcolor-white",
+        "text": "text-brandcolor-white"
+      },
+      "whenToUse": [
+        "Card backgrounds",
+        "Modal backgrounds",
+        "Button text on primary buttons",
+        "General white backgrounds"
+      ],
+      "examples": [
+        "Card: bg-brandcolor-white",
+        "Primary button text: text-brandcolor-white"
+      ]
+    }
+  },
+  "componentGuidelines": {
+    "button": {
+      "primary": {
+        "description": "Main CTA button with primary brand color",
+        "classes": "bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover",
+        "logic": "Uses primary brand color as background with white text. On hover, background changes to brandcolor-primaryhover (#016323) which is a darker shade of primary for better visual feedback."
+      },
+      "secondary": {
+        "description": "Secondary button WITH brand secondary color (Type 1)",
+        "classes": "border-brandcolor-strokeweak text-brandcolor-secondary bg-transparent hover:bg-brandcolor-secondaryhover",
+        "logic": "Transparent background with brandcolor-strokeweak border (#DDDDDD) and brandcolor-secondary text (#2F55D9). On hover, background fills with brandcolor-secondaryhover (#EFEFEF). IMPORTANT: Border is ALWAYS brandcolor-strokeweak, NOT brandcolor-secondary.",
+        "whenToUse": "Use when you want the button to have the secondary brand color as text"
+      },
+      "secondary-outline": {
+        "description": "Secondary button WITHOUT brand secondary color (Type 2)",
+        "classes": "border-brandcolor-strokeweak text-brandcolor-textstrong bg-transparent hover:bg-brandcolor-secondaryhover",
+        "logic": "Transparent background with brandcolor-strokeweak border (#DDDDDD) and brandcolor-textstrong text (#001A31). On hover, background fills with brandcolor-secondaryhover (#EFEFEF). IMPORTANT: Border is ALWAYS brandcolor-strokeweak, text is strong text color.",
+        "whenToUse": "Use when you want a secondary button style but with strong text color instead of secondary brand color"
+      },
+      "outline": {
+        "description": "Outline button with strong stroke (alternative outline style)",
+        "classes": "border-brandcolor-strokestrong text-brandcolor-textstrong bg-transparent hover:bg-brandcolor-secondaryhover",
+        "logic": "Transparent with strong stroke border (#737373). Hover uses brandcolor-secondaryhover (#EFEFEF). This is different from secondary buttons which use brandcolor-strokeweak border."
+      }
+    },
+    "input": {
+      "description": "Input fields with proper borders",
+      "classes": "border-brandcolor-strokestrong focus:border-brandcolor-primary focus:ring-brandcolor-primary",
+      "logic": "Strong stroke border by default, changes to primary on focus"
+    },
+    "heading": {
+      "h1": {
+        "classes": "text-brandcolor-textstrong text-3xl font-bold",
+        "logic": "Strong text color for main headings"
+      },
+      "h2": {
+        "classes": "text-brandcolor-textstrong text-2xl font-semibold",
+        "logic": "Strong text color for secondary headings"
+      },
+      "h3": {
+        "classes": "text-brandcolor-textstrong text-xl font-semibold",
+        "logic": "Strong text color for tertiary headings"
+      }
+    },
+    "icon": {
+      "description": "Icons use strong stroke color",
+      "classes": "text-brandcolor-strokestrong",
+      "logic": "Icons should use strong stroke color for visibility"
+    },
+    "divider": {
+      "description": "Dividers use weak stroke",
+      "classes": "border-t border-brandcolor-strokeweak",
+      "logic": "Light dividers for subtle separation"
+    },
+    "sidebar": {
+      "description": "Sidebar borders always use strong stroke",
+      "classes": "border-brandcolor-strokestrong",
+      "logic": "Sidebar borders MUST use strokestrong for visibility and definition"
+    },
+    "card": {
+      "description": "Card borders always use weak stroke",
+      "classes": "border border-brandcolor-strokeweak",
+      "logic": "Card borders MUST use strokeweak for subtle, light appearance"
+    }
+  },
+  "aiInstructions": {
+    "workflow": [
+      "1. Read tailwind.config.js to see available theme colors",
+      "2. Read this JSON file to understand color usage rules",
+      "3. When creating components, follow the guidelines in componentGuidelines",
+      "4. Always use theme colors from tailwind config, never hardcode hex values",
+      "5. Follow the logic explained in each component guideline",
+      "6. Combine utility classes as shown in examples"
+    ],
+    "criticalRules": {
+      "noHexCodes": {
+        "rule": "NEVER use hex color codes (#008B31, #2F55D9, etc.) directly in HTML, CSS, or inline styles",
+        "severity": "CRITICAL",
+        "reason": "All colors must come from theme utility classes for consistency and maintainability"
+      },
+      "noInlineStyles": {
+        "rule": "NEVER use inline styles (style='color: #008B31') or style attributes for colors",
+        "severity": "CRITICAL",
+        "reason": "All styling must use Tailwind utility classes from the theme system"
+      },
+      "noHardcodedTailwindColors": {
+        "rule": "NEVER use hardcoded Tailwind color classes (bg-blue-700, text-gray-900, border-gray-200, etc.)",
+        "severity": "CRITICAL",
+        "reason": "Always use theme utility classes (bg-brandcolor-primary, text-brandcolor-textstrong, etc.)",
+        "examples": {
+          "wrong": [
+            "bg-blue-700",
+            "text-gray-900",
+            "border-gray-200",
+            "bg-white (use bg-brandcolor-white instead)",
+            "text-white (use text-brandcolor-white instead)"
+          ],
+          "correct": [
+            "bg-brandcolor-primary",
+            "text-brandcolor-textstrong",
+            "border-brandcolor-strokeweak",
+            "bg-brandcolor-white",
+            "text-brandcolor-white"
+          ]
+        }
+      },
+      "onlyUtilityClasses": {
+        "rule": "ONLY use utility classes from theme-guide.json and tailwind.config.js",
+        "severity": "CRITICAL",
+        "reason": "This ensures consistency, maintainability, and easy theme updates",
+        "allowed": [
+          "Tailwind utility classes from theme (bg-brandcolor-*, text-brandcolor-*, border-brandcolor-*)",
+          "Standard Tailwind utilities (px-*, py-*, rounded-*, flex, grid, etc.)",
+          "Layout and spacing utilities (container, mx-auto, mb-*, gap-*, etc.)"
+        ],
+        "forbidden": [
+          "Hex codes in any form (#008B31, #2F55D9, etc.)",
+          "Inline styles with colors (style='color: #008B31')",
+          "Hardcoded Tailwind color classes (bg-blue-700, text-gray-900)",
+          "CSS variables in inline styles (style='color: var(--brand-color)')",
+          "Any color values not defined in tailwind.config.js"
+        ]
+      }
+    },
+    "rules": [
+      "CRITICAL: NEVER hardcode hex colors (#008B31, #2F55D9, etc.) - ALWAYS use Tailwind utility classes",
+      "CRITICAL: NEVER use inline styles (style='...') for colors - ALWAYS use utility classes",
+      "CRITICAL: NEVER use hardcoded Tailwind color classes (bg-blue-700, text-gray-900, border-gray-200) - ALWAYS use theme utility classes (bg-brandcolor-primary, text-brandcolor-textstrong, border-brandcolor-strokeweak)",
+      "ONLY use utility classes from theme-guide.json and tailwind.config.js",
+      "Primary buttons: bg-brandcolor-primary + text-brandcolor-white + hover:bg-brandcolor-primaryhover",
+      "Secondary buttons Type 1 (with brand color): border-brandcolor-strokeweak + text-brandcolor-secondary + hover:bg-brandcolor-secondaryhover",
+      "Secondary buttons Type 2 (without brand color): border-brandcolor-strokeweak + text-brandcolor-textstrong + hover:bg-brandcolor-secondaryhover",
+      "IMPORTANT: ALL secondary buttons use border-brandcolor-strokeweak (#DDDDDD) for border, NOT border-brandcolor-secondary",
+      "Headings: Always use text-brandcolor-textstrong",
+      "Body text: Use text-brandcolor-textweak",
+      "BORDER RULES - CRITICAL:",
+      "Sidebar borders: ALWAYS use border-brandcolor-strokestrong",
+      "Input field borders: ALWAYS use border-brandcolor-strokestrong",
+      "Button borders: ALWAYS use border-brandcolor-strokestrong (EXCEPT secondary buttons which use strokeweak)",
+      "Card borders: ALWAYS use border-brandcolor-strokeweak",
+      "Dividers: ALWAYS use border-brandcolor-strokeweak",
+      "Icons: Always use text-brandcolor-strokestrong",
+      "Layout backgrounds: Use bg-brandcolor-fill",
+      "Secondary button hover: ALWAYS use bg-brandcolor-secondaryhover (#EFEFEF), NEVER use bg-brandcolor-fill",
+      "Primary button hover: ALWAYS use bg-brandcolor-primaryhover (#016323)"
+    ],
+    "importantNotes": {
+      "primaryButtonHover": "When bg is brandcolor-primary, hover MUST be bg-brandcolor-primaryhover (#016323)",
+      "secondaryButtonHover": "When button is secondary/outline, hover MUST be bg-brandcolor-secondaryhover (#EFEFEF), NOT bg-brandcolor-fill",
+      "secondaryButtonBorder": "ALL secondary buttons (both types) MUST use border-brandcolor-strokeweak (#C5C5C5), NEVER border-brandcolor-secondary. This is an EXCEPTION to the button border rule.",
+      "secondaryButtonTypes": "Two types of secondary buttons: (1) text-brandcolor-secondary with brandcolor-strokeweak border, (2) text-brandcolor-textstrong with brandcolor-strokeweak border",
+      "borderUsageRules": {
+        "strokestrong": "ALWAYS use for: Sidebar borders, input field borders, button borders (except secondary buttons)",
+        "strokeweak": "ALWAYS use for: Card borders, dividers, and all other light elements. Also used for secondary button borders (exception)."
+      }
+    },
+    "enforcement": {
+      "beforeCreatingComponent": [
+        "Check: Are there any hex codes (#008B31, etc.)? REMOVE them, use utility classes",
+        "Check: Are there any inline styles? REMOVE them, use utility classes",
+        "Check: Are there hardcoded Tailwind colors (bg-blue-700, text-gray-900)? REPLACE with theme classes",
+        "Verify: All colors come from tailwind.config.js theme colors",
+        "Verify: All color usage follows theme-guide.json rules"
+      ],
+      "validationChecklist": {
+        "hexCodes": "NO hex codes anywhere in component",
+        "inlineStyles": "NO inline style attributes for colors",
+        "hardcodedColors": "NO hardcoded Tailwind color classes (bg-blue-*, text-gray-*, etc.)",
+        "themeClassesOnly": "YES - Only theme utility classes (bg-brandcolor-*, text-brandcolor-*, border-brandcolor-*)",
+        "standardUtilities": "YES - Standard Tailwind utilities (px-*, py-*, rounded-*, flex, grid) are allowed"
+      }
+    }
+  }
+}
+

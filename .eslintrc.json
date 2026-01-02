@@ -1,0 +1,22 @@
+{
+  "root": true,
+  "ignorePatterns": ["projects/**/*", "node_modules/**/*", "dist/**/*"],
+  "plugins": ["tailwindcss"],
+  "rules": {
+    "tailwindcss/classnames-order": "warn",
+    "tailwindcss/no-custom-classname": "off",
+    "tailwindcss/no-contradicting-classname": "error"
+  },
+  "overrides": [
+    {
+      "files": ["*.html"],
+      "plugins": ["tailwindcss"],
+      "rules": {
+        "tailwindcss/classnames-order": "warn",
+        "tailwindcss/no-custom-classname": "off",
+        "tailwindcss/no-contradicting-classname": "error"
+      }
+    }
+  ]
+}
+
