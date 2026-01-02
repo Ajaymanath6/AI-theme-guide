@@ -70,6 +70,104 @@
     </div>
   </div>
 
+  <!-- Dropdown UI -->
+  <div class="mb-8">
+    <div class="max-w-xs bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg shadow-lg">
+      <!-- Header -->
+      <div class="px-4 py-3 border-b border-brandcolor-strokeweak">
+        <h3 class="text-brandcolor-textstrong text-base font-semibold">
+          Pick from below
+        </h3>
+      </div>
+
+      <!-- 4 Numbers -->
+      <div class="px-4 py-3">
+        <div class="space-y-2">
+          <div class="text-brandcolor-textstrong text-sm py-2 cursor-pointer hover:bg-brandcolor-fill rounded px-2">
+            1
+          </div>
+          <div class="text-brandcolor-textstrong text-sm py-2 cursor-pointer hover:bg-brandcolor-fill rounded px-2">
+            2
+          </div>
+          <div class="text-brandcolor-textstrong text-sm py-2 cursor-pointer hover:bg-brandcolor-fill rounded px-2">
+            3
+          </div>
+          <div class="text-brandcolor-textstrong text-sm py-2 cursor-pointer hover:bg-brandcolor-fill rounded px-2">
+            4
+          </div>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="border-t border-brandcolor-strokeweak"></div>
+
+      <!-- Buttons -->
+      <div class="px-4 py-3 flex gap-3">
+        <!-- Primary Button -->
+        <button
+          type="button"
+          class="flex-1 bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover px-4 py-2 rounded-lg font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brandcolor-primary focus:ring-offset-2">
+          Primary
+        </button>
+
+        <!-- Secondary Button without Brand (Type 2) -->
+        <button
+          type="button"
+          class="flex-1 border-brandcolor-strokeweak text-brandcolor-textstrong bg-transparent hover:bg-brandcolor-secondaryhover px-4 py-2 rounded-lg font-medium border-2 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brandcolor-strokeweak focus:ring-offset-2">
+          Secondary
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dropdown UI - Recently Used -->
+  <div class="mb-8">
+    <div class="max-w-xs bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg shadow-lg">
+      <!-- Header (No Border) -->
+      <div class="px-4 py-3">
+        <h3 class="text-brandcolor-textstrong text-base font-semibold">
+          Pick from recently used..
+        </h3>
+      </div>
+
+      <!-- Two Account IDs with Checkboxes -->
+      <div class="px-4 py-3">
+        <div class="space-y-2">
+          <!-- Account ID 1 -->
+          <div class="flex items-center justify-between py-2 cursor-pointer hover:bg-brandcolor-fill rounded px-2">
+            <span class="text-brandcolor-textstrong text-sm">ACC-12345</span>
+            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokestrong rounded focus:ring-brandcolor-primary focus:ring-2 cursor-pointer">
+          </div>
+          
+          <!-- Account ID 2 -->
+          <div class="flex items-center justify-between py-2 cursor-pointer hover:bg-brandcolor-fill rounded px-2">
+            <span class="text-brandcolor-textstrong text-sm">ACC-67890</span>
+            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokestrong rounded focus:ring-brandcolor-primary focus:ring-2 cursor-pointer">
+          </div>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="border-t border-brandcolor-strokeweak"></div>
+
+      <!-- Input Field and Button -->
+      <div class="px-4 py-3 space-y-3">
+        <!-- Input Field -->
+        <input
+          type="text"
+          placeholder="clients code"
+          class="w-full px-3 py-2 border border-brandcolor-strokestrong rounded-lg text-brandcolor-textstrong placeholder:text-brandcolor-textweak focus:outline-none focus:border-brandcolor-primary focus:ring-2 focus:ring-brandcolor-primary">
+        
+        <!-- Secondary Button with Brand (Type 1) -->
+        <button
+          type="button"
+          class="w-full border-brandcolor-strokeweak text-brandcolor-secondary bg-transparent hover:bg-brandcolor-secondaryhover px-4 py-2 rounded-lg font-medium border-2 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brandcolor-secondary focus:ring-offset-2">
+          Secondary Button
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Flowbite Modal -->
  
 
