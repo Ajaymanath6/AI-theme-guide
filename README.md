@@ -1,59 +1,104 @@
-# AngularTailwindFlowbiteApp
+# AI Theme Guide - Angular + Tailwind + Flowbite
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.7.
+This project demonstrates a semantic theme system for Angular applications using Tailwind CSS and Flowbite, designed for AI-assisted component development.
 
-## Development server
+## 🎨 Features
 
-To start a local development server, run:
+- **Angular 19.1.6** - Latest Angular framework
+- **Tailwind CSS 3.4.17** - Utility-first CSS framework
+- **Flowbite 2.5.2** - UI component library
+- **Semantic Theme System** - Descriptive color naming for easier development
+- **AI-Ready** - Theme guide JSON for AI-assisted component creation
+
+## 🚀 Quick Start
+
+### Development
 
 ```bash
+npm install
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Navigate to `http://localhost:4200/`
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+### Build
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 📚 Theme System
 
-## Running unit tests
+This project uses a semantic theme system with descriptive color names:
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+- `brandcolor-primary` - Main brand color (#008B31)
+- `brandcolor-textstrong` - Strong text for headings (#001A31)
+- `brandcolor-textweak` - Weak text for body (#5C6166)
+- `brandcolor-strokestrong` - Strong borders for inputs, sidebars (#737373)
+- `brandcolor-strokeweak` - Weak borders for cards, dividers (#C5C5C5)
 
-```bash
-ng test
+See `src/app/theme-guide.json` for complete theme documentation.
+
+## 🤖 AI-Assisted Development
+
+The `theme-guide.json` file provides:
+- Color usage rules
+- Component guidelines
+- Reusable utility classes
+- AI instructions for consistent component creation
+
+## 📖 Documentation
+
+- **Theme Guide**: `src/app/theme-guide.json` - Complete theme system documentation
+- **Reasoning**: `reasoning.md` - Why semantic naming reduces memory load by ~60%
+
+## 🌐 GitHub Pages Deployment
+
+### Automatic Deployment
+
+The project includes a GitHub Actions workflow that automatically deploys to GitHub Pages on every push to `main`.
+
+### Manual Setup
+
+1. Go to your repository settings
+2. Navigate to **Pages** section
+3. Under **Source**, select **GitHub Actions**
+4. The workflow will automatically build and deploy your app
+
+### Access Your Site
+
+Once deployed, your site will be available at:
+```
+https://ajaymanath6.github.io/AI-theme-guide/
 ```
 
-## Running end-to-end tests
+## 📁 Project Structure
 
-For end-to-end (e2e) testing, run:
+```
+src/
+├── app/
+│   ├── components/
+│   │   └── document-view/     # Example component
+│   ├── theme-guide.json       # Theme system documentation
+│   └── app.component.*        # Main app component
+├── styles.scss                # Global styles with Tailwind
+└── index.html                 # Main HTML file
 
-```bash
-ng e2e
+tailwind.config.js             # Tailwind configuration
+theme-guide.json               # Theme system guide
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## 🛠️ Technology Stack
 
-## Additional Resources
+- **Angular**: ^19.1.6
+- **Tailwind CSS**: ^3.4.17
+- **Flowbite**: ^2.5.2
+- **TypeScript**: ~5.7.2
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 📝 License
+
+This project is open source and available for use.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
