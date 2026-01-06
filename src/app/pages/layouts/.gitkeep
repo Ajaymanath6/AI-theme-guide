@@ -1,0 +1,3 @@
+# Page Layouts
+This folder contains layout components that wrap pages.
+Layouts become pages, and pages can have layouts.
