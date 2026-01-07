@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { ProjectHeaderComponent } from './components/project-header/project-header.component';
+
+declare var initFlowbite: () => void;
 
 @Component({
   selector: 'app-projects',
@@ -7,6 +9,10 @@ import { ProjectHeaderComponent } from './components/project-header/project-head
   templateUrl: './projects.component.html',
   styleUrl: './projects.component.scss'
 })
-export class ProjectsComponent {
-
+export class ProjectsComponent implements AfterViewInit {
+  ngAfterViewInit() {
+    if (typeof initFlowbite === 'function') {
+      initFlowbite();
+    }
+  }
 }

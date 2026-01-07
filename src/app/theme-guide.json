@@ -312,19 +312,67 @@
       "description": "Card borders always use weak stroke",
       "classes": "border border-brandcolor-strokeweak",
       "logic": "Card borders MUST use strokeweak for subtle, light appearance"
+    },
+    "dropdown": {
+      "description": "Flowbite dropdown menus - MUST follow proper structure and initialization",
+      "structure": {
+        "required": [
+          "Button and dropdown MUST be wrapped in a relative container: <div class=\"relative\">",
+          "Button MUST have: id=\"dropdown-button-X\" and data-dropdown-toggle=\"dropdown-menu-X\"",
+          "Dropdown div MUST have: id=\"dropdown-menu-X\" matching the data-dropdown-toggle value",
+          "Dropdown MUST have classes: \"hidden z-50\" (hidden by default, high z-index)",
+          "Dropdown positioning: \"absolute top-8 right-0\" (or appropriate positioning)",
+          "Component MUST initialize Flowbite in ngAfterViewInit: initFlowbite()"
+        ],
+        "htmlExample": "<div class=\"relative\"><button id=\"dropdown-button-1\" data-dropdown-toggle=\"dropdown-menu-1\" type=\"button\">...</button><div id=\"dropdown-menu-1\" class=\"hidden z-50 ... absolute top-8 right-0\">...</div></div>"
+      },
+      "initialization": {
+        "required": "Component MUST implement AfterViewInit and call initFlowbite()",
+        "typescriptExample": "ngAfterViewInit() { if (typeof initFlowbite === 'function') { initFlowbite(); } }",
+        "declaration": "declare var initFlowbite: () => void;"
+      },
+      "styling": {
+        "dropdownMenu": "bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg shadow-lg",
+        "menuItems": "text-brandcolor-textstrong hover:bg-brandcolor-fill",
+        "icons": "text-brandcolor-strokestrong"
+      },
+      "criticalRules": [
+        "ALWAYS wrap button and dropdown in <div class=\"relative\"> for proper positioning",
+        "ALWAYS initialize Flowbite in component's ngAfterViewInit() method",
+        "ALWAYS use unique IDs for each dropdown (dropdown-button-1, dropdown-menu-1, etc.)",
+        "ALWAYS match button's data-dropdown-toggle value with dropdown's id",
+        "ALWAYS use z-50 (or higher) for dropdown z-index to ensure it appears above other elements",
+        "Dropdown MUST be hidden by default with 'hidden' class",
+        "Button active state (bg + border) shows when dropdown is open (aria-expanded='true')"
+      ],
+      "commonIssues": {
+        "dropdownNotOpening": [
+          "Check: Is initFlowbite() called in ngAfterViewInit?",
+          "Check: Are button and dropdown wrapped in relative container?",
+          "Check: Do button data-dropdown-toggle and dropdown id match?",
+          "Check: Is Flowbite script loaded in index.html?"
+        ],
+        "dropdownPositioning": [
+          "Ensure parent container has 'relative' class",
+          "Use 'absolute' positioning on dropdown",
+          "Adjust 'top-8 right-0' values as needed for positioning"
+        ]
+      }
     }
   },
   "aiInstructions": {
     "workflow": [
       "1. BEFORE creating ANY component or making ANY styling changes, ALWAYS read this theme-guide.json file first",
       "2. Read tailwind.config.js to see available theme colors and custom configurations",
-      "3. Check componentGuidelines section for specific component rules (buttons, inputs, headings, etc.)",
+      "3. Check componentGuidelines section for specific component rules (buttons, inputs, headings, dropdowns, etc.)",
       "4. Verify button specifications: rounded-md (6px) for all buttons, border-[1.5px] for secondary buttons",
-      "5. When creating components, follow the guidelines in componentGuidelines",
-      "6. Always use theme colors from tailwind config, never hardcode hex values",
-      "7. Follow the logic explained in each component guideline",
-      "8. Combine utility classes as shown in examples",
-      "9. Check requiredClasses arrays in button specifications to ensure all classes are included"
+      "5. If creating dropdowns: Check dropdown section for structure, initialization, and styling requirements",
+      "6. When creating components, follow the guidelines in componentGuidelines",
+      "7. Always use theme colors from tailwind config, never hardcode hex values",
+      "8. Follow the logic explained in each component guideline",
+      "9. Combine utility classes as shown in examples",
+      "10. Check requiredClasses arrays in button specifications to ensure all classes are included",
+      "11. For dropdowns: Ensure proper HTML structure, Flowbite initialization, and unique IDs"
     ],
     "mandatoryFirstStep": {
       "rule": "BEFORE making any component or styling changes, you MUST read theme-guide.json first",

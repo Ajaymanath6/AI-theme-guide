@@ -10,8 +10,11 @@ input[type="text"]:focus {
   font-variation-settings: 'FILL' 1;
 }
 
-// Icon button active state when dropdown is open
-button[data-dropdown-toggle][aria-expanded="true"] {
+// Icon button active state when clicked and dropdown is open
+button[data-dropdown-toggle][aria-expanded="true"],
+button[data-dropdown-toggle]:active,
+button[data-dropdown-toggle]:focus {
   background-color: #F5F5F5 !important; // brandcolor-fill
   border-color: #DDDDDD !important; // brandcolor-strokeweak
+  border-width: 1px !important;
 }
