@@ -474,6 +474,16 @@
           </div>
         </div>
       </div>
+
+      <!-- Pagination -->
+      <div class="mt-8">
+        <app-pagination
+          [currentPage]="currentPage()"
+          [totalItems]="totalItems()"
+          [itemsPerPage]="itemsPerPage()"
+          (pageChange)="onPageChange($event)">
+        </app-pagination>
+      </div>
     </div>
   </main>
 </div>

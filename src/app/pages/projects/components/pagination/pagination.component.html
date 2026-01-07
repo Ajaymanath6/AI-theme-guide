@@ -1,0 +1,70 @@
+<div class="flex items-center justify-between">
+  <!-- Left: Showing count with badges -->
+  <div class="flex items-center gap-2">
+    <span class="text-brandcolor-textweak text-sm">Showing</span>
+    <span class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-full px-3 py-1 text-sm text-brandcolor-textstrong">{{ startIndex }}-{{ endIndex }}</span>
+    <span class="text-brandcolor-textweak text-sm">of</span>
+    <span class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-full px-3 py-1 text-sm text-brandcolor-textstrong">{{ totalItems }}</span>
+    <span class="text-brandcolor-textweak text-sm">results</span>
+  </div>
+
+  <!-- Right: Page numbers with arrows -->
+  <div class="flex items-center gap-2">
+    <!-- Previous arrow -->
+    <button 
+      type="button" 
+      (click)="onPrevious()"
+      [disabled]="currentPage() === 1"
+      [class.opacity-50]="currentPage() === 1"
+      [class.cursor-not-allowed]="currentPage() === 1"
+      class="p-2 text-brandcolor-strokestrong hover:bg-brandcolor-fill rounded-lg disabled:pointer-events-none">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+    </button>
+
+    <!-- Page number badges -->
+    @for (page of visiblePages; track page) {
+      @if (page === '...') {
+        <span class="text-brandcolor-textweak px-2">...</span>
+      } @else {
+        <button 
+          type="button" 
+          (click)="onPageChange(page)"
+          [class.bg-brandcolor-white]="page === currentPage()"
+          [class.border-brandcolor-strokeweak]="page === currentPage()"
+          [class.text-brandcolor-secondary]="page === currentPage()"
+          [class.rounded-full]="page === currentPage()"
+          [class.w-8]="page === currentPage()"
+          [class.h-8]="page === currentPage()"
+          [class.flex]="page === currentPage()"
+          [class.items-center]="page === currentPage()"
+          [class.justify-center]="page === currentPage()"
+          [class.text-sm]="page === currentPage()"
+          [class.font-medium]="page === currentPage()"
+          [class.text-brandcolor-secondary]="page !== currentPage()"
+          [class.text-sm]="page !== currentPage()"
+          [class.font-medium]="page !== currentPage()"
+          [class.hover:bg-brandcolor-fill]="page !== currentPage()"
+          [class.rounded-lg]="page !== currentPage()"
+          [class.px-2]="page !== currentPage()"
+          [class.py-1]="page !== currentPage()">
+          {{ page }}
+        </button>
+      }
+    }
+
+    <!-- Next arrow -->
+    <button 
+      type="button" 
+      (click)="onNext()"
+      [disabled]="currentPage() === totalPages()"
+      [class.opacity-50]="currentPage() === totalPages()"
+      [class.cursor-not-allowed]="currentPage() === totalPages()"
+      class="p-2 text-brandcolor-strokestrong hover:bg-brandcolor-fill rounded-lg disabled:pointer-events-none">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+      </svg>
+    </button>
+  </div>
+</div>
