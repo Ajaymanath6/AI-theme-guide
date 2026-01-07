@@ -1,0 +1,17 @@
+// Override any default input focus styles
+input[type="text"]:focus {
+  border-color: #001A31 !important; // brandcolor-textstrong
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+// Material Symbols filled icon
+.material-symbols-filled {
+  font-variation-settings: 'FILL' 1;
+}
+
+// Icon button active state when dropdown is open
+button[data-dropdown-toggle][aria-expanded="true"] {
+  background-color: #F5F5F5 !important; // brandcolor-fill
+  border-color: #DDDDDD !important; // brandcolor-strokeweak
+}

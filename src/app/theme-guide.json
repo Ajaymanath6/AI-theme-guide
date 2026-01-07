@@ -188,33 +188,68 @@
   },
   "componentGuidelines": {
     "button": {
+      "cornerRadius": {
+        "value": "6px",
+        "tailwindClass": "rounded-md",
+        "description": "ALL buttons (primary and secondary) MUST have 6px corner radius. Use rounded-md utility class."
+      },
+      "secondaryBorderWidth": {
+        "value": "1.5px",
+        "tailwindClass": "border-[1.5px]",
+        "description": "ALL secondary buttons (both types) MUST have 1.5px border width. Use border-[1.5px] utility class."
+      },
       "primary": {
         "description": "Main CTA button with primary brand color",
-        "classes": "bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover",
-        "logic": "Uses primary brand color as background with white text. On hover, background changes to brandcolor-primaryhover (#016323) which is a darker shade of primary for better visual feedback."
+        "classes": "bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover rounded-md",
+        "logic": "Uses primary brand color as background with white text. On hover, background changes to brandcolor-primaryhover (#016323) which is a darker shade of primary for better visual feedback. ALWAYS includes rounded-md (6px corner radius).",
+        "requiredClasses": ["bg-brandcolor-primary", "text-brandcolor-white", "hover:bg-brandcolor-primaryhover", "rounded-md"]
       },
       "secondary": {
         "description": "Secondary button WITH brand secondary color (Type 1)",
-        "classes": "border-brandcolor-strokeweak text-brandcolor-secondary bg-transparent hover:bg-brandcolor-secondaryhover",
-        "logic": "Transparent background with brandcolor-strokeweak border (#DDDDDD) and brandcolor-secondary text (#2F55D9). On hover, background fills with brandcolor-secondaryhover (#EFEFEF). IMPORTANT: Border is ALWAYS brandcolor-strokeweak, NOT brandcolor-secondary.",
-        "whenToUse": "Use when you want the button to have the secondary brand color as text"
+        "classes": "border-[1.5px] border-brandcolor-strokeweak text-brandcolor-secondary bg-transparent hover:bg-brandcolor-secondaryhover rounded-md",
+        "logic": "Transparent background with brandcolor-strokeweak border (#DDDDDD) at 1.5px width and brandcolor-secondary text (#2F55D9). On hover, background fills with brandcolor-secondaryhover (#EFEFEF). IMPORTANT: Border is ALWAYS brandcolor-strokeweak at 1.5px width, NOT brandcolor-secondary. ALWAYS includes rounded-md (6px corner radius).",
+        "whenToUse": "Use when you want the button to have the secondary brand color as text",
+        "requiredClasses": ["border-[1.5px]", "border-brandcolor-strokeweak", "text-brandcolor-secondary", "bg-transparent", "hover:bg-brandcolor-secondaryhover", "rounded-md"]
       },
       "secondary-outline": {
         "description": "Secondary button WITHOUT brand secondary color (Type 2)",
-        "classes": "border-brandcolor-strokeweak text-brandcolor-textstrong bg-transparent hover:bg-brandcolor-secondaryhover",
-        "logic": "Transparent background with brandcolor-strokeweak border (#DDDDDD) and brandcolor-textstrong text (#001A31). On hover, background fills with brandcolor-secondaryhover (#EFEFEF). IMPORTANT: Border is ALWAYS brandcolor-strokeweak, text is strong text color.",
-        "whenToUse": "Use when you want a secondary button style but with strong text color instead of secondary brand color"
+        "classes": "border-[1.5px] border-brandcolor-strokeweak text-brandcolor-textstrong bg-transparent hover:bg-brandcolor-secondaryhover rounded-md",
+        "logic": "Transparent background with brandcolor-strokeweak border (#DDDDDD) at 1.5px width and brandcolor-textstrong text (#001A31). On hover, background fills with brandcolor-secondaryhover (#EFEFEF). IMPORTANT: Border is ALWAYS brandcolor-strokeweak at 1.5px width, text is strong text color. ALWAYS includes rounded-md (6px corner radius).",
+        "whenToUse": "Use when you want a secondary button style but with strong text color instead of secondary brand color",
+        "requiredClasses": ["border-[1.5px]", "border-brandcolor-strokeweak", "text-brandcolor-textstrong", "bg-transparent", "hover:bg-brandcolor-secondaryhover", "rounded-md"]
       },
       "outline": {
         "description": "Outline button with strong stroke (alternative outline style)",
-        "classes": "border-brandcolor-strokestrong text-brandcolor-textstrong bg-transparent hover:bg-brandcolor-secondaryhover",
-        "logic": "Transparent with strong stroke border (#737373). Hover uses brandcolor-secondaryhover (#EFEFEF). This is different from secondary buttons which use brandcolor-strokeweak border."
-      }
+        "classes": "border-[1.5px] border-brandcolor-strokestrong text-brandcolor-textstrong bg-transparent hover:bg-brandcolor-secondaryhover rounded-md",
+        "logic": "Transparent with strong stroke border (#737373) at 1.5px width. Hover uses brandcolor-secondaryhover (#EFEFEF). This is different from secondary buttons which use brandcolor-strokeweak border. ALWAYS includes rounded-md (6px corner radius).",
+        "requiredClasses": ["border-[1.5px]", "border-brandcolor-strokestrong", "text-brandcolor-textstrong", "bg-transparent", "hover:bg-brandcolor-secondaryhover", "rounded-md"]
+      },
+      "criticalRules": [
+        "ALL buttons MUST have rounded-md (6px corner radius) - NO EXCEPTIONS",
+        "ALL secondary buttons (both types) MUST have border-[1.5px] (1.5px border width) - NO EXCEPTIONS",
+        "Primary buttons do NOT have borders, only secondary buttons have borders",
+        "Never use rounded-lg, rounded-xl, or any other border radius for buttons - ALWAYS use rounded-md",
+        "Never use border, border-2, or any other border width for secondary buttons - ALWAYS use border-[1.5px]"
+      ]
     },
     "input": {
-      "description": "Input fields with proper borders",
-      "classes": "border-brandcolor-strokestrong focus:border-brandcolor-primary focus:ring-brandcolor-primary",
-      "logic": "Strong stroke border by default, changes to primary on focus"
+      "description": "Input fields with proper borders - MUST override Flowbite and browser defaults",
+      "classes": "border-brandcolor-strokestrong focus:border-brandcolor-textstrong focus:outline-none focus:ring-0 text-brandcolor-textstrong",
+      "logic": "Strong stroke border by default, changes to text-strong color on focus. No extra border/ring on focus. Text color is always text-strong. CRITICAL: Must use focus:ring-0 to prevent Flowbite's default ring styles. Must use focus:outline-none to prevent browser default outline.",
+      "criticalRules": [
+        "ALWAYS include focus:ring-0 to override Flowbite's default focus ring",
+        "ALWAYS include focus:outline-none to override browser default outline",
+        "NEVER allow Flowbite or browser default focus styles",
+        "Focus border MUST be brandcolor-textstrong (#001A31), NEVER brandcolor-secondary or any other color",
+        "No box-shadow on focus - use focus:ring-0",
+        "If default styles still appear, add !important in component SCSS file"
+      ],
+      "preventDefaults": {
+        "flowbite": "Use focus:ring-0 to prevent Flowbite's default focus ring styles",
+        "browser": "Use focus:outline-none to prevent browser default outline",
+        "tailwind": "Explicitly set focus:border-brandcolor-textstrong to override any Tailwind defaults"
+      },
+      "overrideExample": "If styles still don't work, add to component SCSS: input:focus { border-color: #001A31 !important; outline: none !important; box-shadow: none !important; }"
     },
     "heading": {
       "h1": {
@@ -235,6 +270,34 @@
       "classes": "text-brandcolor-strokestrong",
       "logic": "Icons should use strong stroke color for visibility"
     },
+    "iconButton": {
+      "description": "Icon buttons (buttons with only icons, no text) on white surfaces",
+      "surfaceCondition": "ONLY applies when the icon button is on a white surface (bg-white or bg-brandcolor-white)",
+      "classes": "hover:bg-brandcolor-fill border border-transparent active:border-brandcolor-strokeweak rounded-lg",
+      "logic": "When an icon button sits on a white surface (bg-white or bg-brandcolor-white), on hover: background becomes brandcolor-fill (#F5F5F5). Border is transparent by default. When clicked and dropdown is open: background becomes brandcolor-fill (#F5F5F5) AND border becomes brandcolor-strokeweak (#DDDDDD). The active state (bg + border) persists as long as the dropdown is visible.",
+      "activeStateBehavior": "When dropdown is open (button has aria-expanded='true'), the button shows both background (brandcolor-fill) and border (brandcolor-strokeweak) to indicate it's active. This state persists until dropdown closes.",
+      "whenToUse": [
+        "Icon-only buttons on white backgrounds",
+        "3-dots menu buttons on cards",
+        "Action buttons with only icons",
+        "Buttons on bg-white or bg-brandcolor-white surfaces"
+      ],
+      "examples": [
+        "3-dots menu button on card: hover:bg-brandcolor-fill border border-transparent active:border-brandcolor-strokeweak rounded-lg",
+        "Icon button on white surface: hover:bg-brandcolor-fill border border-transparent active:border-brandcolor-strokeweak"
+      ],
+      "criticalRules": [
+        "ONLY applies to icon buttons on white surfaces (bg-white or bg-brandcolor-white)",
+        "Hover background MUST be bg-brandcolor-fill, NOT bg-brandcolor-secondaryhover",
+        "Hover shows ONLY background color, NO border",
+        "When clicked and dropdown is open: button shows BOTH background (brandcolor-fill) AND border (brandcolor-strokeweak)",
+        "Active state (bg + border) persists as long as dropdown is visible (button has aria-expanded='true')",
+        "Use CSS selector button[aria-expanded='true'] to target active state when dropdown is open",
+        "Default border should be border-transparent or no border",
+        "Always include rounded-lg for rounded corners"
+      ],
+      "implementation": "Add CSS rule: button[data-dropdown-toggle][aria-expanded='true'] { background-color: #F5F5F5 !important; border-color: #DDDDDD !important; }"
+    },
     "divider": {
       "description": "Dividers use weak stroke",
       "classes": "border-t border-brandcolor-strokeweak",
@@ -253,13 +316,21 @@
   },
   "aiInstructions": {
     "workflow": [
-      "1. Read tailwind.config.js to see available theme colors",
-      "2. Read this JSON file to understand color usage rules",
-      "3. When creating components, follow the guidelines in componentGuidelines",
-      "4. Always use theme colors from tailwind config, never hardcode hex values",
-      "5. Follow the logic explained in each component guideline",
-      "6. Combine utility classes as shown in examples"
+      "1. BEFORE creating ANY component or making ANY styling changes, ALWAYS read this theme-guide.json file first",
+      "2. Read tailwind.config.js to see available theme colors and custom configurations",
+      "3. Check componentGuidelines section for specific component rules (buttons, inputs, headings, etc.)",
+      "4. Verify button specifications: rounded-md (6px) for all buttons, border-[1.5px] for secondary buttons",
+      "5. When creating components, follow the guidelines in componentGuidelines",
+      "6. Always use theme colors from tailwind config, never hardcode hex values",
+      "7. Follow the logic explained in each component guideline",
+      "8. Combine utility classes as shown in examples",
+      "9. Check requiredClasses arrays in button specifications to ensure all classes are included"
     ],
+    "mandatoryFirstStep": {
+      "rule": "BEFORE making any component or styling changes, you MUST read theme-guide.json first",
+      "severity": "CRITICAL",
+      "reason": "This file contains all theme specifications, button rules, input rules, and component guidelines that must be followed"
+    },
     "criticalRules": {
       "noHexCodes": {
         "rule": "NEVER use hex color codes (#008B31, #2F55D9, etc.) directly in HTML, CSS, or inline styles",

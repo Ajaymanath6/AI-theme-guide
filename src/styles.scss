@@ -3,3 +3,31 @@
 @tailwind utilities;
 
 /* You can add global styles to this file, and also import other style files */
+
+/* Global Input Focus Overrides - Prevent Flowbite and Browser Defaults */
+/* This ensures ALL input fields follow our theme, regardless of Flowbite or browser defaults */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+textarea:focus,
+select:focus {
+  border-color: #001A31 !important; /* brandcolor-textstrong */
+  outline: none !important;
+  box-shadow: none !important;
+  --tw-ring-offset-shadow: 0 0 #0000 !important;
+  --tw-ring-shadow: 0 0 #0000 !important;
+  ring-width: 0 !important;
+}
+
+/* Prevent Flowbite's default input styles */
+input:focus,
+textarea:focus,
+select:focus {
+  --tw-ring-color: transparent !important;
+  --tw-ring-offset-width: 0px !important;
+  --tw-ring-width: 0px !important;
+}

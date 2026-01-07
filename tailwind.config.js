@@ -17,6 +17,12 @@ module.exports = {
         'brandcolor-strokeweak': '#DDDDDD',
         'brandcolor-fill': '#F5F5F5',
         'brandcolor-white': '#FFFFFF',
+      },
+      borderWidth: {
+        '1.5': '1.5px',
+      },
+      borderRadius: {
+        'button': '6px', // Standard button corner radius
       }
     },
   },

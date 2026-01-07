@@ -4,11 +4,460 @@
   <app-project-header></app-project-header>
 
   <!-- Main Content - Scrollable -->
-  <main class="flex-1 overflow-y-auto bg-brandcolor-fill">
+  <main class="flex-1 overflow-y-auto bg-brandcolor-white">
     <div class="container mx-auto px-4 py-8">
-      <p class="text-brandcolor-textweak">Projects page content goes here.</p>
-      <!-- Projects page specific components will go here -->
-      <!-- Example: <app-project-card></app-project-card> -->
+      <!-- Title and Subtitle -->
+      <div class="mb-6 text-center">
+        <h1 class="text-brandcolor-textstrong text-3xl font-bold mb-2">Projects</h1>
+        <p class="text-brandcolor-textweak">Organise and manage your projects</p>
+      </div>
+
+      <!-- Search Bar and New Project Button -->
+      <div class="flex items-center gap-4 mb-8">
+        <!-- Search Bar -->
+        <div class="flex-1">
+          <input
+            type="text"
+            placeholder="Search projects..."
+            class="w-full px-4 py-2 border border-brandcolor-strokestrong rounded-lg focus:outline-none focus:border-brandcolor-textstrong focus:ring-0 bg-brandcolor-white text-brandcolor-textstrong">
+        </div>
+
+        <!-- New Project Button -->
+        <button
+          type="button"
+          class="bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover px-4 py-2 rounded-md flex items-center gap-2 font-medium">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          <span>New Project</span>
+        </button>
+      </div>
+
+      <!-- Divider with My Projects Label -->
+      <div class="flex items-center gap-2 py-4">
+        <span class="material-symbols-outlined text-brandcolor-strokestrong material-symbols-filled">folder</span>
+        <span class="text-brandcolor-textstrong font-medium">My Projects</span>
+        <div class="flex-1 border-t border-brandcolor-strokestrong ml-2"></div>
+      </div>
+
+      <!-- Projects Cards Grid -->
+      <div class="grid grid-cols-4 gap-4 mt-6">
+        <!-- Card 1 -->
+        <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-4 relative">
+          <!-- Card Header - 3 Dots Icon with Dropdown -->
+          <div class="flex justify-end mb-3">
+            <button id="dropdown-button-1" data-dropdown-toggle="dropdown-menu-1" type="button" class="p-1 hover:bg-brandcolor-fill border border-transparent active:border-brandcolor-strokeweak rounded-lg">
+              <svg class="w-5 h-5 text-brandcolor-strokestrong" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+              </svg>
+            </button>
+            <!-- Dropdown Menu -->
+            <div id="dropdown-menu-1" class="hidden z-10 bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg shadow-lg min-w-[200px] absolute top-8 right-0">
+              <ul class="py-2 text-sm text-brandcolor-textstrong">
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">bookmark</span>
+                    <span>Keep</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">push_pin</span>
+                    <span>Pin</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong material-symbols-filled" style="font-size: 20px;">mode_edit</span>
+                    <span>Edit</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">content_copy</span>
+                    <span>Copy Project ID</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill text-brandcolor-textstrong">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">delete</span>
+                    <span>Delete</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- Card Content - Title and Subtitle -->
+          <div>
+            <h3 class="text-brandcolor-textstrong font-semibold text-lg mb-1">Project Title 1</h3>
+            <p class="text-brandcolor-textweak text-sm">Project subtitle description</p>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-4 relative">
+          <!-- Card Header - 3 Dots Icon with Dropdown -->
+          <div class="flex justify-end mb-3">
+            <button id="dropdown-button-2" data-dropdown-toggle="dropdown-menu-2" type="button" class="p-1 hover:bg-brandcolor-fill border border-transparent active:border-brandcolor-strokeweak rounded-lg">
+              <svg class="w-5 h-5 text-brandcolor-strokestrong" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+              </svg>
+            </button>
+            <!-- Dropdown Menu -->
+            <div id="dropdown-menu-2" class="hidden z-10 bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg shadow-lg min-w-[200px] absolute top-8 right-0">
+              <ul class="py-2 text-sm text-brandcolor-textstrong">
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">bookmark</span>
+                    <span>Keep</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">push_pin</span>
+                    <span>Pin</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong material-symbols-filled" style="font-size: 20px;">mode_edit</span>
+                    <span>Edit</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">content_copy</span>
+                    <span>Copy Project ID</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill text-brandcolor-textstrong">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">delete</span>
+                    <span>Delete</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- Card Content - Title and Subtitle -->
+          <div>
+            <h3 class="text-brandcolor-textstrong font-semibold text-lg mb-1">Project Title 2</h3>
+            <p class="text-brandcolor-textweak text-sm">Project subtitle description</p>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-4 relative">
+          <!-- Card Header - 3 Dots Icon with Dropdown -->
+          <div class="flex justify-end mb-3">
+            <button id="dropdown-button-3" data-dropdown-toggle="dropdown-menu-3" type="button" class="p-1 hover:bg-brandcolor-fill border border-transparent active:border-brandcolor-strokeweak rounded-lg">
+              <svg class="w-5 h-5 text-brandcolor-strokestrong" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+              </svg>
+            </button>
+            <!-- Dropdown Menu -->
+            <div id="dropdown-menu-3" class="hidden z-10 bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg shadow-lg min-w-[200px] absolute top-8 right-0">
+              <ul class="py-2 text-sm text-brandcolor-textstrong">
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">bookmark</span>
+                    <span>Keep</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">push_pin</span>
+                    <span>Pin</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong material-symbols-filled" style="font-size: 20px;">mode_edit</span>
+                    <span>Edit</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">content_copy</span>
+                    <span>Copy Project ID</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill text-brandcolor-textstrong">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">delete</span>
+                    <span>Delete</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- Card Content - Title and Subtitle -->
+          <div>
+            <h3 class="text-brandcolor-textstrong font-semibold text-lg mb-1">Project Title 3</h3>
+            <p class="text-brandcolor-textweak text-sm">Project subtitle description</p>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-4 relative">
+          <!-- Card Header - 3 Dots Icon with Dropdown -->
+          <div class="flex justify-end mb-3">
+            <button id="dropdown-button-4" data-dropdown-toggle="dropdown-menu-4" type="button" class="p-1 hover:bg-brandcolor-fill border border-transparent active:border-brandcolor-strokeweak rounded-lg">
+              <svg class="w-5 h-5 text-brandcolor-strokestrong" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+              </svg>
+            </button>
+            <!-- Dropdown Menu -->
+            <div id="dropdown-menu-4" class="hidden z-10 bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg shadow-lg min-w-[200px] absolute top-8 right-0">
+              <ul class="py-2 text-sm text-brandcolor-textstrong">
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">bookmark</span>
+                    <span>Keep</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">push_pin</span>
+                    <span>Pin</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong material-symbols-filled" style="font-size: 20px;">mode_edit</span>
+                    <span>Edit</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">content_copy</span>
+                    <span>Copy Project ID</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill text-brandcolor-textstrong">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">delete</span>
+                    <span>Delete</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- Card Content - Title and Subtitle -->
+          <div>
+            <h3 class="text-brandcolor-textstrong font-semibold text-lg mb-1">Project Title 4</h3>
+            <p class="text-brandcolor-textweak text-sm">Project subtitle description</p>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-4 relative">
+          <!-- Card Header - 3 Dots Icon with Dropdown -->
+          <div class="flex justify-end mb-3">
+            <button id="dropdown-button-5" data-dropdown-toggle="dropdown-menu-5" type="button" class="p-1 hover:bg-brandcolor-fill border border-transparent active:border-brandcolor-strokeweak rounded-lg">
+              <svg class="w-5 h-5 text-brandcolor-strokestrong" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+              </svg>
+            </button>
+            <!-- Dropdown Menu -->
+            <div id="dropdown-menu-5" class="hidden z-10 bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg shadow-lg min-w-[200px] absolute top-8 right-0">
+              <ul class="py-2 text-sm text-brandcolor-textstrong">
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">bookmark</span>
+                    <span>Keep</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">push_pin</span>
+                    <span>Pin</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong material-symbols-filled" style="font-size: 20px;">mode_edit</span>
+                    <span>Edit</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">content_copy</span>
+                    <span>Copy Project ID</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill text-brandcolor-textstrong">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">delete</span>
+                    <span>Delete</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- Card Content - Title and Subtitle -->
+          <div>
+            <h3 class="text-brandcolor-textstrong font-semibold text-lg mb-1">Project Title 5</h3>
+            <p class="text-brandcolor-textweak text-sm">Project subtitle description</p>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-4 relative">
+          <!-- Card Header - 3 Dots Icon with Dropdown -->
+          <div class="flex justify-end mb-3">
+            <button id="dropdown-button-6" data-dropdown-toggle="dropdown-menu-6" type="button" class="p-1 hover:bg-brandcolor-fill border border-transparent active:border-brandcolor-strokeweak rounded-lg">
+              <svg class="w-5 h-5 text-brandcolor-strokestrong" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+              </svg>
+            </button>
+            <!-- Dropdown Menu -->
+            <div id="dropdown-menu-6" class="hidden z-10 bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg shadow-lg min-w-[200px] absolute top-8 right-0">
+              <ul class="py-2 text-sm text-brandcolor-textstrong">
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">bookmark</span>
+                    <span>Keep</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">push_pin</span>
+                    <span>Pin</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong material-symbols-filled" style="font-size: 20px;">mode_edit</span>
+                    <span>Edit</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">content_copy</span>
+                    <span>Copy Project ID</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill text-brandcolor-textstrong">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">delete</span>
+                    <span>Delete</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- Card Content - Title and Subtitle -->
+          <div>
+            <h3 class="text-brandcolor-textstrong font-semibold text-lg mb-1">Project Title 6</h3>
+            <p class="text-brandcolor-textweak text-sm">Project subtitle description</p>
+          </div>
+        </div>
+
+        <!-- Card 7 -->
+        <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-4 relative">
+          <!-- Card Header - 3 Dots Icon with Dropdown -->
+          <div class="flex justify-end mb-3">
+            <button id="dropdown-button-7" data-dropdown-toggle="dropdown-menu-7" type="button" class="p-1 hover:bg-brandcolor-fill border border-transparent active:border-brandcolor-strokeweak rounded-lg">
+              <svg class="w-5 h-5 text-brandcolor-strokestrong" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+              </svg>
+            </button>
+            <!-- Dropdown Menu -->
+            <div id="dropdown-menu-7" class="hidden z-10 bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg shadow-lg min-w-[200px] absolute top-8 right-0">
+              <ul class="py-2 text-sm text-brandcolor-textstrong">
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">bookmark</span>
+                    <span>Keep</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">push_pin</span>
+                    <span>Pin</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong material-symbols-filled" style="font-size: 20px;">mode_edit</span>
+                    <span>Edit</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">content_copy</span>
+                    <span>Copy Project ID</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill text-brandcolor-textstrong">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">delete</span>
+                    <span>Delete</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- Card Content - Title and Subtitle -->
+          <div>
+            <h3 class="text-brandcolor-textstrong font-semibold text-lg mb-1">Project Title 7</h3>
+            <p class="text-brandcolor-textweak text-sm">Project subtitle description</p>
+          </div>
+        </div>
+
+        <!-- Card 8 -->
+        <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-4 relative">
+          <!-- Card Header - 3 Dots Icon with Dropdown -->
+          <div class="flex justify-end mb-3">
+            <button id="dropdown-button-8" data-dropdown-toggle="dropdown-menu-8" type="button" class="p-1 hover:bg-brandcolor-fill border border-transparent active:border-brandcolor-strokeweak rounded-lg">
+              <svg class="w-5 h-5 text-brandcolor-strokestrong" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+              </svg>
+            </button>
+            <!-- Dropdown Menu -->
+            <div id="dropdown-menu-8" class="hidden z-10 bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg shadow-lg min-w-[200px] absolute top-8 right-0">
+              <ul class="py-2 text-sm text-brandcolor-textstrong">
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">bookmark</span>
+                    <span>Keep</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">push_pin</span>
+                    <span>Pin</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong material-symbols-filled" style="font-size: 20px;">mode_edit</span>
+                    <span>Edit</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">content_copy</span>
+                    <span>Copy Project ID</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill text-brandcolor-textstrong">
+                    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">delete</span>
+                    <span>Delete</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- Card Content - Title and Subtitle -->
+          <div>
+            <h3 class="text-brandcolor-textstrong font-semibold text-lg mb-1">Project Title 8</h3>
+            <p class="text-brandcolor-textweak text-sm">Project subtitle description</p>
+          </div>
+        </div>
+      </div>
     </div>
   </main>
 </div>
