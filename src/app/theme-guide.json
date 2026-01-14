@@ -51,13 +51,13 @@
         "Alternative actions"
       ],
       "examples": [
-        "Outline button: border-brandcolor-secondary text-brandcolor-secondary bg-transparent hover:bg-brandcolor-secondaryhover",
+        "Outline button: border-brandcolor-secondary text-brandcolor-secondary bg-transparent hover:bg-brandcolor-neutralhover",
         "Secondary button: bg-brandcolor-secondary text-brandcolor-white"
       ]
     },
     "brandcolor-secondaryhover": {
-      "hex": "#EFEFEF",
-      "usage": "Hover state for secondary/outline buttons (NOT bg-brandcolor-fill)",
+      "hex": "#183885",
+      "usage": "Hover state for secondary buttons (darker shade of secondary)",
       "utilityClasses": {
         "background": "bg-brandcolor-secondaryhover",
         "text": "text-brandcolor-secondaryhover",
@@ -65,14 +65,32 @@
       },
       "whenToUse": [
         "Secondary button hover state",
-        "Outline button hover state",
-        "Hover on elements with secondary/outline style"
+        "Hover on elements with secondary background"
       ],
       "examples": [
-        "Secondary button hover: hover:bg-brandcolor-secondaryhover",
-        "Full outline button: border-brandcolor-secondary text-brandcolor-secondary bg-transparent hover:bg-brandcolor-secondaryhover"
+        "Secondary button hover: hover:bg-brandcolor-secondaryhover"
       ],
-      "logic": "When a button is secondary (outline style with border), the hover should use bg-brandcolor-secondaryhover (#EFEFEF), NOT bg-brandcolor-fill. This is a lighter gray specifically for secondary button hovers."
+      "logic": "When a button has secondary background color, the hover should use bg-brandcolor-secondaryhover (#183885) which is a darker shade of secondary for better visual feedback."
+    },
+    "brandcolor-neutralhover": {
+      "hex": "#EFEFEF",
+      "usage": "Hover state for neutral buttons and outline buttons (NOT bg-brandcolor-fill)",
+      "utilityClasses": {
+        "background": "bg-brandcolor-neutralhover",
+        "text": "text-brandcolor-neutralhover",
+        "border": "border-brandcolor-neutralhover"
+      },
+      "whenToUse": [
+        "Neutral button hover state",
+        "Outline button hover state",
+        "Primary-outline button hover state",
+        "Hover on elements with neutral/outline style"
+      ],
+      "examples": [
+        "Neutral button hover: hover:bg-brandcolor-neutralhover",
+        "Primary-outline button hover: hover:bg-brandcolor-neutralhover"
+      ],
+      "logic": "When a button is neutral or outline style (with border), the hover should use bg-brandcolor-neutralhover (#EFEFEF), NOT bg-brandcolor-fill. This is a lighter gray specifically for neutral and outline button hovers."
     },
     "brandcolor-textstrong": {
       "hex": "#001A31",
@@ -165,9 +183,24 @@
       ],
       "importantNote": "ALWAYS use strokemild for table row borders on hover. Selected rows use border-brandcolor-secondary instead."
     },
+    "brandcolor-strokelight": {
+      "hex": "#C5C5C5",
+      "usage": "ALWAYS use for: Primary-outline button borders",
+      "utilityClasses": {
+        "border": "border-brandcolor-strokelight"
+      },
+      "whenToUse": [
+        "Primary-outline button default border",
+        "Light stroke borders for primary-outline buttons"
+      ],
+      "examples": [
+        "Primary-outline button: border-brandcolor-strokelight"
+      ],
+      "importantNote": "ALWAYS use strokelight for primary-outline button default border. Active state uses border-brandcolor-primary."
+    },
     "brandcolor-fill": {
       "hex": "#F5F5F5",
-      "usage": "Layout background (NOT for secondary button hover - use brandcolor-secondaryhover instead)",
+      "usage": "Layout background (NOT for neutral/outline button hover - use brandcolor-neutralhover instead)",
       "utilityClasses": {
         "background": "bg-brandcolor-fill"
       },
@@ -180,7 +213,7 @@
         "Layout bg: bg-brandcolor-fill",
         "Section background: bg-brandcolor-fill"
       ],
-      "importantNote": "DO NOT use this for secondary button hover - use brandcolor-secondaryhover (#EFEFEF) instead"
+      "importantNote": "DO NOT use this for neutral/outline button hover - use brandcolor-neutralhover (#EFEFEF) instead"
     },
     "brandcolor-white": {
       "hex": "#FFFFFF",
@@ -215,36 +248,132 @@
       },
       "primary": {
         "description": "Main CTA button with primary brand color",
-        "classes": "bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover rounded-md",
-        "logic": "Uses primary brand color as background with white text. On hover, background changes to brandcolor-primaryhover (#016323) which is a darker shade of primary for better visual feedback. ALWAYS includes rounded-md (6px corner radius).",
-        "requiredClasses": ["bg-brandcolor-primary", "text-brandcolor-white", "hover:bg-brandcolor-primaryhover", "rounded-md"]
+        "defaultState": {
+          "classes": "border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white rounded-md",
+          "logic": "Uses primary brand color (#008B31) as background with white text. Has transparent border in default state to prevent layout shift when border appears on focus/active. ALWAYS includes rounded-md (6px corner radius)."
+        },
+        "hoverState": {
+          "classes": "hover:bg-brandcolor-primaryhover",
+          "logic": "On hover, background changes to brandcolor-primaryhover (#016323) which is a darker shade of primary for better visual feedback."
+        },
+        "focusState": {
+          "classes": "focus:border-brandcolor-primary",
+          "logic": "On focus, transparent border changes to primary color (#008B31)."
+        },
+        "activeState": {
+          "classes": "active:border-brandcolor-primary active:shadow-button-press",
+          "logic": "On press/active: transparent border changes to primary color (#008B31), and inner shadow appears (inset 3px 3px 10px 0px rgba(0, 26, 49, 0.33))."
+        },
+        "disabledState": {
+          "classes": "disabled:opacity-50",
+          "logic": "Disabled state reduces opacity to 50%."
+        },
+        "completeClasses": "border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md",
+        "requiredClasses": ["border-[1.5px]", "border-transparent", "bg-brandcolor-primary", "text-brandcolor-white", "hover:bg-brandcolor-primaryhover", "focus:border-brandcolor-primary", "active:border-brandcolor-primary", "active:shadow-button-press", "disabled:opacity-50", "rounded-md"],
+        "whenToUse": "Use for main call-to-action buttons with primary brand color"
       },
       "secondary": {
-        "description": "Secondary button WITH brand secondary color (Type 1)",
-        "classes": "border-[1.5px] border-brandcolor-strokeweak text-brandcolor-secondary bg-transparent hover:bg-brandcolor-secondaryhover rounded-md",
-        "logic": "Transparent background with brandcolor-strokeweak border (#DDDDDD) at 1.5px width and brandcolor-secondary text (#2F55D9). On hover, background fills with brandcolor-secondaryhover (#EFEFEF). IMPORTANT: Border is ALWAYS brandcolor-strokeweak at 1.5px width, NOT brandcolor-secondary. ALWAYS includes rounded-md (6px corner radius).",
-        "whenToUse": "Use when you want the button to have the secondary brand color as text",
-        "requiredClasses": ["border-[1.5px]", "border-brandcolor-strokeweak", "text-brandcolor-secondary", "bg-transparent", "hover:bg-brandcolor-secondaryhover", "rounded-md"]
+        "description": "Secondary button with secondary brand color background",
+        "defaultState": {
+          "classes": "border-[1.5px] border-transparent bg-brandcolor-secondary text-brandcolor-white rounded-md",
+          "logic": "Uses secondary brand color (#2F55D9) as background with white text. Has transparent border in default state to prevent layout shift when border appears on focus/active. ALWAYS includes rounded-md (6px corner radius)."
+        },
+        "hoverState": {
+          "classes": "hover:bg-brandcolor-secondaryhover",
+          "logic": "On hover, background changes to brandcolor-secondaryhover (#183885) which is a darker shade of secondary for better visual feedback."
+        },
+        "focusState": {
+          "classes": "focus:border-brandcolor-secondary",
+          "logic": "On focus, transparent border changes to secondary color (#2F55D9)."
+        },
+        "activeState": {
+          "classes": "active:border-brandcolor-secondary active:shadow-button-press",
+          "logic": "On press/active: transparent border changes to secondary color (#2F55D9), and inner shadow appears (inset 3px 3px 10px 0px rgba(0, 26, 49, 0.33))."
+        },
+        "disabledState": {
+          "classes": "disabled:opacity-50",
+          "logic": "Disabled state reduces opacity to 50%."
+        },
+        "completeClasses": "border-[1.5px] border-transparent bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md",
+        "requiredClasses": ["border-[1.5px]", "border-transparent", "bg-brandcolor-secondary", "text-brandcolor-white", "hover:bg-brandcolor-secondaryhover", "focus:border-brandcolor-secondary", "active:border-brandcolor-secondary", "active:shadow-button-press", "disabled:opacity-50", "rounded-md"],
+        "whenToUse": "Use for secondary call-to-action buttons with secondary brand color background"
       },
       "secondary-outline": {
-        "description": "Secondary button WITHOUT brand secondary color (Type 2)",
-        "classes": "border-[1.5px] border-brandcolor-strokeweak text-brandcolor-textstrong bg-transparent hover:bg-brandcolor-secondaryhover rounded-md",
-        "logic": "Transparent background with brandcolor-strokeweak border (#DDDDDD) at 1.5px width and brandcolor-textstrong text (#001A31). On hover, background fills with brandcolor-secondaryhover (#EFEFEF). IMPORTANT: Border is ALWAYS brandcolor-strokeweak at 1.5px width, text is strong text color. ALWAYS includes rounded-md (6px corner radius).",
-        "whenToUse": "Use when you want a secondary button style but with strong text color instead of secondary brand color",
-        "requiredClasses": ["border-[1.5px]", "border-brandcolor-strokeweak", "text-brandcolor-textstrong", "bg-transparent", "hover:bg-brandcolor-secondaryhover", "rounded-md"]
+        "description": "Secondary-outline button with secondary brand color border and text - border is INSIDE (inset)",
+        "defaultState": {
+          "classes": "shadow-border-inset-strokelight text-brandcolor-secondary bg-brandcolor-white rounded-md",
+          "logic": "White background with strokelight INSET border (#C5C5C5) at 1.5px width (using box-shadow) and secondary color text (#2F55D9). Border is inside the button, not centered like primary-outline. ALWAYS includes rounded-md (6px corner radius)."
+        },
+        "hoverState": {
+          "classes": "hover:bg-brandcolor-neutralhover",
+          "logic": "On hover, background changes to brandcolor-neutralhover (#EFEFEF). Border and text color remain the same."
+        },
+        "activeState": {
+          "classes": "active:shadow-border-inset-secondary-press active:text-brandcolor-secondary",
+          "logic": "On press/active: inset border changes to secondary color (#2F55D9), text remains secondary color, and inner shadow appears (inset 3px 3px 10px 0px rgba(0, 26, 49, 0.33)). Both shadows are combined in one utility."
+        },
+        "disabledState": {
+          "classes": "disabled:opacity-50",
+          "logic": "Disabled state reduces background opacity to 50%."
+        },
+        "completeClasses": "shadow-border-inset-strokelight text-brandcolor-secondary bg-brandcolor-white hover:bg-brandcolor-neutralhover active:shadow-border-inset-secondary-press active:text-brandcolor-secondary disabled:opacity-50 rounded-md",
+        "requiredClasses": ["shadow-border-inset-strokelight", "text-brandcolor-secondary", "bg-brandcolor-white", "hover:bg-brandcolor-neutralhover", "active:shadow-border-inset-secondary-press", "disabled:opacity-50", "rounded-md"],
+        "whenToUse": "Use when you want a secondary button style but with outline appearance (white background with secondary border and text). Border is INSIDE the button.",
+        "importantNote": "IMPORTANT: Secondary-outline button uses INSET border (box-shadow), while primary-outline uses CENTERED border (regular border). This is a key visual difference."
       },
-      "outline": {
-        "description": "Outline button with strong stroke (alternative outline style)",
-        "classes": "border-[1.5px] border-brandcolor-strokestrong text-brandcolor-textstrong bg-transparent hover:bg-brandcolor-secondaryhover rounded-md",
-        "logic": "Transparent with strong stroke border (#737373) at 1.5px width. Hover uses brandcolor-secondaryhover (#EFEFEF). This is different from secondary buttons which use brandcolor-strokeweak border. ALWAYS includes rounded-md (6px corner radius).",
-        "requiredClasses": ["border-[1.5px]", "border-brandcolor-strokestrong", "text-brandcolor-textstrong", "bg-transparent", "hover:bg-brandcolor-secondaryhover", "rounded-md"]
+      "neutral": {
+        "description": "Neutral button with textweak color and strokelight border",
+        "defaultState": {
+          "classes": "border-[1.5px] border-brandcolor-strokelight text-brandcolor-textweak bg-brandcolor-white rounded-md",
+          "logic": "White background with strokelight border (#C5C5C5) at 1.5px width and textweak color text (#5C6166). ALWAYS includes rounded-md (6px corner radius)."
+        },
+        "hoverState": {
+          "classes": "hover:bg-brandcolor-neutralhover",
+          "logic": "On hover, background changes to brandcolor-neutralhover (#EFEFEF). Border and text color remain the same."
+        },
+        "activeState": {
+          "classes": "active:border-brandcolor-textweak active:text-brandcolor-textweak active:shadow-button-press",
+          "logic": "On press/active: border changes to textweak color (#5C6166), text remains textweak color, and inner shadow appears (inset 3px 3px 10px 0px rgba(0, 26, 49, 0.33))."
+        },
+        "disabledState": {
+          "classes": "disabled:opacity-50",
+          "logic": "Disabled state reduces background opacity to 50%."
+        },
+        "completeClasses": "border-[1.5px] border-brandcolor-strokelight text-brandcolor-textweak bg-brandcolor-white hover:bg-brandcolor-neutralhover active:border-brandcolor-textweak active:text-brandcolor-textweak active:shadow-button-press disabled:opacity-50 rounded-md",
+        "requiredClasses": ["border-[1.5px]", "border-brandcolor-strokelight", "text-brandcolor-textweak", "bg-brandcolor-white", "hover:bg-brandcolor-neutralhover", "active:border-brandcolor-textweak", "active:shadow-button-press", "disabled:opacity-50", "rounded-md"],
+        "whenToUse": "Use for neutral actions that don't require primary or secondary emphasis"
+      },
+      "primary-outline": {
+        "description": "Primary-outline button with primary brand color border and text - border is CENTERED",
+        "defaultState": {
+          "classes": "border-[1.5px] border-brandcolor-strokelight text-brandcolor-primary bg-brandcolor-white rounded-md",
+          "logic": "White background with strokelight CENTERED border (#C5C5C5) at 1.5px width and primary color text (#008B31). Border is centered (half inside, half outside). ALWAYS includes rounded-md (6px corner radius)."
+        },
+        "hoverState": {
+          "classes": "hover:bg-brandcolor-neutralhover",
+          "logic": "On hover, background changes to brandcolor-neutralhover (#EFEFEF). Border and text color remain the same."
+        },
+        "activeState": {
+          "classes": "active:border-brandcolor-primary active:text-brandcolor-primary active:shadow-button-press",
+          "logic": "On press/active: border changes to primary color (#008B31), text remains primary color, and inner shadow appears (inset 3px 3px 10px 0px rgba(0, 26, 49, 0.33))."
+        },
+        "disabledState": {
+          "classes": "disabled:opacity-50",
+          "logic": "Disabled state reduces background opacity to 50%."
+        },
+        "completeClasses": "border-[1.5px] border-brandcolor-strokelight text-brandcolor-primary bg-brandcolor-white hover:bg-brandcolor-neutralhover active:border-brandcolor-primary active:text-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md",
+        "requiredClasses": ["border-[1.5px]", "border-brandcolor-strokelight", "text-brandcolor-primary", "bg-brandcolor-white", "hover:bg-brandcolor-neutralhover", "active:border-brandcolor-primary", "active:shadow-button-press", "disabled:opacity-50", "rounded-md"],
+        "whenToUse": "Use when you want a primary button style but with outline appearance (white background with primary border and text)"
       },
       "criticalRules": [
         "ALL buttons MUST have rounded-md (6px corner radius) - NO EXCEPTIONS",
-        "ALL secondary buttons (both types) MUST have border-[1.5px] (1.5px border width) - NO EXCEPTIONS",
-        "Primary buttons do NOT have borders, only secondary buttons have borders",
+        "ONLY primary and secondary buttons use border-transparent in default state (to prevent layout shift when border appears on focus/active)",
+        "Primary-outline button uses CENTERED border (border-[1.5px]) - border is half inside, half outside",
+        "Secondary-outline button uses INSET border (box-shadow) - border is completely inside the button",
+        "Neutral button uses CENTERED border (border-[1.5px]) like primary-outline",
         "Never use rounded-lg, rounded-xl, or any other border radius for buttons - ALWAYS use rounded-md",
-        "Never use border, border-2, or any other border width for secondary buttons - ALWAYS use border-[1.5px]"
+        "Never use border, border-2, or any other border width for buttons - ALWAYS use border-[1.5px] or shadow utilities for inset borders",
+        "Transparent border is ONLY for primary and secondary buttons - outline buttons already have visible borders"
       ]
     },
     "input": {
@@ -303,7 +432,7 @@
       ],
       "criticalRules": [
         "ONLY applies to icon buttons on white surfaces (bg-white or bg-brandcolor-white)",
-        "Hover background MUST be bg-brandcolor-fill, NOT bg-brandcolor-secondaryhover",
+        "Hover background MUST be bg-brandcolor-fill, NOT bg-brandcolor-neutralhover",
         "Hover shows ONLY background color, NO border",
         "When clicked and dropdown is open: button shows BOTH background (brandcolor-fill) AND border (brandcolor-strokeweak)",
         "Active state (bg + border) persists as long as dropdown is visible (button has aria-expanded='true')",
@@ -324,9 +453,29 @@
       "logic": "Sidebar borders MUST use strokestrong for visibility and definition"
     },
     "card": {
-      "description": "Card borders always use weak stroke",
-      "classes": "border border-brandcolor-strokeweak",
-      "logic": "Card borders MUST use strokeweak for subtle, light appearance"
+      "description": "Cards with proper borders and dynamic width",
+      "styling": {
+        "border": "border border-brandcolor-strokeweak",
+        "background": "bg-brandcolor-white",
+        "padding": "p-6",
+        "borderRadius": "rounded-lg",
+        "width": "w-fit or inline-block - ALWAYS make card width dynamic to its content"
+      },
+      "logic": "Card borders MUST use strokeweak for subtle, light appearance. Card width MUST be dynamic to its content - use w-fit or inline-block, NEVER use fixed widths like w-full, max-w-*, or fixed pixel widths. Let the card width adapt to its content.",
+      "criticalRules": [
+        "ALWAYS use border border-brandcolor-strokeweak for card borders",
+        "ALWAYS use bg-brandcolor-white for card background",
+        "ALWAYS use rounded-lg for card border radius",
+        "CRITICAL: Card width MUST be dynamic to its content - use w-fit or inline-block",
+        "NEVER use fixed widths like w-full, max-w-*, or fixed pixel widths for cards",
+        "Let the card width adapt naturally to its content"
+      ],
+      "examples": [
+        "Correct: <div class=\"bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-fit\">Content</div>",
+        "Correct: <div class=\"bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 inline-block\">Content</div>",
+        "Wrong: <div class=\"bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full\">Content</div>",
+        "Wrong: <div class=\"bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 max-w-4xl\">Content</div>"
+      ]
     },
     "table": {
       "description": "Data tables with proper semantic structure, borders, expandable rows, and Material Icons",
@@ -564,7 +713,7 @@
       },
       "mistake4": {
         "wrong": "<button class=\"border border-brandcolor-secondary\">Secondary</button>",
-        "correct": "<button class=\"border-[1.5px] border-brandcolor-strokeweak text-brandcolor-secondary bg-transparent hover:bg-brandcolor-secondaryhover rounded-md\">Secondary</button>",
+        "correct": "<button class=\"bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover rounded-md\">Secondary</button>",
         "reason": "Secondary buttons use border-[1.5px] and border-brandcolor-strokeweak, plus all required classes."
       },
       "mistake5": {
@@ -670,8 +819,8 @@
       "CRITICAL: NEVER use hardcoded Tailwind color classes (bg-blue-700, text-gray-900, border-gray-200) - ALWAYS use theme utility classes (bg-brandcolor-primary, text-brandcolor-textstrong, border-brandcolor-strokeweak)",
       "ONLY use utility classes from theme-guide.json and tailwind.config.js",
       "Primary buttons: bg-brandcolor-primary + text-brandcolor-white + hover:bg-brandcolor-primaryhover",
-      "Secondary buttons Type 1 (with brand color): border-brandcolor-strokeweak + text-brandcolor-secondary + hover:bg-brandcolor-secondaryhover",
-      "Secondary buttons Type 2 (without brand color): border-brandcolor-strokeweak + text-brandcolor-textstrong + hover:bg-brandcolor-secondaryhover",
+      "Secondary button: bg-brandcolor-secondary + text-brandcolor-white + hover:bg-brandcolor-secondaryhover",
+      "Secondary-outline button: border-brandcolor-strokelight + text-brandcolor-secondary + hover:bg-brandcolor-neutralhover",
       "IMPORTANT: ALL secondary buttons use border-brandcolor-strokeweak (#DDDDDD) for border, NOT border-brandcolor-secondary",
       "Headings: Always use text-brandcolor-textstrong",
       "Body text: Use text-brandcolor-textweak",
@@ -686,7 +835,8 @@
       "Table row borders (selected): ALWAYS use border-brandcolor-secondary (ONLY border changes, NO background)",
       "Icons: Always use text-brandcolor-strokestrong",
       "Layout backgrounds: Use bg-brandcolor-fill",
-      "Secondary button hover: ALWAYS use bg-brandcolor-secondaryhover (#EFEFEF), NEVER use bg-brandcolor-fill",
+      "Secondary button hover: ALWAYS use bg-brandcolor-secondaryhover (#183885) for secondary buttons with secondary background",
+      "Neutral/outline button hover: ALWAYS use bg-brandcolor-neutralhover (#EFEFEF), NEVER use bg-brandcolor-fill",
       "Primary button hover: ALWAYS use bg-brandcolor-primaryhover (#016323)",
       "TABLE RULES - CRITICAL:",
       "Table borders: ALWAYS use border-brandcolor-strokeweak for table border and row borders",
@@ -700,7 +850,8 @@
     ],
     "importantNotes": {
       "primaryButtonHover": "When bg is brandcolor-primary, hover MUST be bg-brandcolor-primaryhover (#016323)",
-      "secondaryButtonHover": "When button is secondary/outline, hover MUST be bg-brandcolor-secondaryhover (#EFEFEF), NOT bg-brandcolor-fill",
+      "secondaryButtonHover": "When button has secondary background, hover MUST be bg-brandcolor-secondaryhover (#183885)",
+      "neutralButtonHover": "When button is neutral or outline style, hover MUST be bg-brandcolor-neutralhover (#EFEFEF), NOT bg-brandcolor-fill",
       "secondaryButtonBorder": "ALL secondary buttons (both types) MUST use border-brandcolor-strokeweak (#C5C5C5), NEVER border-brandcolor-secondary. This is an EXCEPTION to the button border rule.",
       "secondaryButtonTypes": "Two types of secondary buttons: (1) text-brandcolor-secondary with brandcolor-strokeweak border, (2) text-brandcolor-textstrong with brandcolor-strokeweak border",
       "borderUsageRules": {
@@ -718,7 +869,6 @@
         "materialIconsStylesheet": "MUST include Material Icons stylesheet: <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=unfold_more\" />",
         "bodyText": "Table body text can be MIXED: text-brandcolor-textstrong for regular text, text-brandcolor-secondary for clickable text/links/buttons",
         "clickableElements": "Clickable text, links, and buttons in table cells MUST use text-brandcolor-secondary",
-        "selectedRow": "Selected/active table rows MUST use bg-brandcolor-secondary",
         "expandableRows": "Tables with more than 5 rows MUST show first 5 rows, then an expandable row with bg-brandcolor-fill containing a 'Show All (X) Items' button using text-brandcolor-secondary",
         "expandButton": "Expand button MUST use text-brandcolor-secondary class and format: 'Show All (X) Items' where X is total count"
       }
