@@ -15,10 +15,12 @@ This guide explains how to deploy your Angular app to Vercel.
 
 3. **Configure Build Settings**
    - **Framework Preset**: Angular
-   - **Root Directory**: `angular-tailwind-flowbite-app` (if your Angular app is in a subdirectory)
-   - **Build Command**: `npm run build -- --configuration production`
-   - **Output Directory**: `dist/angular-tailwind-flowbite-app/browser`
-   - **Install Command**: `npm ci`
+   - **Root Directory**: Leave empty (if vercel.json is in the repo root) OR set to `angular-tailwind-flowbite-app` (if Angular app is in a subdirectory)
+   - **Build Command**: `npm run build:prod` (or leave empty to use vercel.json)
+   - **Output Directory**: `dist/angular-tailwind-flowbite-app/browser` (or leave empty to use vercel.json)
+   - **Install Command**: `npm ci` (or leave empty to use vercel.json)
+   
+   **IMPORTANT**: If your Angular app is in a subdirectory (e.g., `angular-tailwind-flowbite-app/`), you MUST set the **Root Directory** in Vercel project settings to that subdirectory. Otherwise, Vercel will look for files in the wrong place.
 
 4. **Deploy**
    - Click "Deploy"
