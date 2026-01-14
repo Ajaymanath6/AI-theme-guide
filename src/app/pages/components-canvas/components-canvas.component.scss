@@ -1,1 +1,67 @@
 // Components Canvas styles
+
+.canvas-container {
+  position: relative;
+  min-height: 100%;
+}
+
+// CDK Drag styles - smooth drag experience like Figma
+// Use the original element, not a preview
+.cdk-drag-preview {
+  display: none !important;
+}
+
+.cdk-drag-placeholder {
+  display: none !important;
+}
+
+.cdk-drag-animating {
+  transition: none; // No transition for instant response
+}
+
+// Draggable elements - smooth like Figma
+.draggable-element {
+  cursor: move;
+  position: absolute !important;
+  will-change: transform;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+  
+  &:hover {
+    cursor: grab;
+  }
+  
+  &:active {
+    cursor: grabbing;
+  }
+  
+  // During drag
+  &.cdk-drag-dragging {
+    z-index: 1000 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+}
+
+// Ensure no transitions interfere with smooth drag and elements stay visible
+[cdkDrag] {
+  transition: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+  
+  &.cdk-drag-dragging {
+    transition: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+  
+  // Make sure element never disappears
+  * {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+}
