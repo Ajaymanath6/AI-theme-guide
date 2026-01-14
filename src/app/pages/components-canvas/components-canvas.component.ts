@@ -20,8 +20,9 @@ interface CanvasElement {
 })
 export class ComponentsCanvasComponent implements AfterViewInit {
   canvasElements: CanvasElement[] = [
-    { id: '1', type: 'card', x: 100, y: 100, content: 'Card 1' },
-    { id: '2', type: 'button', x: 300, y: 200, content: 'Button' }
+    { id: 'card1', type: 'card1', x: 50, y: 50, content: 'Card Title One' },
+    { id: 'card2', type: 'card2', x: 400, y: 50, content: 'Card Title Two' },
+    { id: 'card3', type: 'card3', x: 750, y: 50, content: 'Card Title Three' }
   ];
 
   constructor(private cdr: ChangeDetectorRef) {}
