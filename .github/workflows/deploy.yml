@@ -33,12 +33,20 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build -- --base-href /AI-theme-guide/
+        run: npm run build -- --base-href /AI-theme-guide/ --configuration production
         env:
           NODE_OPTIONS: '--max-old-space-size=4096'
 
+      - name: Verify build output
+        run: |
+          ls -la dist/angular-tailwind-flowbite-app/browser/
+          test -f dist/angular-tailwind-flowbite-app/browser/index.html || exit 1
+
       - name: Copy 404.html for GitHub Pages routing
         run: cp public/404.html dist/angular-tailwind-flowbite-app/browser/404.html
+
+      - name: Verify 404.html exists
+        run: test -f dist/angular-tailwind-flowbite-app/browser/404.html || exit 1
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
