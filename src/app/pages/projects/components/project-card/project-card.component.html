@@ -1,0 +1,58 @@
+<div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-4 relative">
+  <!-- Card Header - 3 Dots Icon with Dropdown -->
+  <div class="flex justify-end mb-3">
+    <div class="relative">
+      <button 
+        [id]="'dropdown-button-' + projectId" 
+        [attr.data-dropdown-toggle]="'dropdown-menu-' + projectId" 
+        type="button" 
+        class="p-1 hover:bg-brandcolor-fill border border-transparent active:border-brandcolor-strokeweak rounded-lg">
+        <svg class="w-5 h-5 text-brandcolor-strokestrong" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+        </svg>
+      </button>
+      <!-- Dropdown Menu -->
+      <div 
+        [id]="'dropdown-menu-' + projectId" 
+        class="hidden z-50 bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg shadow-lg min-w-[200px] absolute top-8 right-0">
+        <ul class="py-2 text-sm text-brandcolor-textstrong">
+          <li>
+            <a href="#" (click)="onKeep($event)" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+              <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">bookmark</span>
+              <span>Keep</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" (click)="onPin($event)" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+              <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">push_pin</span>
+              <span>Pin</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" (click)="onEdit($event)" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+              <span class="material-symbols-outlined text-brandcolor-strokestrong material-symbols-filled" style="font-size: 20px;">mode_edit</span>
+              <span>Edit</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" (click)="onCopyId($event)" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+              <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">content_copy</span>
+              <span>Copy Project ID</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" (click)="onDelete($event)" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill text-brandcolor-textstrong">
+              <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">delete</span>
+              <span>Delete</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- Card Content - Title and Subtitle -->
+  <div>
+    <h3 class="text-brandcolor-textstrong font-semibold text-lg mb-1">{{ title }}</h3>
+    <p class="text-brandcolor-textweak text-sm">{{ subtitle }}</p>
+  </div>
+</div>

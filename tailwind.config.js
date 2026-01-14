@@ -15,6 +15,7 @@ module.exports = {
         'brandcolor-textweak': '#5C6166',
         'brandcolor-strokestrong': '#737373',
         'brandcolor-strokeweak': '#DDDDDD',
+        'brandcolor-strokemild': '#A5A5A5',
         'brandcolor-fill': '#F5F5F5',
         'brandcolor-white': '#FFFFFF',
       },

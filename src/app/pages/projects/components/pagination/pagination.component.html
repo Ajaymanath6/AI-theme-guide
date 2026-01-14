@@ -24,7 +24,7 @@
     </button>
 
     <!-- Page number badges -->
-    @for (page of visiblePages; track page) {
+    @for (page of visiblePages(); track page) {
       @if (page === '...') {
         <span class="text-brandcolor-textweak px-2">...</span>
       } @else {

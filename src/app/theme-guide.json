@@ -150,6 +150,21 @@
       ],
       "importantNote": "ALWAYS use strokeweak for card borders and dividers. Secondary buttons are an exception and also use strokeweak, but all other button borders use strokestrong."
     },
+    "brandcolor-strokemild": {
+      "hex": "#A5A5A5",
+      "usage": "ALWAYS use for: Table row borders when hovered",
+      "utilityClasses": {
+        "border": "border-brandcolor-strokemild"
+      },
+      "whenToUse": [
+        "Table row borders when row is hovered (hover:border-brandcolor-strokemild)",
+        "Table row hover states"
+      ],
+      "examples": [
+        "Hovered table row: hover:border-brandcolor-strokemild"
+      ],
+      "importantNote": "ALWAYS use strokemild for table row borders on hover. Selected rows use border-brandcolor-secondary instead."
+    },
     "brandcolor-fill": {
       "hex": "#F5F5F5",
       "usage": "Layout background (NOT for secondary button hover - use brandcolor-secondaryhover instead)",
@@ -313,6 +328,138 @@
       "classes": "border border-brandcolor-strokeweak",
       "logic": "Card borders MUST use strokeweak for subtle, light appearance"
     },
+    "table": {
+      "description": "Data tables with proper semantic structure, borders, expandable rows, and Material Icons",
+      "structure": {
+        "required": [
+          "MUST use proper HTML table structure: <table>, <thead>, <tbody>, <tr>, <th>, <td>",
+          "Table MUST have border: border border-brandcolor-strokeweak",
+          "Table rows MUST have border: border-b border-brandcolor-strokeweak (default)",
+          "Table rows on hover MUST have border: hover:border-brandcolor-strokemild",
+          "Selected table rows MUST have border: border-brandcolor-strokemild",
+          "Table header (<th>) text MUST use: text-brandcolor-textweak",
+          "Table header MUST include Material Icons 'unfold_more' icon next to each column label",
+          "Table header icons MUST use: text-brandcolor-textweak",
+          "Table body text can be MIXED: text-brandcolor-textstrong for regular text, text-brandcolor-secondary for clickable text/links/buttons",
+          "Table cells can contain clickable text, links, or secondary buttons using text-brandcolor-secondary",
+          "Selected row MUST use border: border-brandcolor-secondary (when row is selected/active) - NO background color change, only border changes",
+          "After 5 visible rows, MUST show expandable row with bg-brandcolor-fill and 'Show All' button",
+          "MUST include Material Icons stylesheet: <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=unfold_more\" />"
+        ],
+        "htmlExample": "<table class=\"w-full border border-brandcolor-strokeweak\"><thead><tr class=\"border-b border-brandcolor-strokeweak\"><th class=\"px-4 py-3 text-left text-brandcolor-textweak\"><div class=\"flex items-center gap-2\"><span>Column Name</span><span class=\"material-symbols-outlined text-brandcolor-textweak\" style=\"font-size: 20px;\">unfold_more</span></div></th></tr></thead><tbody>@for (item of visibleItems; track item.id) {<tr class=\"border-b border-brandcolor-strokeweak hover:bg-brandcolor-fill hover:border-brandcolor-strokemild\" [class.border-brandcolor-secondary]=\"item.selected\"><td class=\"px-4 py-3\"><span class=\"text-brandcolor-textstrong\">Regular text</span> <button class=\"text-brandcolor-secondary hover:underline\">Clickable</button></td></tr>}@if (hasMoreItems) {<tr class=\"bg-brandcolor-fill\"><td class=\"px-4 py-3 text-center\"><button class=\"text-brandcolor-secondary hover:underline\" (click)=\"showAll()\">Show All ({{totalCount}}) Items</button></td></tr>}</tbody></table>"
+      },
+      "styling": {
+        "table": "w-full border border-brandcolor-strokeweak",
+        "tableRow": "border-b border-brandcolor-strokeweak",
+        "tableRowHover": "hover:border-brandcolor-strokemild",
+        "tableHeader": "px-4 py-3 text-left text-brandcolor-textweak",
+        "tableHeaderIcon": "material-symbols-outlined text-brandcolor-textweak (with style=\"font-size: 20px;\")",
+        "tableHeaderIconName": "unfold_more",
+        "tableCell": "px-4 py-3",
+        "tableCellRegularText": "text-brandcolor-textstrong",
+        "tableCellClickableText": "text-brandcolor-secondary hover:underline",
+        "tableCellLink": "text-brandcolor-secondary hover:underline",
+        "tableCellButton": "text-brandcolor-secondary (for text buttons in cells)",
+        "selectedRow": "border-brandcolor-secondary (NO background color, only border changes)",
+        "selectedRowBorder": "border-brandcolor-secondary",
+        "hoverRow": "hover:bg-brandcolor-fill hover:border-brandcolor-strokemild",
+        "expandableRow": "bg-brandcolor-fill",
+        "expandButton": "text-brandcolor-secondary hover:underline"
+      },
+      "materialIcons": {
+        "description": "Table headers MUST use Material Icons 'unfold_more' icon",
+        "stylesheet": "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=unfold_more\" />",
+        "iconUsage": "Each table header column MUST have the 'unfold_more' icon next to the column label",
+        "iconClasses": "material-symbols-outlined text-brandcolor-textweak",
+        "iconStyle": "style=\"font-size: 20px;\"",
+        "iconName": "unfold_more",
+        "example": "<th class=\"px-4 py-3 text-left text-brandcolor-textweak\"><div class=\"flex items-center gap-2\"><span>Column Name</span><span class=\"material-symbols-outlined text-brandcolor-textweak\" style=\"font-size: 20px;\">unfold_more</span></div></th>"
+      },
+      "bodyTextStyling": {
+        "description": "Table body text can be MIXED - not always text-brandcolor-textstrong",
+        "regularText": {
+          "classes": "text-brandcolor-textstrong",
+          "whenToUse": [
+            "Regular table cell content",
+            "Non-clickable text",
+            "Static data display"
+          ]
+        },
+        "clickableText": {
+          "classes": "text-brandcolor-secondary hover:underline",
+          "whenToUse": [
+            "Clickable text links in table cells",
+            "Text buttons in table cells",
+            "Interactive text elements",
+            "Links within table cells"
+          ]
+        },
+        "secondaryButtons": {
+          "description": "Table cells can contain secondary buttons",
+          "classes": "text-brandcolor-secondary (for text buttons)",
+          "whenToUse": [
+            "Action buttons in table cells",
+            "Secondary buttons within table rows",
+            "Clickable actions in cells"
+          ]
+        },
+        "mixedContent": {
+          "description": "Table cells can have mixed content with both regular and clickable text",
+          "example": "<td class=\"px-4 py-3\"><span class=\"text-brandcolor-textstrong\">Regular text</span> <button class=\"text-brandcolor-secondary hover:underline\">Clickable</button> <a href=\"#\" class=\"text-brandcolor-secondary hover:underline\">Link</a></td>"
+        }
+      },
+      "expandableRows": {
+        "description": "Tables with more than 5 rows must have expandable functionality",
+        "defaultVisibleRows": 5,
+        "expandableRowStructure": {
+          "background": "bg-brandcolor-fill",
+          "buttonText": "Show All (X) Items",
+          "buttonClasses": "text-brandcolor-secondary hover:underline",
+          "buttonAction": "On click, expand table to show all rows",
+          "logic": "If total rows > 5, show first 5 rows, then show expandable row with button. On button click, show all remaining rows."
+        },
+        "implementation": {
+          "typescript": "visibleItems = items.slice(0, 5); hasMoreItems = items.length > 5; showAll() { this.visibleItems = this.items; this.hasMoreItems = false; }",
+          "html": "@for (item of visibleItems; track item.id) { <tr>...</tr> } @if (hasMoreItems) { <tr class=\"bg-brandcolor-fill\"><td><button (click)=\"showAll()\">Show All ({{items.length}}) Items</button></td></tr> }"
+        }
+      },
+      "rowSelection": {
+        "description": "When a table row is selected/active, ONLY the border changes to brandcolor-secondary - NO background color change",
+        "classes": "border-brandcolor-secondary",
+        "whenToUse": [
+          "When row is clicked/selected",
+          "When row represents active/current item",
+          "When row needs to be highlighted as selected"
+        ],
+        "importantNote": "Selected rows ONLY change border color to border-brandcolor-secondary. NO background color change. Only border changes.",
+        "example": "<tr [class.border-brandcolor-secondary]=\"item.isSelected\" class=\"border-b border-brandcolor-strokeweak hover:bg-brandcolor-fill hover:border-brandcolor-strokemild\">"
+      },
+      "criticalRules": [
+        "ALWAYS use proper HTML table structure: <table>, <thead>, <tbody>, <tr>, <th>, <td>",
+        "ALWAYS use border-brandcolor-strokeweak for table border and default row borders",
+        "Table row borders on hover MUST use: hover:border-brandcolor-strokemild",
+        "Selected table row borders MUST use: border-brandcolor-strokemild",
+        "Table header text MUST be text-brandcolor-textweak",
+        "Table header MUST include Material Icons 'unfold_more' icon next to each column label",
+        "Table header icons MUST use: material-symbols-outlined text-brandcolor-textweak with style=\"font-size: 20px;\"",
+        "Table body text can be MIXED: text-brandcolor-textstrong for regular text, text-brandcolor-secondary for clickable text/links/buttons",
+        "Table cells can contain clickable text, links, or secondary buttons using text-brandcolor-secondary",
+        "Selected rows MUST use border-brandcolor-secondary (ONLY border changes, NO background color change)",
+        "Hovered rows MUST use hover:bg-brandcolor-fill AND hover:border-brandcolor-strokemild",
+        "If table has more than 5 rows, MUST implement expandable row functionality",
+        "Expandable row MUST have bg-brandcolor-fill background",
+        "Expand button MUST use text-brandcolor-secondary class",
+        "Expand button text format: 'Show All (X) Items' where X is total count",
+        "MUST include Material Icons stylesheet in index.html or component",
+        "NEVER use hardcoded Tailwind colors for table styling",
+        "NEVER use inline styles for table colors (except for Material Icons font-size)"
+      ],
+      "completeExample": {
+        "html": "<table class=\"w-full border border-brandcolor-strokeweak\"><thead><tr class=\"border-b border-brandcolor-strokeweak\"><th class=\"px-4 py-3 text-left text-brandcolor-textweak\"><div class=\"flex items-center gap-2\"><span>Name</span><span class=\"material-symbols-outlined text-brandcolor-textweak\" style=\"font-size: 20px;\">unfold_more</span></div></th><th class=\"px-4 py-3 text-left text-brandcolor-textweak\"><div class=\"flex items-center gap-2\"><span>Status</span><span class=\"material-symbols-outlined text-brandcolor-textweak\" style=\"font-size: 20px;\">unfold_more</span></div></th></tr></thead><tbody>@for (item of visibleItems; track item.id) {<tr class=\"border-b border-brandcolor-strokeweak hover:bg-brandcolor-fill hover:border-brandcolor-strokemild\" [class.border-brandcolor-secondary]=\"item.selected\"><td class=\"px-4 py-3\"><span class=\"text-brandcolor-textstrong\">{{item.name}}</span> <button class=\"text-brandcolor-secondary hover:underline\">View</button></td><td class=\"px-4 py-3\"><span class=\"text-brandcolor-textstrong\">{{item.status}}</span></td></tr>}@if (hasMoreItems) {<tr class=\"bg-brandcolor-fill\"><td colspan=\"2\" class=\"px-4 py-3 text-center\"><button type=\"button\" class=\"text-brandcolor-secondary hover:underline\" (click)=\"showAll()\">Show All ({{totalCount}}) Documents Ordered</button></td></tr>}</tbody></table>",
+        "typescript": "visibleItems = this.items.slice(0, 5); hasMoreItems = this.items.length > 5; totalCount = this.items.length; showAll() { this.visibleItems = this.items; this.hasMoreItems = false; }",
+        "materialIconsStylesheet": "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=unfold_more\" />"
+      }
+    },
     "dropdown": {
       "description": "Flowbite dropdown menus - MUST follow proper structure and initialization",
       "structure": {
@@ -362,22 +509,94 @@
   },
   "aiInstructions": {
     "workflow": [
-      "1. BEFORE creating ANY component or making ANY styling changes, ALWAYS read this theme-guide.json file first",
-      "2. Read tailwind.config.js to see available theme colors and custom configurations",
-      "3. Check componentGuidelines section for specific component rules (buttons, inputs, headings, dropdowns, etc.)",
-      "4. Verify button specifications: rounded-md (6px) for all buttons, border-[1.5px] for secondary buttons",
-      "5. If creating dropdowns: Check dropdown section for structure, initialization, and styling requirements",
-      "6. When creating components, follow the guidelines in componentGuidelines",
-      "7. Always use theme colors from tailwind config, never hardcode hex values",
-      "8. Follow the logic explained in each component guideline",
-      "9. Combine utility classes as shown in examples",
-      "10. Check requiredClasses arrays in button specifications to ensure all classes are included",
-      "11. For dropdowns: Ensure proper HTML structure, Flowbite initialization, and unique IDs"
+      "STEP 1 (MANDATORY): Read tailwind.config.js FIRST to see what theme colors are available",
+      "STEP 2 (MANDATORY): Read this theme-guide.json file COMPLETELY to understand all rules",
+      "STEP 3: Check componentGuidelines section for the specific component you're creating",
+      "STEP 4: Review preGenerationChecklist to ensure understanding",
+      "STEP 5: Review commonMistakes section to avoid known errors",
+      "STEP 6: Generate code using ONLY theme utility classes from tailwind.config.js",
+      "STEP 7: Follow componentGuidelines exactly (requiredClasses, cornerRadius, etc.)",
+      "STEP 8: Run codeValidation checklist before submitting code",
+      "STEP 9: Verify no hex codes, no inline styles, no hardcoded Tailwind colors",
+      "STEP 10: If creating tables: Check table section for structure, borders, header styling, and expandable row functionality",
+      "STEP 11: If creating dropdowns: Check dropdown section for structure, initialization, and styling requirements",
+      "STEP 12: For dropdowns: Ensure proper HTML structure, Flowbite initialization, and unique IDs"
     ],
+    "preGenerationChecklist": {
+      "beforeGeneratingCode": [
+        "✅ Read tailwind.config.js - know what colors exist",
+        "✅ Read theme-guide.json completely - know all rules",
+        "✅ Check componentGuidelines for component type",
+        "✅ Review commonMistakes to avoid errors",
+        "✅ Understand requiredClasses for component",
+        "✅ Know critical rules (no hex, no inline styles, no hardcoded colors)"
+      ],
+      "mandatory": "DO NOT generate code until ALL checklist items are completed"
+    },
+    "codeValidation": {
+      "beforeSubmittingCode": [
+        "Scan for hex codes (#008B31, #2F55D9, etc.) - REMOVE if found",
+        "Scan for inline styles (style='...') - REMOVE if found",
+        "Scan for hardcoded Tailwind colors (bg-blue-*, text-gray-*, border-gray-*) - REPLACE with theme classes",
+        "Verify all color classes start with 'brandcolor-' prefix",
+        "Check that buttons have 'rounded-md' (not rounded-lg, rounded-xl, etc.)",
+        "Check that secondary buttons have 'border-[1.5px]' (not border, border-2, etc.)",
+        "Verify component follows componentGuidelines for that component type",
+        "Ensure all requiredClasses from componentGuidelines are included"
+      ],
+      "requiredPrefix": "All theme color classes MUST start with 'brandcolor-': bg-brandcolor-*, text-brandcolor-*, border-brandcolor-*"
+    },
+    "commonMistakes": {
+      "mistake1": {
+        "wrong": "<button class=\"bg-blue-600 text-white\">Button</button>",
+        "correct": "<button class=\"bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover rounded-md px-4 py-2\">Button</button>",
+        "reason": "Never use hardcoded Tailwind colors. Always use theme classes with required classes."
+      },
+      "mistake2": {
+        "wrong": "<div style=\"background-color: #008B31\">Content</div>",
+        "correct": "<div class=\"bg-brandcolor-primary\">Content</div>",
+        "reason": "Never use inline styles or hex codes. Always use utility classes."
+      },
+      "mistake3": {
+        "wrong": "<button class=\"bg-brandcolor-primary rounded-lg\">Button</button>",
+        "correct": "<button class=\"bg-brandcolor-primary rounded-md\">Button</button>",
+        "reason": "All buttons MUST use rounded-md (6px), not rounded-lg or any other radius."
+      },
+      "mistake4": {
+        "wrong": "<button class=\"border border-brandcolor-secondary\">Secondary</button>",
+        "correct": "<button class=\"border-[1.5px] border-brandcolor-strokeweak text-brandcolor-secondary bg-transparent hover:bg-brandcolor-secondaryhover rounded-md\">Secondary</button>",
+        "reason": "Secondary buttons use border-[1.5px] and border-brandcolor-strokeweak, plus all required classes."
+      },
+      "mistake5": {
+        "wrong": "<input class=\"border-gray-300\">",
+        "correct": "<input class=\"border-brandcolor-strokestrong focus:border-brandcolor-textstrong focus:outline-none focus:ring-0 text-brandcolor-textstrong\">",
+        "reason": "Inputs MUST use border-brandcolor-strokestrong and include focus states with focus:ring-0 and focus:outline-none."
+      },
+      "mistake6": {
+        "wrong": "<h1 class=\"text-gray-900 text-3xl font-bold\">Heading</h1>",
+        "correct": "<h1 class=\"text-brandcolor-textstrong text-3xl font-bold\">Heading</h1>",
+        "reason": "Headings MUST use text-brandcolor-textstrong, never hardcoded Tailwind colors like text-gray-900."
+      },
+      "mistake7": {
+        "wrong": "<table class=\"border border-gray-200\"><thead><tr><th class=\"text-gray-600\">Header</th></tr></thead><tbody><tr class=\"bg-blue-100\"><td>Content</td></tr></tbody></table>",
+        "correct": "<table class=\"w-full border border-brandcolor-strokeweak\"><thead><tr class=\"border-b border-brandcolor-strokeweak\"><th class=\"px-4 py-3 text-left text-brandcolor-textweak\">Header</th></tr></thead><tbody><tr class=\"border-b border-brandcolor-strokeweak hover:bg-brandcolor-fill\" [class.bg-brandcolor-secondary]=\"item.selected\"><td class=\"px-4 py-3 text-brandcolor-textstrong\">Content</td></tr></tbody></table>",
+        "reason": "Tables MUST use border-brandcolor-strokeweak for all borders, text-brandcolor-textweak for headers, text-brandcolor-textstrong for body, and bg-brandcolor-secondary for selected rows. Never use hardcoded Tailwind colors."
+      },
+      "mistake8": {
+        "wrong": "<table><tr><td>Row 1</td></tr><tr><td>Row 2</td></tr></table>",
+        "correct": "<table class=\"w-full border border-brandcolor-strokeweak\"><thead><tr class=\"border-b border-brandcolor-strokeweak\"><th class=\"px-4 py-3 text-left text-brandcolor-textweak\"><div class=\"flex items-center gap-2\"><span>Column</span><span class=\"material-symbols-outlined text-brandcolor-textweak\" style=\"font-size: 20px;\">unfold_more</span></div></th></tr></thead><tbody><tr class=\"border-b border-brandcolor-strokeweak\"><td class=\"px-4 py-3\"><span class=\"text-brandcolor-textstrong\">Row 1</span></td></tr><tr class=\"border-b border-brandcolor-strokeweak\"><td class=\"px-4 py-3\"><span class=\"text-brandcolor-textstrong\">Row 2</span></td></tr></tbody></table>",
+        "reason": "Tables MUST use proper HTML structure with <thead> and <tbody>, proper table borders, Material Icons 'unfold_more' in headers, and theme color classes. Never skip semantic structure."
+      },
+      "mistake9": {
+        "wrong": "<td class=\"px-4 py-3 text-brandcolor-textstrong\">{{item.name}} <a href=\"#\">View</a></td>",
+        "correct": "<td class=\"px-4 py-3\"><span class=\"text-brandcolor-textstrong\">{{item.name}}</span> <a href=\"#\" class=\"text-brandcolor-secondary hover:underline\">View</a></td>",
+        "reason": "Table cells with clickable text/links MUST use text-brandcolor-secondary for the clickable element, not text-brandcolor-textstrong. Regular text uses text-brandcolor-textstrong."
+      }
+    },
     "mandatoryFirstStep": {
-      "rule": "BEFORE making any component or styling changes, you MUST read theme-guide.json first",
+      "rule": "BEFORE making any component or styling changes, you MUST: (1) Read tailwind.config.js to see available colors, (2) Read theme-guide.json completely to understand all rules",
       "severity": "CRITICAL",
-      "reason": "This file contains all theme specifications, button rules, input rules, and component guidelines that must be followed"
+      "reason": "These files contain all theme specifications, component rules, and critical guidelines that must be followed"
     },
     "criticalRules": {
       "noHexCodes": {
@@ -427,6 +646,22 @@
           "CSS variables in inline styles (style='color: var(--brand-color)')",
           "Any color values not defined in tailwind.config.js"
         ]
+      },
+      "onlyThemeClasses": {
+        "rule": "ONLY use utility classes that start with 'brandcolor-' prefix OR standard Tailwind utilities (px-*, py-*, flex, grid, etc.)",
+        "severity": "CRITICAL",
+        "reason": "All color classes must use the theme system. Standard Tailwind utilities for layout/spacing are allowed.",
+        "allowed": [
+          "Theme color classes: bg-brandcolor-*, text-brandcolor-*, border-brandcolor-*",
+          "Standard Tailwind utilities: px-*, py-*, rounded-*, flex, grid, container, mx-auto, etc.",
+          "Layout utilities: gap-*, mb-*, mt-*, etc."
+        ],
+        "forbidden": [
+          "Hex codes: #008B31, #2F55D9, etc.",
+          "Inline styles: style='color: #008B31'",
+          "Hardcoded Tailwind colors: bg-blue-*, text-gray-*, border-gray-*",
+          "Any color class not starting with 'brandcolor-'"
+        ]
       }
     },
     "rules": [
@@ -446,10 +681,22 @@
       "Button borders: ALWAYS use border-brandcolor-strokestrong (EXCEPT secondary buttons which use strokeweak)",
       "Card borders: ALWAYS use border-brandcolor-strokeweak",
       "Dividers: ALWAYS use border-brandcolor-strokeweak",
+      "Table row borders (default): ALWAYS use border-brandcolor-strokeweak",
+      "Table row borders (hover): ALWAYS use hover:border-brandcolor-strokemild",
+      "Table row borders (selected): ALWAYS use border-brandcolor-secondary (ONLY border changes, NO background)",
       "Icons: Always use text-brandcolor-strokestrong",
       "Layout backgrounds: Use bg-brandcolor-fill",
       "Secondary button hover: ALWAYS use bg-brandcolor-secondaryhover (#EFEFEF), NEVER use bg-brandcolor-fill",
-      "Primary button hover: ALWAYS use bg-brandcolor-primaryhover (#016323)"
+      "Primary button hover: ALWAYS use bg-brandcolor-primaryhover (#016323)",
+      "TABLE RULES - CRITICAL:",
+      "Table borders: ALWAYS use border-brandcolor-strokeweak for table border and row borders",
+      "Table header text: ALWAYS use text-brandcolor-textweak",
+      "Table header icons: ALWAYS use text-brandcolor-textweak",
+      "Table body text: Can be MIXED - use text-brandcolor-textstrong for regular text, text-brandcolor-secondary for clickable text/links/buttons",
+      "Selected table rows: ALWAYS use bg-brandcolor-secondary",
+      "Tables with more than 5 rows: MUST implement expandable row with bg-brandcolor-fill and 'Show All' button",
+      "Expand button: MUST use text-brandcolor-secondary class",
+      "Table structure: MUST use proper HTML table tags (<table>, <thead>, <tbody>, <tr>, <th>, <td>)"
     ],
     "importantNotes": {
       "primaryButtonHover": "When bg is brandcolor-primary, hover MUST be bg-brandcolor-primaryhover (#016323)",
@@ -458,7 +705,22 @@
       "secondaryButtonTypes": "Two types of secondary buttons: (1) text-brandcolor-secondary with brandcolor-strokeweak border, (2) text-brandcolor-textstrong with brandcolor-strokeweak border",
       "borderUsageRules": {
         "strokestrong": "ALWAYS use for: Sidebar borders, input field borders, button borders (except secondary buttons)",
-        "strokeweak": "ALWAYS use for: Card borders, dividers, and all other light elements. Also used for secondary button borders (exception)."
+        "strokeweak": "ALWAYS use for: Card borders, dividers, table border, default table row borders, and all other light elements. Also used for secondary button borders (exception).",
+        "strokemild": "ALWAYS use for: Table row borders when hovered (hover:border-brandcolor-strokemild)",
+        "secondaryBorder": "ALWAYS use for: Selected table row borders (border-brandcolor-secondary) - ONLY border changes, NO background color"
+      },
+      "tableRules": {
+        "structure": "MUST use proper HTML table structure: <table>, <thead>, <tbody>, <tr>, <th>, <td>",
+        "borders": "Table border and default row borders MUST use border-brandcolor-strokeweak. Hovered rows use hover:border-brandcolor-strokemild. Selected rows use border-brandcolor-secondary (ONLY border changes, NO background color)",
+        "selectedRow": "Selected rows ONLY change border to border-brandcolor-secondary. NO background color change. Only border color changes on selection.",
+        "headerText": "Table header text MUST use text-brandcolor-textweak",
+        "headerIcons": "Table header MUST include Material Icons 'unfold_more' icon next to each column label, using material-symbols-outlined text-brandcolor-textweak with style=\"font-size: 20px;\"",
+        "materialIconsStylesheet": "MUST include Material Icons stylesheet: <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=unfold_more\" />",
+        "bodyText": "Table body text can be MIXED: text-brandcolor-textstrong for regular text, text-brandcolor-secondary for clickable text/links/buttons",
+        "clickableElements": "Clickable text, links, and buttons in table cells MUST use text-brandcolor-secondary",
+        "selectedRow": "Selected/active table rows MUST use bg-brandcolor-secondary",
+        "expandableRows": "Tables with more than 5 rows MUST show first 5 rows, then an expandable row with bg-brandcolor-fill containing a 'Show All (X) Items' button using text-brandcolor-secondary",
+        "expandButton": "Expand button MUST use text-brandcolor-secondary class and format: 'Show All (X) Items' where X is total count"
       }
     },
     "enforcement": {
