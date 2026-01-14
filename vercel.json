@@ -1,6 +1,7 @@
 {
-  "buildCommand": "npm run build -- --configuration production",
+  "buildCommand": "npm run build:prod",
   "outputDirectory": "dist/angular-tailwind-flowbite-app/browser",
+  "installCommand": "npm ci",
   "rewrites": [
     {
       "source": "/(.*)",
