@@ -176,6 +176,20 @@ export class ComponentsCanvasComponent implements AfterViewInit {
   }
 
   /**
+   * Copy component tag to clipboard (for shared components)
+   */
+  copyComponentTag(componentId: string): void {
+    const componentTag = `<app-${componentId}></app-${componentId}>`;
+    navigator.clipboard.writeText(componentTag).then(() => {
+      this.showToast(`✓ Copied "${componentTag}" to clipboard`);
+      console.log('Copied component tag to clipboard:', componentTag);
+    }).catch(err => {
+      console.error('Failed to copy component tag:', err);
+      this.showToast('Failed to copy component tag');
+    });
+  }
+
+  /**
    * Check if component is registered in catalog
    */
   isInCatalog(componentId: string): boolean {

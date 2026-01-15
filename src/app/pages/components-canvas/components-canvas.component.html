@@ -268,46 +268,63 @@
           }
           
           <!-- Universal Tooltip (works for ALL components) -->
-          <div class="component-tooltip flex items-center gap-2 bg-white/95 backdrop-blur-sm shadow-lg rounded-lg px-3 py-2 border border-gray-200">
-            <span class="text-xs font-mono text-gray-700 font-medium">
-              {{ element.type }}
-              @if (element.isSharedComponent) {
-                <span class="ml-1 text-xs text-blue-600">(shared)</span>
-              }
-            </span>
-            <button (click)="copyToClipboard(element.type); $event.stopPropagation()"
-                    class="p-1 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
-                    title="Copy component ID">
-              <span class="material-symbols-outlined" style="font-size: 18px;">content_copy</span>
-            </button>
-            @if (!isInCatalog(element.type)) {
-              <button (click)="addToCatalog(element.type); $event.stopPropagation()"
+          <div class="component-tooltip flex flex-col gap-2 bg-white/95 backdrop-blur-sm shadow-lg rounded-lg px-3 py-2 border border-gray-200">
+            <!-- Row 1: Component ID with actions -->
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-mono text-gray-700 font-medium">
+                {{ element.type }}
+                @if (element.isSharedComponent) {
+                  <span class="ml-1 text-xs text-blue-600">(shared)</span>
+                }
+              </span>
+              <button (click)="copyToClipboard(element.type); $event.stopPropagation()"
                       class="p-1 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
-                      title="Register to catalog">
-                <span class="material-symbols-outlined" style="font-size: 18px;">add_circle_outline</span>
+                      title="Copy component ID">
+                <span class="material-symbols-outlined" style="font-size: 18px;">content_copy</span>
               </button>
-            }
-            @if (isInCatalog(element.type)) {
-              <span class="p-1 text-green-600" title="Registered">
-                <span class="material-symbols-outlined" style="font-size: 18px;">check_circle</span>
-              </span>
-              <button (click)="removeFromCatalog(element.type); $event.stopPropagation()"
-                      class="p-1 text-gray-600 hover:text-red-600 hover:bg-gray-100 rounded transition-colors"
-                      title="Remove from catalog">
-                <span class="material-symbols-outlined" style="font-size: 18px;">delete_outline</span>
-              </button>
-            }
-            @if (!element.isSharedComponent) {
-              <button (click)="makeSharedComponent(element.type); $event.stopPropagation()"
-                      class="p-1 text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded transition-colors"
-                      title="Make shared component">
-                <span class="material-symbols-outlined" style="font-size: 18px;">share</span>
-              </button>
-            }
+              @if (!isInCatalog(element.type)) {
+                <button (click)="addToCatalog(element.type); $event.stopPropagation()"
+                        class="p-1 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
+                        title="Register to catalog">
+                  <span class="material-symbols-outlined" style="font-size: 18px;">add_circle_outline</span>
+                </button>
+              }
+              @if (isInCatalog(element.type)) {
+                <span class="p-1 text-green-600" title="Registered">
+                  <span class="material-symbols-outlined" style="font-size: 18px;">check_circle</span>
+                </span>
+                <button (click)="removeFromCatalog(element.type); $event.stopPropagation()"
+                        class="p-1 text-gray-600 hover:text-red-600 hover:bg-gray-100 rounded transition-colors"
+                        title="Remove from catalog">
+                  <span class="material-symbols-outlined" style="font-size: 18px;">delete_outline</span>
+                </button>
+              }
+              @if (!element.isSharedComponent) {
+                <button (click)="makeSharedComponent(element.type); $event.stopPropagation()"
+                        class="p-1 text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded transition-colors"
+                        title="Make shared component">
+                  <span class="material-symbols-outlined" style="font-size: 18px;">share</span>
+                </button>
+              }
+              @if (element.isSharedComponent) {
+                <span class="p-1 text-blue-600" title="Shared component">
+                  <span class="material-symbols-outlined" style="font-size: 18px;">check_circle</span>
+                </span>
+              }
+            </div>
+            
+            <!-- Row 2: Component tag (only for shared components) -->
             @if (element.isSharedComponent) {
-              <span class="p-1 text-blue-600" title="Shared component">
-                <span class="material-symbols-outlined" style="font-size: 18px;">check_circle</span>
-              </span>
+              <div class="flex items-center gap-2 pt-1 border-t border-gray-200">
+                <span class="text-xs font-mono text-blue-600 font-medium">
+                  &lt;app-{{ element.type }}&gt;&lt;/app-{{ element.type }}&gt;
+                </span>
+                <button (click)="copyComponentTag(element.type); $event.stopPropagation()"
+                        class="p-1 text-blue-600 hover:text-blue-900 hover:bg-blue-50 rounded transition-colors"
+                        title="Copy component tag">
+                  <span class="material-symbols-outlined" style="font-size: 18px;">content_copy</span>
+                </button>
+              </div>
             }
           </div>
         </div>
