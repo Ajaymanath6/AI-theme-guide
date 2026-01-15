@@ -6,6 +6,7 @@
         [id]="'dropdown-button-' + projectId" 
         [attr.data-dropdown-toggle]="'dropdown-menu-' + projectId" 
         type="button" 
+        (click)="$event.stopPropagation()"
         class="p-1 hover:bg-brandcolor-fill border border-transparent active:border-brandcolor-strokeweak rounded-lg">
         <svg class="w-5 h-5 text-brandcolor-strokestrong" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
@@ -50,9 +51,9 @@
       </div>
     </div>
   </div>
-  <!-- Card Content - Title and Subtitle -->
-  <div>
+  <!-- Card Content - Title and Subtitle (Clickable) -->
+  <a [routerLink]="['/dashboard', projectId]" class="block cursor-pointer hover:opacity-80 transition-opacity">
     <h3 class="text-brandcolor-textstrong font-semibold text-lg mb-1">{{ title }}</h3>
     <p class="text-brandcolor-textweak text-sm">{{ subtitle }}</p>
-  </div>
+  </a>
 </div>

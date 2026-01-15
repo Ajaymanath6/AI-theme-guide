@@ -35,6 +35,9 @@ export class ComponentsCanvasComponent implements AfterViewInit {
   activeMenuItem: string | null = null;
   selectedDropdownOption: string | null = null;
 
+  // File System Access API - store directory handle
+  private directoryHandle: any = null;
+
   constructor(
     private cdr: ChangeDetectorRef,
     private catalogService: ComponentCatalogService
@@ -279,9 +282,11 @@ export class ComponentsCanvasComponent implements AfterViewInit {
   }
 
   /**
-   * Save catalog to project (downloads component-catalog.json)
+   * Save catalog to project using File System Access API
+   * First time: Asks for folder permission
+   * After that: Automatically saves to the selected folder
    */
-  exportCatalog(): void {
+  async exportCatalog(): Promise<void> {
     const catalog = this.catalogService.getCatalogAsJson();
     const componentsCount = Object.keys(catalog.registeredComponents).length;
 
@@ -290,26 +295,73 @@ export class ComponentsCanvasComponent implements AfterViewInit {
       return;
     }
 
-    // Create JSON blob with nice formatting
+    // Create JSON content
     const jsonString = JSON.stringify(catalog, null, 2);
-    const blob = new Blob([jsonString], { type: 'application/json' });
-    
-    // Create download link
+
+    try {
+      // Check if File System Access API is supported
+      if ('showDirectoryPicker' in window) {
+        await this.saveWithFileSystemAPI(jsonString, componentsCount);
+      } else {
+        // Fallback to download for browsers that don't support the API
+        this.fallbackDownload(jsonString, componentsCount);
+      }
+    } catch (error: any) {
+      // User cancelled or error occurred
+      if (error.name === 'AbortError') {
+        console.log('User cancelled file save');
+      } else {
+        console.error('Error saving file:', error);
+        // Fallback to download
+        this.fallbackDownload(jsonString, componentsCount);
+      }
+    }
+  }
+
+  /**
+   * Save file using File System Access API (automatic save to project)
+   */
+  private async saveWithFileSystemAPI(content: string, componentsCount: number): Promise<void> {
+    try {
+      // If we don't have a directory handle, ask user to select the project folder
+      if (!this.directoryHandle) {
+        this.directoryHandle = await (window as any).showDirectoryPicker({
+          mode: 'readwrite',
+          startIn: 'documents',
+        });
+        console.log('📁 Project folder selected:', this.directoryHandle.name);
+      }
+
+      // Create/overwrite the component-catalog.json file
+      const fileHandle = await this.directoryHandle.getFileHandle('component-catalog.json', { create: true });
+      const writable = await fileHandle.createWritable();
+      await writable.write(content);
+      await writable.close();
+
+      this.showToast(`✓ Saved ${componentsCount} component(s) to component-catalog.json in your project folder!`);
+      console.log('✓ File saved to project automatically');
+      console.log('💡 Now you can use @component-catalog.json in AI chat');
+    } catch (error) {
+      throw error; // Re-throw to be caught by parent
+    }
+  }
+
+  /**
+   * Fallback download method for unsupported browsers
+   */
+  private fallbackDownload(content: string, componentsCount: number): void {
+    const blob = new Blob([content], { type: 'application/json' });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
     link.download = 'component-catalog.json';
     
-    // Trigger download
     document.body.appendChild(link);
     link.click();
-    
-    // Cleanup
     document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
     
-    this.showToast(`✓ Saved ${componentsCount} component(s) to component-catalog.json. Move this file to your project root!`);
-    console.log('Catalog saved for project:', catalog);
-    console.log('💡 Tip: Save this file to your project root and use @component-catalog.json in AI chat');
+    this.showToast(`✓ Downloaded ${componentsCount} component(s). Save to your project root!`);
+    console.log('⚠️ File System Access API not supported, using download fallback');
   }
 }

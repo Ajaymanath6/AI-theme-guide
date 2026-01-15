@@ -1,0 +1,34 @@
+{
+  "catalogId": "design-system-v1",
+  "version": "1.0.0",
+  "lastUpdated": "2026-01-15T11:23:43.243Z",
+  "registeredComponents": {
+    "card1": {
+      "id": "card1",
+      "displayName": "Primary Content Card",
+      "category": "cards",
+      "description": "Card with long paragraph content, primary and secondary action buttons",
+      "htmlSelector": "[title='card1']",
+      "status": "active",
+      "registeredAt": "2026-01-15T11:13:49.606Z"
+    },
+    "card2": {
+      "id": "card2",
+      "displayName": "Action Card",
+      "category": "cards",
+      "description": "Card with two-line content, primary and primary outline buttons",
+      "htmlSelector": "[title='card2']",
+      "status": "active",
+      "registeredAt": "2026-01-15T11:22:19.090Z"
+    },
+    "card3": {
+      "id": "card3",
+      "displayName": "Compact Card",
+      "category": "cards",
+      "description": "Compact card with single line content, secondary and secondary outline buttons",
+      "htmlSelector": "[title='card3']",
+      "status": "active",
+      "registeredAt": "2026-01-15T11:23:38.388Z"
+    }
+  }
+}
