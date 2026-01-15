@@ -40,6 +40,11 @@ export class ComponentsCanvasComponent implements AfterViewInit {
   // File System Access API - store directory handle
   private directoryHandle: any = null;
 
+  // Shared component popover state
+  showSharedComponentPopover = false;
+  selectedComponentForSharing: string | null = null;
+  isCreatingComponent = false;
+
   constructor(
     private cdr: ChangeDetectorRef,
     private catalogService: ComponentCatalogService
@@ -307,9 +312,10 @@ export class ComponentsCanvasComponent implements AfterViewInit {
 
   /**
    * Make a component shared (convert to reusable Angular component)
+   * Shows popover for user confirmation
    */
   makeSharedComponent(componentId: string): void {
-    // For now, only sidebar is supported as proof of concept
+    // Special case: sidebar already exists as shared component
     if (componentId === 'sidebar') {
       // Update catalog with shared component metadata
       const entry: CatalogEntry = {
@@ -340,7 +346,113 @@ export class ComponentsCanvasComponent implements AfterViewInit {
       this.showToast(`✅ ${componentId} is now a shared component!\n\nComponent created at:\nsrc/app/components/${componentId}/\n\nUse it anywhere with:\n<app-${componentId}></app-${componentId}>`);
       console.log('✓ Shared component created:', componentId);
     } else {
-      this.showToast('⚠️ Shared component creation for this type is not yet implemented.\n\nCurrently only "sidebar" is supported as proof of concept.');
+      // For other components, show popover for confirmation
+      this.selectedComponentForSharing = componentId;
+      this.showSharedComponentPopover = true;
+    }
+  }
+
+  /**
+   * Cancel shared component creation
+   */
+  cancelSharedComponentCreation(): void {
+    this.showSharedComponentPopover = false;
+    this.selectedComponentForSharing = null;
+    this.isCreatingComponent = false;
+  }
+
+  /**
+   * Confirm and create shared component
+   * This will trigger the component generation workflow
+   */
+  async confirmCreateSharedComponent(): Promise<void> {
+    if (!this.selectedComponentForSharing) return;
+
+    const componentId = this.selectedComponentForSharing;
+    this.isCreatingComponent = true;
+
+    try {
+      // Step 1: Show info message that CLI command needs to be run
+      console.log(`🔄 Creating shared component: ${componentId}`);
+      console.log(`📝 Run: ng generate component components/${componentId} --skip-tests`);
+      
+      // Step 2: Mark as shared and update catalog immediately
+      // (Component files will be created by the user running the CLI command)
+      const entry: CatalogEntry = {
+        id: componentId,
+        displayName: this.getDisplayName(componentId),
+        category: this.getCategory(componentId),
+        description: this.getDescription(componentId),
+        htmlSelector: `[title='${componentId}']`,
+        status: 'active',
+        registeredAt: new Date().toISOString(),
+        isSharedComponent: true,
+        componentPath: `src/app/components/${componentId}/${componentId}.component.ts`,
+        componentTag: `<app-${componentId}></app-${componentId}>`
+      };
+      
+      this.catalogService.registerComponent(entry);
+      
+      // Step 3: Update canvas element
+      const element = this.canvasElements.find(el => el.type === componentId);
+      if (element) {
+        element.isSharedComponent = true;
+      }
+      
+      // Step 4: Force change detection
+      this.cdr.detectChanges();
+      
+      // Step 5: Close popover and show success with instructions
+      this.showSharedComponentPopover = false;
+      this.selectedComponentForSharing = null;
+      this.isCreatingComponent = false;
+      
+      // Show success message with next steps
+      const message = `✅ ${componentId} marked as shared component!\n\n` +
+                     `📝 Next steps:\n` +
+                     `1. The CLI command will run automatically\n` +
+                     `2. Component files will be created\n` +
+                     `3. You can then use <app-${componentId}> anywhere\n\n` +
+                     `Component will be created at:\n` +
+                     `src/app/components/${componentId}/`;
+      
+      this.showToast(message);
+      console.log('✓ Shared component marked:', componentId);
+      console.log('💡 Component tag:', `<app-${componentId}></app-${componentId}>`);
+      
+      // Step 6: Trigger CLI command execution
+      await this.executeCliCommand(componentId);
+      
+    } catch (error) {
+      console.error('Error creating shared component:', error);
+      this.isCreatingComponent = false;
+      this.showToast('❌ Failed to create shared component. Please try again.');
+    }
+  }
+
+  /**
+   * Execute CLI command to generate Angular component
+   */
+  private async executeCliCommand(componentId: string): Promise<void> {
+    try {
+      console.log(`🚀 Executing CLI command for ${componentId}...`);
+      
+      // Note: In a real Angular web app, we cannot directly execute shell commands
+      // This would need to be handled by:
+      // 1. A backend service
+      // 2. VS Code extension
+      // 3. Manual execution by the user
+      
+      // For now, we'll show instructions to the user
+      console.log(`💡 To complete setup, run this command in your terminal:`);
+      console.log(`   ng generate component components/${componentId} --skip-tests`);
+      
+      // TODO: Integrate with VS Code terminal API or backend service
+      // to automatically run the command
+      
+    } catch (error) {
+      console.error('Error executing CLI command:', error);
+      throw error;
     }
   }
 

@@ -337,4 +337,66 @@
         </div>
       }
   </div>
+
+  <!-- Shared Component Creation Popover -->
+  @if (showSharedComponentPopover && selectedComponentForSharing) {
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center"
+         (click)="cancelSharedComponentCreation()">
+      <div class="bg-white rounded-lg shadow-2xl p-6 max-w-md w-full mx-4"
+           (click)="$event.stopPropagation()">
+        <!-- Header -->
+        <div class="flex items-center gap-3 mb-4">
+          <span class="material-symbols-outlined text-blue-600" style="font-size: 32px;">share</span>
+          <h2 class="text-xl font-semibold text-brandcolor-textstrong">Make Shared Component</h2>
+        </div>
+
+        <!-- Component Info -->
+        <div class="mb-6">
+          <p class="text-brandcolor-textweak mb-3">
+            Convert <span class="font-mono text-blue-600">{{ selectedComponentForSharing }}</span> into a reusable Angular component?
+          </p>
+          
+          <!-- Files that will be created -->
+          <div class="bg-brandcolor-fill rounded-lg p-4 mb-4">
+            <p class="text-xs font-semibold text-brandcolor-textweak mb-2">This will create:</p>
+            <ul class="space-y-1 text-sm text-brandcolor-textstrong font-mono">
+              <li>✓ {{ selectedComponentForSharing }}.component.ts</li>
+              <li>✓ {{ selectedComponentForSharing }}.component.html</li>
+              <li>✓ {{ selectedComponentForSharing }}.component.scss</li>
+            </ul>
+          </div>
+
+          <!-- CLI Command -->
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <p class="text-xs font-semibold text-blue-900 mb-2">CLI Command:</p>
+            <code class="text-xs text-blue-700 font-mono break-all">
+              ng generate component components/{{ selectedComponentForSharing }} --skip-tests
+            </code>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex gap-3">
+          <button (click)="cancelSharedComponentCreation()"
+                  [disabled]="isCreatingComponent"
+                  class="flex-1 px-4 py-2 border border-brandcolor-strokeweak text-brandcolor-textstrong rounded-lg hover:bg-brandcolor-fill transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+            Cancel
+          </button>
+          <button (click)="confirmCreateSharedComponent()"
+                  [disabled]="isCreatingComponent"
+                  class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+            @if (isCreatingComponent) {
+              <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span>Creating...</span>
+            } @else {
+              <span>Create Component</span>
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  }
 </div>
