@@ -7,7 +7,8 @@
     "build": "ng build",
     "build:prod": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "component-helper": "node component-helper.js"
   },
   "private": true,
   "dependencies": {
@@ -31,7 +32,9 @@
     "@angular/compiler-cli": "^19.1.0",
     "@types/jasmine": "~5.1.0",
     "autoprefixer": "^10.4.23",
+    "cors": "^2.8.5",
     "eslint-plugin-tailwindcss": "^3.18.2",
+    "express": "^5.2.1",
     "jasmine-core": "~5.5.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",

@@ -431,27 +431,44 @@ export class ComponentsCanvasComponent implements AfterViewInit {
   }
 
   /**
-   * Execute CLI command to generate Angular component
+   * Execute CLI command to generate Angular component via helper service
    */
   private async executeCliCommand(componentId: string): Promise<void> {
     try {
-      console.log(`🚀 Executing CLI command for ${componentId}...`);
+      console.log(`🚀 Calling component helper service for ${componentId}...`);
       
-      // Note: In a real Angular web app, we cannot directly execute shell commands
-      // This would need to be handled by:
-      // 1. A backend service
-      // 2. VS Code extension
-      // 3. Manual execution by the user
+      // Call the component helper service running on localhost:4202
+      const response = await fetch('http://localhost:4202/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ componentId })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        console.log('✅ Component generated successfully!');
+        console.log('📁 Files created:', result.files);
+        console.log('📍 Location:', result.componentPath);
+        
+        // Show success notification
+        this.showToast(`✅ Component files created successfully!\n\nFiles:\n${result.files.join('\n')}\n\nLocation: ${result.componentPath}`);
+      } else {
+        console.error('❌ Failed to generate component:', result.error);
+        this.showToast(`❌ Failed to generate component:\n${result.error}\n\nMake sure the component helper is running:\nnpm run component-helper`);
+      }
       
-      // For now, we'll show instructions to the user
-      console.log(`💡 To complete setup, run this command in your terminal:`);
-      console.log(`   ng generate component components/${componentId} --skip-tests`);
+    } catch (error: any) {
+      console.error('❌ Error calling component helper:', error);
       
-      // TODO: Integrate with VS Code terminal API or backend service
-      // to automatically run the command
-      
-    } catch (error) {
-      console.error('Error executing CLI command:', error);
+      // Check if it's a connection error (helper not running)
+      if (error.message?.includes('fetch') || error.name === 'TypeError') {
+        this.showToast(`❌ Cannot connect to component helper!\n\nPlease start it first:\nnpm run component-helper\n\nThen try again.\n\nMake sure it's running on port 4202.`);
+      } else {
+        this.showToast(`❌ Error: ${error.message}`);
+      }
       throw error;
     }
   }
