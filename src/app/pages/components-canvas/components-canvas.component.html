@@ -144,41 +144,80 @@
           
           <!-- Card 4: Title, Subtitle, Sub Headings (Left & Right), Divider, Primary & Neutral Buttons -->
           @if (element.type === 'card4') {
-            <div title="card4" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
-              <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title Four</h3>
-              <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle Four</p>
-              
-              <!-- Sub Headings Left and Right -->
-              <div class="flex items-center justify-between mb-4">
-                <!-- Left End -->
-                <div>
-                  <h4 class="text-brandcolor-textstrong font-medium text-sm mb-1">Sub Heading Left</h4>
-                  <p class="text-brandcolor-textweak text-xs">Sub Title Left</p>
+            @if (element.isSharedComponent) {
+              <!-- Shared Component: Show component tag -->
+              <app-card4></app-card4>
+            } @else {
+              <!-- Not Shared: Show full HTML -->
+              <div title="card4" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
+                <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title Four</h3>
+                <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle Four</p>
+                
+                <!-- Sub Headings Left and Right -->
+                <div class="flex items-center justify-between mb-4">
+                  <!-- Left End -->
+                  <div>
+                    <h4 class="text-brandcolor-textstrong font-medium text-sm mb-1">Sub Heading Left</h4>
+                    <p class="text-brandcolor-textweak text-xs">Sub Title Left</p>
+                  </div>
+                  
+                  <!-- Right End -->
+                  <div class="text-right">
+                    <h4 class="text-brandcolor-textstrong font-medium text-sm mb-1">Sub Heading Right</h4>
+                    <p class="text-brandcolor-textweak text-xs">Sub Title Right</p>
+                  </div>
                 </div>
                 
-                <!-- Right End -->
-                <div class="text-right">
-                  <h4 class="text-brandcolor-textstrong font-medium text-sm mb-1">Sub Heading Right</h4>
-                  <p class="text-brandcolor-textweak text-xs">Sub Title Right</p>
+                <!-- Divider -->
+                <hr class="border-brandcolor-strokeweak mb-4">
+                
+                <!-- Buttons -->
+                <div class="flex gap-3">
+                  <button
+                    type="button"
+                    title="card4-primary-button"
+                    class="flex-1 border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
+                    Primary
+                  </button>
+                  <button
+                    type="button"
+                    title="card4-neutral-button"
+                    class="flex-1 border-[1.5px] border-brandcolor-strokeweak bg-brandcolor-white text-brandcolor-textstrong hover:bg-brandcolor-neutralhover focus:border-brandcolor-strokeweak active:border-brandcolor-strokeweak active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
+                    Neutral
+                  </button>
                 </div>
               </div>
+            }
+          }
+          
+          <!-- Card 5: Title, Subtitle, Image, Primary & Secondary Buttons -->
+          @if (element.type === 'card5') {
+            <div title="card5" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
+              <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title Five</h3>
+              <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle Five</p>
               
-              <!-- Divider -->
-              <hr class="border-brandcolor-strokeweak mb-4">
+              <!-- Placeholder Image -->
+              <div class="mb-4">
+                <img 
+                  src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=250&fit=crop" 
+                  alt="Placeholder" 
+                  class="w-full h-48 object-cover rounded-lg"
+                  title="card5-image">
+              </div>
               
               <!-- Buttons -->
               <div class="flex gap-3">
                 <button
                   type="button"
-                  title="card4-primary-button"
+                  title="card5-primary-button"
                   class="flex-1 border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
                   Primary
                 </button>
                 <button
                   type="button"
-                  title="card4-neutral-button"
-                  class="flex-1 border-[1.5px] border-brandcolor-strokeweak bg-brandcolor-white text-brandcolor-textstrong hover:bg-brandcolor-neutralhover focus:border-brandcolor-strokeweak active:border-brandcolor-strokeweak active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
-                  Neutral
+                  title="card5-secondary-button"
+                  class="flex-1 border-[1.5px] border-brandcolor-secondary bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
+                  Secondary
                 </button>
               </div>
             </div>

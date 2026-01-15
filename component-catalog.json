@@ -28,7 +28,22 @@
       "description": "Compact card with single line content, secondary and secondary outline buttons",
       "htmlSelector": "[title='card3']",
       "status": "active",
-      "registeredAt": "2026-01-15T11:23:38.388Z"
+      "registeredAt": "2026-01-15T11:23:38.388Z",
+      "isSharedComponent": true,
+      "componentPath": "src/app/components/card3/card3.component.ts",
+      "componentTag": "<app-card3></app-card3>"
+    },
+    "card4": {
+      "id": "card4",
+      "displayName": "Dual Subheading Card",
+      "category": "cards",
+      "description": "Card with title, subtitle, dual subheadings (left & right), divider, primary and neutral buttons",
+      "htmlSelector": "[title='card4']",
+      "status": "active",
+      "registeredAt": "2026-01-15T12:00:00.000Z",
+      "isSharedComponent": true,
+      "componentPath": "src/app/components/card4/card4.component.ts",
+      "componentTag": "<app-card4></app-card4>"
     },
     "sidebar": {
       "id": "sidebar",

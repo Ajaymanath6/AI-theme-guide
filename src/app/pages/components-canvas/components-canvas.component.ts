@@ -5,6 +5,7 @@ import { DragDropModule, CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/
 import { ComponentCatalogService, CatalogEntry } from '../../services/component-catalog.service';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { Card3Component } from '../../components/card3/card3.component';
+import { Card4Component } from '../../components/card4/card4.component';
 
 declare var initFlowbite: () => void;
 
@@ -19,7 +20,7 @@ interface CanvasElement {
 
 @Component({
   selector: 'app-components-canvas',
-  imports: [CommonModule, DragDropModule, RouterLink, SidebarComponent, Card3Component],
+  imports: [CommonModule, DragDropModule, RouterLink, SidebarComponent, Card3Component, Card4Component],
   templateUrl: './components-canvas.component.html',
   styleUrl: './components-canvas.component.scss'
 })
@@ -31,6 +32,7 @@ export class ComponentsCanvasComponent implements AfterViewInit {
     { id: 'card2', type: 'card2', x: 400, y: 50, content: 'Card Title Two' },
     { id: 'card3', type: 'card3', x: 750, y: 50, content: 'Card Title Three' },
     { id: 'card4', type: 'card4', x: 1100, y: 50, content: 'Card Title Four' },
+    { id: 'card5', type: 'card5', x: 50, y: 400, content: 'Card Title Five' },
     { id: 'dropdown1', type: 'dropdown', x: 50, y: 300, content: 'Dropdown Component' }
   ];
 
@@ -49,7 +51,67 @@ export class ComponentsCanvasComponent implements AfterViewInit {
   constructor(
     private cdr: ChangeDetectorRef,
     private catalogService: ComponentCatalogService
-  ) {}
+  ) {
+    // Load shared component status from catalog on init
+    this.loadSharedComponentStatus();
+  }
+
+  /**
+   * Load shared component status from catalog
+   * This ensures the status persists across page refreshes
+   */
+  private loadSharedComponentStatus(): void {
+    // Sync component-catalog.json data to localStorage if needed
+    this.syncCatalogToLocalStorage();
+    
+    this.canvasElements.forEach(element => {
+      const catalogEntry = this.catalogService.getComponent(element.type);
+      if (catalogEntry && catalogEntry.isSharedComponent) {
+        element.isSharedComponent = true;
+      }
+    });
+    console.log('✓ Shared component status loaded from catalog');
+  }
+
+  /**
+   * Sync hardcoded catalog data to localStorage
+   * This ensures card3 and card4 are marked as shared
+   */
+  private syncCatalogToLocalStorage(): void {
+    // Check if card3 is in catalog and mark as shared if component files exist
+    if (this.catalogService.isInCatalog('card3')) {
+      const card3Entry = this.catalogService.getComponent('card3');
+      if (!card3Entry?.isSharedComponent) {
+        const updatedCard3: CatalogEntry = {
+          ...card3Entry!,
+          isSharedComponent: true,
+          componentPath: 'src/app/components/card3/card3.component.ts',
+          componentTag: '<app-card3></app-card3>'
+        };
+        this.catalogService.registerComponent(updatedCard3);
+      }
+    }
+
+    // Check if card4 is in catalog and mark as shared if component files exist
+    if (this.catalogService.isInCatalog('card4')) {
+      const card4Entry = this.catalogService.getComponent('card4');
+      if (!card4Entry?.isSharedComponent) {
+        const updatedCard4: CatalogEntry = {
+          id: 'card4',
+          displayName: this.getDisplayName('card4'),
+          category: this.getCategory('card4'),
+          description: this.getDescription('card4'),
+          htmlSelector: "[title='card4']",
+          status: 'active',
+          registeredAt: new Date().toISOString(),
+          isSharedComponent: true,
+          componentPath: 'src/app/components/card4/card4.component.ts',
+          componentTag: '<app-card4></app-card4>'
+        };
+        this.catalogService.registerComponent(updatedCard4);
+      }
+    }
+  }
 
   ngAfterViewInit() {
     if (typeof initFlowbite === 'function') {
@@ -223,6 +285,7 @@ export class ComponentsCanvasComponent implements AfterViewInit {
       'card2': 'Action Card',
       'card3': 'Compact Card',
       'card4': 'Dual Subheading Card',
+      'card5': 'Image Card',
       'sidebar': 'Navigation Sidebar',
       'dropdown': 'Action Dropdown Menu'
     };
@@ -248,6 +311,7 @@ export class ComponentsCanvasComponent implements AfterViewInit {
       'card2': 'Card with two-line content, primary and primary outline buttons',
       'card3': 'Compact card with single line content, secondary and secondary outline buttons',
       'card4': 'Card with title, subtitle, dual subheadings (left & right), divider, primary and neutral buttons',
+      'card5': 'Card with title, subtitle, placeholder image, primary and secondary buttons',
       'sidebar': 'Collapsible navigation sidebar with logo, dropdown, menu items, and toggle button',
       'dropdown': 'Dropdown menu with header, 5 options, divider, and action buttons (primary & neutral)'
     };
@@ -423,6 +487,10 @@ export class ComponentsCanvasComponent implements AfterViewInit {
       
       // Step 6: Trigger CLI command execution
       await this.executeCliCommand(componentId);
+
+      // Step 7: Automatically save to project file
+      console.log('💾 Auto-saving catalog to project file...');
+      await this.exportCatalog();
       
     } catch (error) {
       console.error('Error creating shared component:', error);
