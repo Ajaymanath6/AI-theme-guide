@@ -1,6 +1,34 @@
 <div class="min-h-screen bg-brandcolor-fill p-4">
-  <!-- Save to Project Button (OUTSIDE canvas) -->
-  <div class="mb-4 flex justify-end">
+  <!-- Top Controls Bar -->
+  <div class="mb-4 flex justify-between items-center">
+    <!-- Zoom Controls (LEFT) -->
+    <div class="flex items-center gap-2 bg-white rounded-lg shadow-md px-3 py-2 border border-brandcolor-strokeweak">
+      <button (click)="zoomOut()"
+              class="p-1 text-brandcolor-textstrong hover:text-brandcolor-primary hover:bg-brandcolor-fill rounded transition-colors"
+              title="Zoom Out (Ctrl + -)">
+        <span class="material-symbols-outlined" style="font-size: 20px;">remove</span>
+      </button>
+      
+      <span class="text-sm font-medium text-brandcolor-textstrong min-w-[50px] text-center">
+        {{ getZoomPercentage() }}%
+      </span>
+      
+      <button (click)="zoomIn()"
+              class="p-1 text-brandcolor-textstrong hover:text-brandcolor-primary hover:bg-brandcolor-fill rounded transition-colors"
+              title="Zoom In (Ctrl + +)">
+        <span class="material-symbols-outlined" style="font-size: 20px;">add</span>
+      </button>
+      
+      <div class="w-px h-6 bg-brandcolor-strokeweak mx-1"></div>
+      
+      <button (click)="resetZoom()"
+              class="p-1 text-brandcolor-textstrong hover:text-brandcolor-primary hover:bg-brandcolor-fill rounded transition-colors"
+              title="Reset View (Ctrl + 0)">
+        <span class="material-symbols-outlined" style="font-size: 20px;">center_focus_strong</span>
+      </button>
+    </div>
+    
+    <!-- Save to Project Button (RIGHT) -->
     <button (click)="exportCatalog()"
             class="flex items-center gap-2 px-4 py-2 bg-brandcolor-primary text-white rounded-lg hover:bg-brandcolor-primaryhover transition-colors shadow-md"
             title="💡 Saves directly to your project folder (first time: select folder)">
@@ -10,7 +38,19 @@
   </div>
   
   <!-- Canvas Area -->
-  <div class="relative bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg overflow-hidden canvas-container h-[calc(100vh-2rem)]">
+  <div class="relative bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg overflow-hidden canvas-container h-[calc(100vh-2rem)]"
+       (mousedown)="onCanvasMouseDown($event)"
+       (mousemove)="onCanvasMouseMove($event)"
+       (mouseup)="onCanvasMouseUp($event)"
+       (mouseleave)="onCanvasMouseUp($event)"
+       (wheel)="onCanvasWheel($event)">
+    
+    <!-- Canvas Viewport (pan & zoom wrapper) -->
+    <div class="canvas-viewport absolute inset-0 w-full h-full"
+         [style.transform]="getCanvasTransform()"
+         [style.transform-origin]="'0 0'"
+         [style.cursor]="isPanning ? 'grabbing' : 'grab'">
+      
       <!-- Canvas Elements -->
       @for (element of canvasElements; track element.id) {
         <div
@@ -381,6 +421,8 @@
           <p class="text-brandcolor-textweak">Drag elements around the canvas</p>
         </div>
       }
+    </div>
+    <!-- End Canvas Viewport -->
   </div>
 
   <!-- Shared Component Creation Popover -->

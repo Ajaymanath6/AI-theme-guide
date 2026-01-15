@@ -48,6 +48,16 @@ export class ComponentsCanvasComponent implements AfterViewInit {
   selectedComponentForSharing: string | null = null;
   isCreatingComponent = false;
 
+  // Canvas pan and zoom state
+  canvasPanX = 0;
+  canvasPanY = 0;
+  canvasZoom = 1;
+  isPanning = false;
+  panStartX = 0;
+  panStartY = 0;
+  panStartCanvasX = 0;
+  panStartCanvasY = 0;
+
   constructor(
     private cdr: ChangeDetectorRef,
     private catalogService: ComponentCatalogService
@@ -624,5 +634,126 @@ export class ComponentsCanvasComponent implements AfterViewInit {
     
     this.showToast(`✓ Downloaded ${componentsCount} component(s). Save to your project root!`);
     console.log('⚠️ File System Access API not supported, using download fallback');
+  }
+
+  // ============================================
+  // Canvas Pan & Zoom Methods
+  // ============================================
+
+  /**
+   * Start panning the canvas (only on background, not on elements)
+   */
+  onCanvasMouseDown(event: MouseEvent): void {
+    // Only pan with left mouse button on canvas background (not on elements)
+    if (event.button !== 0) return;
+    
+    // Check if clicking on canvas background (not on an element)
+    const target = event.target as HTMLElement;
+    if (!target.classList.contains('canvas-viewport')) return;
+
+    this.isPanning = true;
+    this.panStartX = event.clientX;
+    this.panStartY = event.clientY;
+    this.panStartCanvasX = this.canvasPanX;
+    this.panStartCanvasY = this.canvasPanY;
+    
+    // Change cursor to grabbing
+    document.body.style.cursor = 'grabbing';
+    event.preventDefault();
+  }
+
+  /**
+   * Pan the canvas while dragging
+   */
+  onCanvasMouseMove(event: MouseEvent): void {
+    if (!this.isPanning) return;
+
+    const deltaX = event.clientX - this.panStartX;
+    const deltaY = event.clientY - this.panStartY;
+
+    this.canvasPanX = this.panStartCanvasX + deltaX;
+    this.canvasPanY = this.panStartCanvasY + deltaY;
+
+    event.preventDefault();
+  }
+
+  /**
+   * Stop panning the canvas
+   */
+  onCanvasMouseUp(event: MouseEvent): void {
+    if (this.isPanning) {
+      this.isPanning = false;
+      document.body.style.cursor = 'default';
+      event.preventDefault();
+    }
+  }
+
+  /**
+   * Get canvas transform style
+   */
+  getCanvasTransform(): string {
+    return `translate(${this.canvasPanX}px, ${this.canvasPanY}px) scale(${this.canvasZoom})`;
+  }
+
+  /**
+   * Zoom canvas with mouse wheel
+   */
+  onCanvasWheel(event: WheelEvent): void {
+    event.preventDefault();
+
+    // Zoom speed
+    const zoomSpeed = 0.001;
+    const delta = -event.deltaY * zoomSpeed;
+    
+    // Calculate new zoom level (min: 0.1, max: 3)
+    const newZoom = Math.min(Math.max(this.canvasZoom + delta, 0.1), 3);
+    
+    // Get mouse position relative to canvas container
+    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+    
+    // Calculate zoom origin (zoom towards mouse position)
+    const zoomPointX = (mouseX - this.canvasPanX) / this.canvasZoom;
+    const zoomPointY = (mouseY - this.canvasPanY) / this.canvasZoom;
+    
+    // Update zoom
+    this.canvasZoom = newZoom;
+    
+    // Adjust pan to keep zoom centered on mouse
+    this.canvasPanX = mouseX - zoomPointX * this.canvasZoom;
+    this.canvasPanY = mouseY - zoomPointY * this.canvasZoom;
+  }
+
+  /**
+   * Zoom in
+   */
+  zoomIn(): void {
+    const newZoom = Math.min(this.canvasZoom + 0.1, 3);
+    this.canvasZoom = newZoom;
+  }
+
+  /**
+   * Zoom out
+   */
+  zoomOut(): void {
+    const newZoom = Math.max(this.canvasZoom - 0.1, 0.1);
+    this.canvasZoom = newZoom;
+  }
+
+  /**
+   * Reset zoom and pan
+   */
+  resetZoom(): void {
+    this.canvasZoom = 1;
+    this.canvasPanX = 0;
+    this.canvasPanY = 0;
+  }
+
+  /**
+   * Get zoom percentage for display
+   */
+  getZoomPercentage(): number {
+    return Math.round(this.canvasZoom * 100);
   }
 }
