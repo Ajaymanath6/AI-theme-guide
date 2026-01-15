@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { DragDropModule, CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
 import { ComponentCatalogService, CatalogEntry } from '../../services/component-catalog.service';
+import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 
 declare var initFlowbite: () => void;
 
@@ -12,18 +13,19 @@ interface CanvasElement {
   x: number;
   y: number;
   content: string;
+  isSharedComponent?: boolean;
 }
 
 @Component({
   selector: 'app-components-canvas',
-  imports: [CommonModule, DragDropModule, RouterLink],
+  imports: [CommonModule, DragDropModule, RouterLink, SidebarComponent],
   templateUrl: './components-canvas.component.html',
   styleUrl: './components-canvas.component.scss'
 })
 export class ComponentsCanvasComponent implements AfterViewInit {
   canvasElements: CanvasElement[] = [
     { id: 'header1', type: 'header', x: 0, y: 0, content: 'Header' },
-    { id: 'sidebar1', type: 'sidebar', x: 0, y: 60, content: 'Sidebar' },
+    { id: 'sidebar1', type: 'sidebar', x: 0, y: 60, content: 'Sidebar', isSharedComponent: true },
     { id: 'card1', type: 'card1', x: 50, y: 50, content: 'Card Title One' },
     { id: 'card2', type: 'card2', x: 400, y: 50, content: 'Card Title Two' },
     { id: 'card3', type: 'card3', x: 750, y: 50, content: 'Card Title Three' },
@@ -278,6 +280,53 @@ export class ComponentsCanvasComponent implements AfterViewInit {
 
       // Force change detection to update badge UI
       this.cdr.detectChanges();
+    }
+  }
+
+  /**
+   * Check if component is a shared component
+   */
+  isSharedComponent(componentId: string): boolean {
+    const entry = this.catalogService.getComponent(componentId);
+    return entry?.isSharedComponent === true;
+  }
+
+  /**
+   * Make a component shared (convert to reusable Angular component)
+   */
+  makeSharedComponent(componentId: string): void {
+    // For now, only sidebar is supported as proof of concept
+    if (componentId === 'sidebar') {
+      // Update catalog with shared component metadata
+      const entry: CatalogEntry = {
+        id: componentId,
+        displayName: this.getDisplayName(componentId),
+        category: this.getCategory(componentId),
+        description: this.getDescription(componentId),
+        htmlSelector: `[title='${componentId}']`,
+        status: 'active',
+        registeredAt: new Date().toISOString(),
+        isSharedComponent: true,
+        componentPath: `src/app/components/${componentId}/${componentId}.component.ts`,
+        componentTag: `<app-${componentId}></app-${componentId}>`
+      };
+      
+      this.catalogService.registerComponent(entry);
+      
+      // Update canvas element
+      const element = this.canvasElements.find(el => el.type === componentId);
+      if (element) {
+        element.isSharedComponent = true;
+      }
+      
+      // Force change detection to update UI
+      this.cdr.detectChanges();
+      
+      // Show success message
+      this.showToast(`✅ ${componentId} is now a shared component!\n\nComponent created at:\nsrc/app/components/${componentId}/\n\nUse it anywhere with:\n<app-${componentId}></app-${componentId}>`);
+      console.log('✓ Shared component created:', componentId);
+    } else {
+      this.showToast('⚠️ Shared component creation for this type is not yet implemented.\n\nCurrently only "sidebar" is supported as proof of concept.');
     }
   }
 

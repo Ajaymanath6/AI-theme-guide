@@ -1,135 +1,47 @@
 <!-- Dashboard Page -->
-<div class="h-screen flex flex-col">
-  <!-- Header Component -->
-  <app-project-header></app-project-header>
-
-  <!-- Main Content - Scrollable -->
-  <main class="flex-1 overflow-y-auto bg-brandcolor-white">
-    <div class="container mx-auto px-4 py-8">
-      <!-- Dashboard Content - Grid 2x2 -->
-      <div class="grid grid-cols-2 gap-6">
-        <!-- Card 1 - Row 1, Column 1 -->
-        <div title="card1" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 shadow-lg">
-          <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title One</h3>
-          <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle One</p>
-          <hr class="border-brandcolor-strokeweak mb-4">
-          <p class="text-brandcolor-textweak text-sm mb-4">
-            This is a long paragraph that contains multiple sentences to demonstrate how text content can span across several lines within a card component. It provides enough content to show how the card handles longer text blocks and ensures proper spacing and readability.
-          </p>
-          <div class="flex gap-3">
-            <button
-              type="button"
-              title="card1-primary-button"
-              class="border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-              Primary
-            </button>
-            <button
-              type="button"
-              title="card1-secondary-button"
-              class="border-[1.5px] border-brandcolor-secondary bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-              Secondary
-            </button>
+<div class="h-screen flex flex-col bg-brandcolor-fill">
+  <!-- Main Container: Left + Right -->
+  <div class="flex flex-1 overflow-hidden">
+    
+    <!-- LEFT PART: Sidebar (shared component) -->
+    <app-sidebar
+      [isSidebarCollapsed]="isSidebarCollapsed"
+      [activeMenuItem]="activeMenuItem"
+      [selectedDropdownOption]="selectedDropdownOption"
+      uniqueId="dashboard"
+      (sidebarToggle)="toggleSidebar()"
+      (menuItemClick)="onMenuItemClick($event)"
+      (dropdownOptionSelect)="selectedDropdownOption = $event">
+    </app-sidebar>
+    
+    <!-- RIGHT PART: Main Content Area -->
+    <div class="flex-1 flex flex-col overflow-hidden bg-brandcolor-white">
+      
+      <!-- TOP: Search Bar Header (Fixed) -->
+      <header class="flex-shrink-0 bg-brandcolor-white border-b border-brandcolor-strokeweak px-6 py-4">
+        <div class="flex items-center gap-4">
+          <!-- Search Bar -->
+          <div class="flex-1">
+            <input
+              type="text"
+              placeholder="Search..."
+              class="w-full px-4 py-2 border border-brandcolor-strokestrong rounded-lg focus:outline-none focus:border-brandcolor-textstrong focus:ring-0 bg-brandcolor-white text-brandcolor-textstrong">
           </div>
+          
+          <!-- Additional header actions can go here -->
         </div>
-
-        <!-- Card 1 - Row 1, Column 2 -->
-        <div title="card1" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 shadow-lg">
-          <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title One</h3>
-          <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle One</p>
-          <hr class="border-brandcolor-strokeweak mb-4">
-          <p class="text-brandcolor-textweak text-sm mb-4">
-            This is a long paragraph that contains multiple sentences to demonstrate how text content can span across several lines within a card component. It provides enough content to show how the card handles longer text blocks and ensures proper spacing and readability.
-          </p>
-          <div class="flex gap-3">
-            <button
-              type="button"
-              title="card1-primary-button"
-              class="border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-              Primary
-            </button>
-            <button
-              type="button"
-              title="card1-secondary-button"
-              class="border-[1.5px] border-brandcolor-secondary bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-              Secondary
-            </button>
-          </div>
+      </header>
+      
+      <!-- BOTTOM: Scrollable Layout -->
+      <main class="flex-1 overflow-y-auto bg-brandcolor-white p-6">
+        <!-- Scrollable content area -->
+        <!-- Your dashboard content goes here -->
+        <div class="space-y-4">
+          <p class="text-brandcolor-textweak">Dashboard content area - Add your components here</p>
         </div>
-
-        <!-- Card 1 - Row 2, Column 1 -->
-        <div title="card1" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 shadow-lg">
-          <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title One</h3>
-          <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle One</p>
-          <hr class="border-brandcolor-strokeweak mb-4">
-          <p class="text-brandcolor-textweak text-sm mb-4">
-            This is a long paragraph that contains multiple sentences to demonstrate how text content can span across several lines within a card component. It provides enough content to show how the card handles longer text blocks and ensures proper spacing and readability.
-          </p>
-          <div class="flex gap-3">
-            <button
-              type="button"
-              title="card1-primary-button"
-              class="border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-              Primary
-            </button>
-            <button
-              type="button"
-              title="card1-secondary-button"
-              class="border-[1.5px] border-brandcolor-secondary bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-              Secondary
-            </button>
-          </div>
-        </div>
-
-        <!-- Card 1 - Row 2, Column 2 -->
-        <div title="card1" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 shadow-lg">
-          <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title One</h3>
-          <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle One</p>
-          <hr class="border-brandcolor-strokeweak mb-4">
-          <p class="text-brandcolor-textweak text-sm mb-4">
-            This is a long paragraph that contains multiple sentences to demonstrate how text content can span across several lines within a card component. It provides enough content to show how the card handles longer text blocks and ensures proper spacing and readability.
-          </p>
-          <div class="flex gap-3">
-            <button
-              type="button"
-              title="card1-primary-button"
-              class="border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-              Primary
-            </button>
-            <button
-              type="button"
-              title="card1-secondary-button"
-              class="border-[1.5px] border-brandcolor-secondary bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-              Secondary
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 2 below the grid -->
-      <div class="mt-6">
-        <div title="card2" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 max-w-sm shadow-lg">
-          <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title Two</h3>
-          <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle Two</p>
-          <hr class="border-brandcolor-strokeweak mb-4">
-          <p class="text-brandcolor-textweak text-sm mb-4">
-            This is a two-line paragraph that demonstrates how shorter content looks within the card component. It spans exactly two lines.
-          </p>
-          <div class="flex gap-3">
-            <button
-              type="button"
-              title="card2-primary-button"
-              class="border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-              Primary
-            </button>
-            <button
-              type="button"
-              title="card2-primary-outline-button"
-              class="border-[1.5px] border-brandcolor-primary bg-transparent text-brandcolor-primary hover:bg-brandcolor-neutralhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
-              Primary Outline
-            </button>
-          </div>
-        </div>
-      </div>
+      </main>
+      
     </div>
-  </main>
+    
+  </div>
 </div>

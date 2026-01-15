@@ -8,6 +8,9 @@ export interface CatalogEntry {
   htmlSelector: string;
   status: 'active';
   registeredAt: string;
+  isSharedComponent?: boolean;
+  componentPath?: string;
+  componentTag?: string;
 }
 
 export interface ComponentCatalog {

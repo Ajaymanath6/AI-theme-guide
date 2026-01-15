@@ -1,7 +1,7 @@
 {
   "catalogId": "design-system-v1",
   "version": "1.0.0",
-  "lastUpdated": "2026-01-15T11:23:43.243Z",
+  "lastUpdated": "2026-01-15T11:43:40.231Z",
   "registeredComponents": {
     "card1": {
       "id": "card1",
@@ -29,6 +29,18 @@
       "htmlSelector": "[title='card3']",
       "status": "active",
       "registeredAt": "2026-01-15T11:23:38.388Z"
+    },
+    "sidebar": {
+      "id": "sidebar",
+      "displayName": "Navigation Sidebar",
+      "category": "navigation",
+      "description": "Collapsible navigation sidebar with logo, dropdown, menu items, and toggle button",
+      "htmlSelector": "[title='sidebar']",
+      "status": "active",
+      "registeredAt": "2026-01-15T11:42:58.711Z",
+      "isSharedComponent": true,
+      "componentPath": "src/app/components/sidebar/sidebar.component.ts",
+      "componentTag": "<app-sidebar></app-sidebar>"
     }
   }
 }
