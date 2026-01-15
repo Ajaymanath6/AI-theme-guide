@@ -20,6 +20,7 @@ module.exports = {
         'brandcolor-strokelight': '#C5C5C5',
         'brandcolor-fill': '#F5F5F5',
         'brandcolor-white': '#FFFFFF',
+        'brandcolor-sidebarhover': '#2E3C48',
       },
       boxShadow: {
         'button-press': 'inset 3px 3px 10px 0px rgba(0, 26, 49, 0.33)',

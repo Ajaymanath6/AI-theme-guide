@@ -1,4 +1,14 @@
 <div class="min-h-screen bg-brandcolor-fill p-4">
+  <!-- Save to Project Button (OUTSIDE canvas) -->
+  <div class="mb-4 flex justify-end">
+    <button (click)="exportCatalog()"
+            class="flex items-center gap-2 px-4 py-2 bg-brandcolor-primary text-white rounded-lg hover:bg-brandcolor-primaryhover transition-colors shadow-md"
+            title="💡 Save to project root, then use &#64;component-catalog.json in AI chat">
+      <span class="material-symbols-outlined" style="font-size: 20px;">save</span>
+      <span class="text-sm font-medium">Save to Project</span>
+    </button>
+  </div>
+  
   <!-- Canvas Area -->
   <div class="relative bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg overflow-hidden canvas-container h-[calc(100vh-2rem)]">
       <!-- Canvas Elements -->
@@ -14,11 +24,42 @@
           [style.top.px]="element.y"
           [style.cursor]="'move'"
           [style.z-index]="'1'"
-          class="cursor-move draggable-element">
+          class="cursor-move draggable-element component-wrapper">
+          
+          <!-- Header Component -->
+          @if (element.type === 'header') {
+            <header title="header" class="bg-brandcolor-textstrong border-b border-brandcolor-strokeweak rounded-lg shadow-lg">
+              <div class="flex items-center justify-between px-4 py-[14px] min-w-[600px]">
+                <!-- Logo -->
+                <a routerLink="/projects" class="flex items-center cursor-pointer">
+                  <img src="/logo-main.svg" alt="Logo" class="h-8">
+                </a>
+
+                <!-- Right Side Options -->
+                <div class="flex items-center gap-4">
+                  <!-- Option 1 -->
+                  <button
+                    type="button"
+                    class="flex items-center gap-2 px-3 py-2 text-brandcolor-white hover:bg-brandcolor-sidebarhover rounded-lg transition-colors">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">settings</span>
+                    <span class="text-sm font-medium">Settings</span>
+                  </button>
+
+                  <!-- Option 2 -->
+                  <button
+                    type="button"
+                    class="flex items-center gap-2 px-3 py-2 text-brandcolor-white hover:bg-brandcolor-sidebarhover rounded-lg transition-colors">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">help_outline</span>
+                    <span class="text-sm font-medium">Help</span>
+                  </button>
+                </div>
+              </div>
+            </header>
+          }
           
           <!-- Card 1: Long Paragraph with Primary and Secondary Buttons -->
           @if (element.type === 'card1') {
-            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
+            <div title="card1" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
               <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title One</h3>
               <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle One</p>
               <hr class="border-brandcolor-strokeweak mb-4">
@@ -28,11 +69,13 @@
               <div class="flex gap-3">
                 <button
                   type="button"
+                  title="card1-primary-button"
                   class="border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
                   Primary
                 </button>
                 <button
                   type="button"
+                  title="card1-secondary-button"
                   class="border-[1.5px] border-brandcolor-secondary bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
                   Secondary
                 </button>
@@ -42,7 +85,7 @@
           
           <!-- Card 2: Two Lines with Primary and Primary Outline Buttons -->
           @if (element.type === 'card2') {
-            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
+            <div title="card2" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
               <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title Two</h3>
               <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle Two</p>
               <hr class="border-brandcolor-strokeweak mb-4">
@@ -52,11 +95,13 @@
               <div class="flex gap-3">
                 <button
                   type="button"
+                  title="card2-primary-button"
                   class="border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
                   Primary
                 </button>
                 <button
                   type="button"
+                  title="card2-primary-outline-button"
                   class="border-[1.5px] border-brandcolor-primary bg-transparent text-brandcolor-primary hover:bg-brandcolor-neutralhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
                   Primary Outline
                 </button>
@@ -66,7 +111,7 @@
           
           <!-- Card 3: One Line with Secondary and Secondary Outline Buttons -->
           @if (element.type === 'card3') {
-            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
+            <div title="card3" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
               <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title Three</h3>
               <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle Three</p>
               <hr class="border-brandcolor-strokeweak mb-4">
@@ -76,17 +121,431 @@
               <div class="flex gap-3">
                 <button
                   type="button"
+                  title="card3-secondary-button"
                   class="border-[1.5px] border-brandcolor-secondary bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
                   Secondary
                 </button>
                 <button
                   type="button"
+                  title="card3-secondary-outline-button"
                   class="border-[1.5px] border-brandcolor-secondary bg-transparent text-brandcolor-secondary hover:bg-brandcolor-neutralhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
                   Secondary Outline
                 </button>
               </div>
             </div>
           }
+          
+          <!-- Card 4: Title, Subtitle, Sub Headings (Left & Right), Divider, Primary & Neutral Buttons -->
+          @if (element.type === 'card4') {
+            <div title="card4" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
+              <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title Four</h3>
+              <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle Four</p>
+              
+              <!-- Sub Headings Left and Right -->
+              <div class="flex items-center justify-between mb-4">
+                <!-- Left End -->
+                <div>
+                  <h4 class="text-brandcolor-textstrong font-medium text-sm mb-1">Sub Heading Left</h4>
+                  <p class="text-brandcolor-textweak text-xs">Sub Title Left</p>
+                </div>
+                
+                <!-- Right End -->
+                <div class="text-right">
+                  <h4 class="text-brandcolor-textstrong font-medium text-sm mb-1">Sub Heading Right</h4>
+                  <p class="text-brandcolor-textweak text-xs">Sub Title Right</p>
+                </div>
+              </div>
+              
+              <!-- Divider -->
+              <hr class="border-brandcolor-strokeweak mb-4">
+              
+              <!-- Buttons -->
+              <div class="flex gap-3">
+                <button
+                  type="button"
+                  title="card4-primary-button"
+                  class="flex-1 border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
+                  Primary
+                </button>
+                <button
+                  type="button"
+                  title="card4-neutral-button"
+                  class="flex-1 border-[1.5px] border-brandcolor-strokeweak bg-brandcolor-white text-brandcolor-textstrong hover:bg-brandcolor-neutralhover focus:border-brandcolor-strokeweak active:border-brandcolor-strokeweak active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
+                  Neutral
+                </button>
+              </div>
+            </div>
+          }
+          
+          <!-- Sidebar Component -->
+          @if (element.type === 'sidebar') {
+            <aside 
+              title="sidebar"
+              [class.w-[222px]]="!isSidebarCollapsed"
+              [class.w-16]="isSidebarCollapsed"
+              [class.p-6]="!isSidebarCollapsed"
+              [class.p-3]="isSidebarCollapsed"
+              class="bg-brandcolor-textstrong border-r border-brandcolor-strokestrong transition-all duration-300 flex flex-col rounded-lg shadow-lg">
+              
+              <!-- Header with Logo -->
+              <div class="pb-4 border-b border-brandcolor-strokestrong flex items-center justify-center">
+                <a routerLink="/components-canvas" title="sidebar-logo" class="flex items-center cursor-pointer">
+                  @if (!isSidebarCollapsed) {
+                    <img src="/logo-main.svg" alt="Logo" class="h-8 transition-all">
+                  } @else {
+                    <img src="/court.svg" alt="Logo" class="h-6 transition-all">
+                  }
+                </a>
+              </div>
+
+              <!-- Dropdown with Border -->
+              <div class="py-4 border-b border-brandcolor-strokestrong">
+                <div class="relative">
+                  <button 
+                    title="sidebar-dropdown-button"
+                    [id]="'sidebar-dropdown-button-' + element.id" 
+                    [attr.data-dropdown-toggle]="'sidebar-dropdown-menu-' + element.id" 
+                    type="button" 
+                    [class.px-3]="!isSidebarCollapsed"
+                    [class.px-0]="isSidebarCollapsed"
+                    class="w-full h-[34px] border-[1.5px] border-brandcolor-textweak bg-brandcolor-textstrong text-brandcolor-white hover:bg-brandcolor-sidebarhover focus:border-brandcolor-secondary active:border-brandcolor-secondary disabled:opacity-50 rounded-md font-medium flex items-center transition-colors"
+                    [class.justify-between]="!isSidebarCollapsed"
+                    [class.justify-center]="isSidebarCollapsed">
+                    @if (!isSidebarCollapsed) {
+                      <div class="flex items-center gap-2 flex-1 justify-center">
+                        @if (selectedDropdownOption === 'dart') {
+                          <img src="/dart.svg" alt="Dart" class="w-[60px] h-5">
+                        } @else if (selectedDropdownOption === 'deep') {
+                          <img src="/deep.svg" alt="Deep" class="w-[60px] h-5">
+                        } @else {
+                          <span class="text-sm text-brandcolor-white">Select Option</span>
+                        }
+                      </div>
+                      <svg 
+                        class="w-4 h-4 text-brandcolor-white transition-transform flex-shrink-0"
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                      </svg>
+                    } @else {
+                      @if (selectedDropdownOption === 'dart') {
+                        <img src="/dartalone.svg" alt="Dart" class="w-5 h-5">
+                      } @else if (selectedDropdownOption === 'deep') {
+                        <img src="/deepa.svg" alt="Deep" class="w-5 h-5">
+                      } @else {
+                        <img src="/dartalone.svg" alt="Dart" class="w-5 h-5">
+                      }
+                    }
+                  </button>
+                  <!-- Dropdown Menu -->
+                  <div 
+                    [id]="'sidebar-dropdown-menu-' + element.id" 
+                    [class.left-0]="!isSidebarCollapsed"
+                    [class.left-full]="isSidebarCollapsed"
+                    [class.ml-2]="isSidebarCollapsed"
+                    [class.min-w-full]="!isSidebarCollapsed"
+                    [class.min-w-[120px]]="isSidebarCollapsed"
+                    class="hidden z-50 bg-brandcolor-sidebarhover border border-brandcolor-strokestrong rounded-lg shadow-lg absolute top-10 h-[80px] px-6 py-1">
+                    <ul class="text-sm text-brandcolor-white h-full flex flex-col gap-1">
+                      <li>
+                        <a href="#" title="sidebar-dropdown-option-dart" (click)="onSidebarDropdownOption($event, 'dart')" 
+                          [class.border-brandcolor-secondary]="selectedDropdownOption === 'dart'"
+                          [class.border-transparent]="selectedDropdownOption !== 'dart'"
+                          [class.bg-brandcolor-textstrong]="selectedDropdownOption === 'dart'"
+                          [class.bg-transparent]="selectedDropdownOption !== 'dart'"
+                          class="flex items-center justify-center border-[1.5px] rounded-md transition-colors h-8 hover:bg-brandcolor-textstrong">
+                          <img [src]="isSidebarCollapsed ? '/dartalone.svg' : '/dart.svg'" alt="Dart" class="w-[60px] h-5">
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#" title="sidebar-dropdown-option-deep" (click)="onSidebarDropdownOption($event, 'deep')" 
+                          [class.border-brandcolor-secondary]="selectedDropdownOption === 'deep'"
+                          [class.border-transparent]="selectedDropdownOption !== 'deep'"
+                          [class.bg-brandcolor-textstrong]="selectedDropdownOption === 'deep'"
+                          [class.bg-transparent]="selectedDropdownOption !== 'deep'"
+                          class="flex items-center justify-center border-[1.5px] rounded-md transition-colors h-8 hover:bg-brandcolor-textstrong">
+                          <img [src]="isSidebarCollapsed ? '/deepa.svg' : '/deep.svg'" alt="Deep" class="w-[60px] h-5">
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Menu Items -->
+              <nav class="py-2">
+                <!-- Home -->
+                <a 
+                  href="#" 
+                  title="sidebar-menu-home"
+                  (click)="onMenuItemClick('home'); $event.preventDefault()"
+                  [class.bg-brandcolor-primary]="activeMenuItem === 'home'"
+                  [class.px-4]="!isSidebarCollapsed"
+                  [class.px-0]="isSidebarCollapsed"
+                  [class.justify-start]="!isSidebarCollapsed"
+                  [class.justify-center]="isSidebarCollapsed"
+                  class="flex items-center gap-3 py-3 hover:bg-brandcolor-sidebarhover transition-colors cursor-pointer text-brandcolor-white rounded-md">
+                  <span class="material-symbols-outlined text-brandcolor-white" style="font-size: 20px;">home</span>
+                  @if (!isSidebarCollapsed) {
+                    <span class="text-sm font-medium text-brandcolor-white">Home</span>
+                  }
+                </a>
+
+                <!-- All projects -->
+                <a 
+                  href="#" 
+                  title="sidebar-menu-all-projects"
+                  (click)="onMenuItemClick('all-projects'); $event.preventDefault()"
+                  [class.bg-brandcolor-primary]="activeMenuItem === 'all-projects'"
+                  [class.px-4]="!isSidebarCollapsed"
+                  [class.px-0]="isSidebarCollapsed"
+                  [class.justify-start]="!isSidebarCollapsed"
+                  [class.justify-center]="isSidebarCollapsed"
+                  class="flex items-center gap-3 py-3 hover:bg-brandcolor-sidebarhover transition-colors cursor-pointer text-brandcolor-white rounded-md">
+                  <span class="material-symbols-outlined text-brandcolor-white" style="font-size: 20px;">folder</span>
+                  @if (!isSidebarCollapsed) {
+                    <span class="text-sm font-medium text-brandcolor-white">All projects</span>
+                  }
+                </a>
+
+                <!-- My projects with divider -->
+                @if (!isSidebarCollapsed) {
+                  <div title="sidebar-menu-my-projects" class="flex items-center gap-2 py-3 px-4">
+                    <span class="material-symbols-outlined text-brandcolor-white material-symbols-filled" style="font-size: 20px; font-variation-settings: 'FILL' 1;">folder</span>
+                    <span class="text-brandcolor-white font-medium text-sm">My projects</span>
+                    <div class="flex-1 border-t border-brandcolor-strokestrong ml-2"></div>
+                  </div>
+                }
+
+                <!-- Search -->
+                <a 
+                  href="#" 
+                  title="sidebar-menu-search"
+                  (click)="onMenuItemClick('search'); $event.preventDefault()"
+                  [class.bg-brandcolor-primary]="activeMenuItem === 'search'"
+                  [class.px-4]="!isSidebarCollapsed"
+                  [class.px-0]="isSidebarCollapsed"
+                  [class.justify-start]="!isSidebarCollapsed"
+                  [class.justify-center]="isSidebarCollapsed"
+                  class="flex items-center gap-3 py-3 hover:bg-brandcolor-sidebarhover transition-colors cursor-pointer text-brandcolor-white rounded-md">
+                  <span class="material-symbols-outlined text-brandcolor-white" style="font-size: 20px;">search</span>
+                  @if (!isSidebarCollapsed) {
+                    <span class="text-sm font-medium text-brandcolor-white">Search</span>
+                  }
+                </a>
+
+                <!-- Tracking -->
+                <a 
+                  href="#" 
+                  title="sidebar-menu-tracking"
+                  (click)="onMenuItemClick('tracking'); $event.preventDefault()"
+                  [class.bg-brandcolor-primary]="activeMenuItem === 'tracking'"
+                  [class.px-4]="!isSidebarCollapsed"
+                  [class.px-0]="isSidebarCollapsed"
+                  [class.justify-start]="!isSidebarCollapsed"
+                  [class.justify-center]="isSidebarCollapsed"
+                  class="flex items-center gap-3 py-3 hover:bg-brandcolor-sidebarhover transition-colors cursor-pointer text-brandcolor-white rounded-md">
+                  <span class="material-symbols-outlined text-brandcolor-white" style="font-size: 20px;">track_changes</span>
+                  @if (!isSidebarCollapsed) {
+                    <span class="text-sm font-medium text-brandcolor-white">Tracking</span>
+                  }
+                </a>
+
+                <!-- Analytics -->
+                <a 
+                  href="#" 
+                  title="sidebar-menu-analytics"
+                  (click)="onMenuItemClick('analytics'); $event.preventDefault()"
+                  [class.bg-brandcolor-primary]="activeMenuItem === 'analytics'"
+                  [class.px-4]="!isSidebarCollapsed"
+                  [class.px-0]="isSidebarCollapsed"
+                  [class.justify-start]="!isSidebarCollapsed"
+                  [class.justify-center]="isSidebarCollapsed"
+                  class="flex items-center gap-3 py-3 hover:bg-brandcolor-sidebarhover transition-colors cursor-pointer text-brandcolor-white rounded-md">
+                  <span class="material-symbols-outlined text-brandcolor-white" style="font-size: 20px;">analytics</span>
+                  @if (!isSidebarCollapsed) {
+                    <span class="text-sm font-medium text-brandcolor-white">Analytics</span>
+                  }
+                </a>
+
+                <!-- Pins -->
+                <a 
+                  href="#" 
+                  title="sidebar-menu-pins"
+                  (click)="onMenuItemClick('pins'); $event.preventDefault()"
+                  [class.bg-brandcolor-primary]="activeMenuItem === 'pins'"
+                  [class.px-4]="!isSidebarCollapsed"
+                  [class.px-0]="isSidebarCollapsed"
+                  [class.justify-start]="!isSidebarCollapsed"
+                  [class.justify-center]="isSidebarCollapsed"
+                  class="flex items-center gap-3 py-3 hover:bg-brandcolor-sidebarhover transition-colors cursor-pointer text-brandcolor-white rounded-md">
+                  <span class="material-symbols-outlined text-brandcolor-white" style="font-size: 20px;">push_pin</span>
+                  @if (!isSidebarCollapsed) {
+                    <span class="text-sm font-medium text-brandcolor-white">Pins</span>
+                  }
+                </a>
+
+                <!-- Exports -->
+                <a 
+                  href="#" 
+                  title="sidebar-menu-exports"
+                  (click)="onMenuItemClick('exports'); $event.preventDefault()"
+                  [class.bg-brandcolor-primary]="activeMenuItem === 'exports'"
+                  [class.px-4]="!isSidebarCollapsed"
+                  [class.px-0]="isSidebarCollapsed"
+                  [class.justify-start]="!isSidebarCollapsed"
+                  [class.justify-center]="isSidebarCollapsed"
+                  class="flex items-center gap-3 py-3 hover:bg-brandcolor-sidebarhover transition-colors cursor-pointer text-brandcolor-white rounded-md">
+                  <span class="material-symbols-outlined text-brandcolor-white" style="font-size: 20px;">download</span>
+                  @if (!isSidebarCollapsed) {
+                    <span class="text-sm font-medium text-brandcolor-white">Exports</span>
+                  }
+                </a>
+
+                <!-- Orders -->
+                <a 
+                  href="#" 
+                  title="sidebar-menu-orders"
+                  (click)="onMenuItemClick('orders'); $event.preventDefault()"
+                  [class.bg-brandcolor-primary]="activeMenuItem === 'orders'"
+                  [class.px-4]="!isSidebarCollapsed"
+                  [class.px-0]="isSidebarCollapsed"
+                  [class.justify-start]="!isSidebarCollapsed"
+                  [class.justify-center]="isSidebarCollapsed"
+                  class="flex items-center gap-3 py-3 hover:bg-brandcolor-sidebarhover transition-colors cursor-pointer text-brandcolor-white rounded-md">
+                  <span class="material-symbols-outlined text-brandcolor-white" style="font-size: 20px;">receipt</span>
+                  @if (!isSidebarCollapsed) {
+                    <span class="text-sm font-medium text-brandcolor-white">Orders</span>
+                  }
+                </a>
+              </nav>
+
+              <!-- Toggle Button -->
+              <div class="pt-4 border-t border-brandcolor-strokestrong" [class.flex]="!isSidebarCollapsed" [class.justify-end]="!isSidebarCollapsed">
+                <button 
+                  title="sidebar-toggle-button"
+                  (click)="toggleSidebar()"
+                  type="button"
+                  [class.w-full]="isSidebarCollapsed"
+                  class="flex items-center p-2 hover:bg-brandcolor-sidebarhover rounded-md transition-colors border-[1.5px] border-brandcolor-strokestrong"
+                  [class.justify-center]="isSidebarCollapsed"
+                  [class.justify-end]="!isSidebarCollapsed">
+                  <svg 
+                    [class.rotate-180]="isSidebarCollapsed"
+                    class="w-5 h-5 text-brandcolor-white transition-transform" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                  </svg>
+                </button>
+              </div>
+            </aside>
+          }
+          
+          <!-- Dropdown Component: Header, 5 Options, Divider, and Two Buttons -->
+          @if (element.type === 'dropdown') {
+            <div title="dropdown" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-0 w-full max-w-sm shadow-lg">
+              <!-- Dropdown Button -->
+              <div class="relative p-4 pb-0">
+                <button 
+                  title="dropdown-button"
+                  [id]="'dropdown-button-' + element.id" 
+                  [attr.data-dropdown-toggle]="'dropdown-menu-' + element.id" 
+                  type="button" 
+                  class="w-full border-[1.5px] border-brandcolor-strokeweak bg-brandcolor-white text-brandcolor-textstrong hover:bg-brandcolor-fill focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium flex items-center justify-between">
+                  <span>Select Option</span>
+                  <svg class="w-4 h-4 text-brandcolor-strokestrong" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </button>
+                <!-- Dropdown Menu -->
+                <div 
+                  [id]="'dropdown-menu-' + element.id" 
+                  class="hidden z-50 bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg shadow-lg min-w-full absolute top-12 left-4 right-4">
+                  <!-- Header -->
+                  <div class="px-4 py-3 border-b border-brandcolor-strokeweak">
+                    <h3 class="text-brandcolor-textstrong font-semibold text-sm">Dropdown Header</h3>
+                  </div>
+                  <!-- Options -->
+                  <ul class="py-2 text-sm text-brandcolor-textstrong">
+                    <li>
+                      <a href="#" title="dropdown-option-1" (click)="onDropdownOption($event, 'option1')" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                        <span>Option 1</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" title="dropdown-option-2" (click)="onDropdownOption($event, 'option2')" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                        <span>Option 2</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" title="dropdown-option-3" (click)="onDropdownOption($event, 'option3')" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                        <span>Option 3</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" title="dropdown-option-4" (click)="onDropdownOption($event, 'option4')" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                        <span>Option 4</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" title="dropdown-option-5" (click)="onDropdownOption($event, 'option5')" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                        <span>Option 5</span>
+                      </a>
+                    </li>
+                  </ul>
+                  <!-- Divider -->
+                  <hr class="border-brandcolor-strokeweak">
+                  <!-- Action Buttons -->
+                  <div class="p-4 flex gap-3">
+                    <button
+                      type="button"
+                      title="dropdown-primary-button"
+                      (click)="onDropdownPrimaryButton(element.id)"
+                      class="flex-1 border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
+                      Primary
+                    </button>
+                    <button
+                      type="button"
+                      title="dropdown-neutral-button"
+                      (click)="onDropdownNeutralButton(element.id)"
+                      class="flex-1 border-[1.5px] border-brandcolor-strokeweak bg-brandcolor-white text-brandcolor-textstrong hover:bg-brandcolor-neutralhover focus:border-brandcolor-strokeweak active:border-brandcolor-strokeweak active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
+                      Neutral
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+          
+          <!-- Universal Tooltip (works for ALL components) -->
+          <div class="component-tooltip flex items-center gap-2 bg-white/95 backdrop-blur-sm shadow-lg rounded-lg px-3 py-2 border border-gray-200">
+            <span class="text-xs font-mono text-gray-700 font-medium">{{ element.type }}</span>
+            <button (click)="copyToClipboard(element.type); $event.stopPropagation()"
+                    class="p-1 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
+                    title="Copy component ID">
+              <span class="material-symbols-outlined" style="font-size: 18px;">content_copy</span>
+            </button>
+            @if (!isInCatalog(element.type)) {
+              <button (click)="addToCatalog(element.type); $event.stopPropagation()"
+                      class="p-1 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
+                      title="Register to catalog">
+                <span class="material-symbols-outlined" style="font-size: 18px;">add_circle_outline</span>
+              </button>
+            }
+            @if (isInCatalog(element.type)) {
+              <span class="p-1 text-green-600" title="Registered">
+                <span class="material-symbols-outlined" style="font-size: 18px;">check_circle</span>
+              </span>
+              <button (click)="removeFromCatalog(element.type); $event.stopPropagation()"
+                      class="p-1 text-gray-600 hover:text-red-600 hover:bg-gray-100 rounded transition-colors"
+                      title="Remove from catalog">
+                <span class="material-symbols-outlined" style="font-size: 18px;">delete_outline</span>
+              </button>
+            }
+          </div>
         </div>
       }
       

@@ -232,6 +232,24 @@
         "Card: bg-brandcolor-white",
         "Primary button text: text-brandcolor-white"
       ]
+    },
+    "brandcolor-sidebarhover": {
+      "hex": "#2E3C48",
+      "usage": "Hover state background color for sidebar menu items and dropdown menu backgrounds",
+      "utilityClasses": {
+        "background": "bg-brandcolor-sidebarhover",
+        "hover": "hover:bg-brandcolor-sidebarhover"
+      },
+      "whenToUse": [
+        "Sidebar menu item hover states",
+        "Navigation item hover backgrounds",
+        "Dropdown menu backgrounds"
+      ],
+      "examples": [
+        "Sidebar menu item hover: hover:bg-brandcolor-sidebarhover",
+        "Dropdown menu background: bg-brandcolor-sidebarhover"
+      ],
+      "logic": "Used specifically for sidebar navigation items when hovered and for dropdown menu backgrounds. Provides a darker background (#2E3C48) for better visual feedback on sidebar interactions and consistent dropdown styling."
     }
   },
   "componentGuidelines": {
