@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { Card3Component } from '../../components/card3/card3.component';
+import { Card4Component } from '../../components/card4/card4.component';
 
 declare var initFlowbite: () => void;
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, RouterLink, SidebarComponent, Card3Component],
+  imports: [CommonModule, RouterLink, SidebarComponent, Card3Component, Card4Component],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })

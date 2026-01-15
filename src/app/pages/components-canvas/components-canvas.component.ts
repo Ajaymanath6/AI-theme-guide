@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { DragDropModule, CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
 import { ComponentCatalogService, CatalogEntry } from '../../services/component-catalog.service';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
+import { Card3Component } from '../../components/card3/card3.component';
 
 declare var initFlowbite: () => void;
 
@@ -18,7 +19,7 @@ interface CanvasElement {
 
 @Component({
   selector: 'app-components-canvas',
-  imports: [CommonModule, DragDropModule, RouterLink, SidebarComponent],
+  imports: [CommonModule, DragDropModule, RouterLink, SidebarComponent, Card3Component],
   templateUrl: './components-canvas.component.html',
   styleUrl: './components-canvas.component.scss'
 })
