@@ -144,10 +144,10 @@
           @if (isSuperComponent(element.type)) {
             @switch (element.type) {
               @case ('super-component') {
-                <app-super-component></app-super-component>
+                <app-super-component variant="1"></app-super-component>
               }
-              @case ('secondary-button-variants') {
-                
+              @case ('app-secondary-button-variants') {
+                <app-secondary-button-variants variant="1"></app-secondary-button-variants>
               }
               @default {
                 <!-- Fallback: Show component info card for unknown super components -->
