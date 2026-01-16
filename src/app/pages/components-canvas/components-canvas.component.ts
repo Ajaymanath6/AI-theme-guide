@@ -55,6 +55,8 @@ export class ComponentsCanvasComponent implements AfterViewInit {
   isCreatingSuperComponent = false;
   availableSharedComponents: CatalogEntry[] = [];
   superComponentApproach: 'full-component' | 'style-variation' = 'full-component';
+  isEditingSuperComponent = false; // Track if we're editing an existing super component
+  editingSuperComponentId: string | null = null; // ID of the super component being edited
 
   // Canvas pan and zoom state
   canvasPanX = 0;
@@ -573,14 +575,36 @@ export class ComponentsCanvasComponent implements AfterViewInit {
       type: c.isSuperComponent ? 'super' : 'shared' 
     })));
 
-    // Pre-select components with same prefix
-    const prefix = componentId.replace(/\d+$/, ''); // Remove trailing numbers
-    this.selectedComponentsForSuper = this.availableSharedComponents
-      .filter(c => c.id.startsWith(prefix))
-      .map(c => c.id);
+    // Check if this component is already a super component (edit mode)
+    const existingSuperComponent = this.catalogService.getComponent(componentId);
+    if (existingSuperComponent?.isSuperComponent) {
+      // EDIT MODE: Pre-select the wrapped components
+      this.isEditingSuperComponent = true;
+      this.editingSuperComponentId = componentId;
+      this.superComponentName = componentId; // Keep the same name
+      this.selectedComponentsForSuper = existingSuperComponent.wraps || [];
+      
+      // Get the approach from description or default to full-component
+      if (existingSuperComponent.description?.includes('Style variation')) {
+        this.superComponentApproach = 'style-variation';
+      } else {
+        this.superComponentApproach = 'full-component';
+      }
+      
+      console.log(`✏️ Editing super component: ${componentId}`);
+      console.log(`   Current wraps: ${this.selectedComponentsForSuper.join(', ')}`);
+    } else {
+      // CREATE MODE: Pre-select components with same prefix
+      this.isEditingSuperComponent = false;
+      this.editingSuperComponentId = null;
+      const prefix = componentId.replace(/\d+$/, ''); // Remove trailing numbers
+      this.selectedComponentsForSuper = this.availableSharedComponents
+        .filter(c => c.id.startsWith(prefix))
+        .map(c => c.id);
 
-    // Auto-generate super component name
-    this.updateSuperComponentName();
+      // Auto-generate super component name
+      this.updateSuperComponentName();
+    }
 
     this.showSuperComponentDialog = true;
   }
@@ -713,6 +737,8 @@ export class ComponentsCanvasComponent implements AfterViewInit {
     this.selectedComponentsForSuper = [];
     this.superComponentName = '';
     this.superComponentApproach = 'full-component';
+    this.isEditingSuperComponent = false;
+    this.editingSuperComponentId = null;
   }
 
   /**
@@ -810,10 +836,16 @@ export class ComponentsCanvasComponent implements AfterViewInit {
       
       console.log('✅ Super component code written successfully!');
 
-      // Step 3: Register in catalog
+      // Step 3: Register/Update in catalog
       const approachDescription = this.superComponentApproach === 'style-variation' 
         ? 'Style variation super component' 
         : 'Full component wrapping super component';
+      
+      // If editing, preserve the original registration date
+      const existingEntry = this.isEditingSuperComponent 
+        ? this.catalogService.getComponent(componentId) 
+        : null;
+      
       const entry: CatalogEntry = {
         id: componentId,
         displayName: this.getDisplayName(componentId),
@@ -821,7 +853,7 @@ export class ComponentsCanvasComponent implements AfterViewInit {
         description: `${approachDescription} wrapping: ${this.selectedComponentsForSuper.join(', ')}`,
         htmlSelector: componentId, // componentId already includes "app-" prefix
         status: 'active',
-        registeredAt: new Date().toISOString(),
+        registeredAt: existingEntry?.registeredAt || new Date().toISOString(), // Preserve original date if editing
         isSuperComponent: true,
         wraps: [...this.selectedComponentsForSuper],
         variants: this.selectedComponentsForSuper.map((id, idx) => (idx + 1).toString()),
@@ -884,14 +916,24 @@ export class ComponentsCanvasComponent implements AfterViewInit {
       // Step 7: Close dialog
       this.showSuperComponentDialog = false;
       this.isCreatingSuperComponent = false;
+      
+      const message = this.isEditingSuperComponent
+        ? `✅ Super component updated!\n\n` +
+          `Component: ${this.superComponentName}\n` +
+          `Wraps: ${this.selectedComponentsForSuper.join(', ')}\n\n` +
+          `Use: <${this.superComponentName} variant="1|2|3"></${this.superComponentName}>\n\n` +
+          `💡 Component code regenerated with new wraps!`
+        : `✅ Super component created!\n\n` +
+          `Component: ${this.superComponentName}\n` +
+          `Wraps: ${this.selectedComponentsForSuper.join(', ')}\n\n` +
+          `Use: <${this.superComponentName} variant="1|2|3"></${this.superComponentName}>\n\n` +
+          `💡 Canvas files updated automatically!`;
 
-      this.showToast(
-        `✅ Super component created!\n\n` +
-        `Component: ${this.superComponentName}\n` +
-        `Wraps: ${this.selectedComponentsForSuper.join(', ')}\n\n` +
-        `Use: <${this.superComponentName} variant="1|2|3"></${this.superComponentName}>\n\n` +
-        `💡 Canvas files updated automatically!`
-      );
+      this.showToast(message);
+      
+      // Reset edit mode
+      this.isEditingSuperComponent = false;
+      this.editingSuperComponentId = null;
 
     } catch (error) {
       console.error('Error creating super component:', error);

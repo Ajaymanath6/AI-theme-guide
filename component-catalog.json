@@ -1,7 +1,7 @@
 {
   "catalogId": "design-system-v1",
   "version": "1.0.0",
-  "lastUpdated": "2026-01-16T12:32:53.024Z",
+  "lastUpdated": "2026-01-16T13:02:35.785Z",
   "registeredComponents": {
     "sidebar": {
       "id": "sidebar",
@@ -131,22 +131,18 @@
       "id": "app-card-variants",
       "displayName": "app-card-variants",
       "category": "super-components",
-      "description": "Full component wrapping super component wrapping: card, card-secondary, super-component, app-secondary-button-variants",
+      "description": "Full component wrapping super component wrapping: card, card-secondary",
       "htmlSelector": "app-card-variants",
       "status": "active",
       "registeredAt": "2026-01-16T12:32:53.024Z",
       "isSuperComponent": true,
       "wraps": [
         "card",
-        "card-secondary",
-        "super-component",
-        "app-secondary-button-variants"
+        "card-secondary"
       ],
       "variants": [
         "1",
-        "2",
-        "3",
-        "4"
+        "2"
       ],
       "componentPath": "src/app/components/app-card-variants/app-card-variants.component.ts",
       "componentTag": "<app-card-variants></app-card-variants>"
