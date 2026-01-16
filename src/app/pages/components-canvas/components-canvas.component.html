@@ -100,239 +100,6 @@
             </header>
           }
           
-          <!-- Card 1: Long Paragraph with Primary and Secondary Buttons -->
-          @if (element.type === 'card1') {
-            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
-              <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title One</h3>
-              <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle One</p>
-              <hr class="border-brandcolor-strokeweak mb-4">
-              <p class="text-brandcolor-textweak text-sm mb-4">
-                This is a long paragraph that contains multiple sentences to demonstrate how text content can span across several lines within a card component. It provides enough content to show how the card handles longer text blocks and ensures proper spacing and readability.
-              </p>
-              <div class="flex gap-3">
-                <button
-                  type="button"
-                 
-                  class="border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-                  Primary
-                </button>
-                <button
-                  type="button"
-                 
-                  class="border-[1.5px] border-brandcolor-secondary bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-                  Secondary
-                </button>
-              </div>
-            </div>
-          }
-          
-          <!-- Card 7: Title, Subtitle, Divider, Paragraph, Divider, Primary & Primary Outline Buttons -->
-          @if (element.type === 'card7') {
-            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
-              <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title Seven</h3>
-              <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle Seven</p>
-              
-              <!-- First Divider -->
-              <hr class="border-brandcolor-strokeweak mb-4">
-              
-              <!-- Paragraph -->
-              <p class="text-brandcolor-textweak text-sm mb-4">
-                This is a paragraph that provides additional context or description about the card content. It can contain multiple sentences and will wrap naturally within the card component.
-              </p>
-              
-              <!-- Second Divider -->
-              <hr class="border-brandcolor-strokeweak mb-4">
-              
-              <!-- Buttons -->
-              <div class="flex gap-3">
-                <button
-                  type="button"
-                 
-                  class="border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-                  Primary
-                </button>
-                <button
-                  type="button"
-                 
-                  class="border-[1.5px] border-brandcolor-primary bg-transparent text-brandcolor-primary hover:bg-brandcolor-neutralhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
-                  Primary Outline
-                </button>
-              </div>
-            </div>
-          }
-          
-          <!-- Card 2: Two Lines with Primary and Primary Outline Buttons -->
-          @if (element.type === 'card2') {
-            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
-              <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title Two</h3>
-              <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle Two</p>
-              <hr class="border-brandcolor-strokeweak mb-4">
-              <p class="text-brandcolor-textweak text-sm mb-4">
-                This is a two-line paragraph that demonstrates how shorter content looks within the card component. It spans exactly two lines.
-              </p>
-              <div class="flex gap-3">
-                <button
-                  type="button"
-                 
-                  class="border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-                  Primary
-                </button>
-                <button
-                  type="button"
-                 
-                  class="border-[1.5px] border-brandcolor-primary bg-transparent text-brandcolor-primary hover:bg-brandcolor-neutralhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
-                  Primary Outline
-                </button>
-              </div>
-            </div>
-          }
-          
-          <!-- Card 3: One Line with Secondary and Secondary Outline Buttons -->
-          @if (element.type === 'card3') {
-            <!-- Always show HTML on canvas for visual reference -->
-            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
-                <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title Three</h3>
-                <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle Three</p>
-                <hr class="border-brandcolor-strokeweak mb-4">
-                <p class="text-brandcolor-textweak text-sm mb-4">
-                  This is a single line of text content.
-                </p>
-                <div class="flex gap-3">
-                  <button
-                    type="button"
-                   
-                    class="border-[1.5px] border-brandcolor-secondary bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-                    Secondary
-                  </button>
-                  <button
-                    type="button"
-                   
-                    class="border-[1.5px] border-brandcolor-secondary bg-transparent text-brandcolor-secondary hover:bg-brandcolor-neutralhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
-                    Secondary Outline
-                  </button>
-                </div>
-              </div>
-          }
-          
-          <!-- Card 4: Title, Subtitle, Sub Headings (Left & Right), Divider, Primary & Neutral Buttons -->
-          @if (element.type === 'card4') {
-            <!-- Always show HTML on canvas for visual reference -->
-            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
-                <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title Four</h3>
-                <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle Four</p>
-                
-                <!-- Sub Headings Left and Right -->
-                <div class="flex items-center justify-between mb-4">
-                  <!-- Left End -->
-                  <div>
-                    <h4 class="text-brandcolor-textstrong font-medium text-sm mb-1">Sub Heading Left</h4>
-                    <p class="text-brandcolor-textweak text-xs">Sub Title Left</p>
-                  </div>
-                  
-                  <!-- Right End -->
-                  <div class="text-right">
-                    <h4 class="text-brandcolor-textstrong font-medium text-sm mb-1">Sub Heading Right</h4>
-                    <p class="text-brandcolor-textweak text-xs">Sub Title Right</p>
-                  </div>
-                </div>
-                
-                <!-- Divider -->
-                <hr class="border-brandcolor-strokeweak mb-4">
-                
-                <!-- Buttons -->
-                <div class="flex gap-3">
-                  <button
-                    type="button"
-                   
-                    class="flex-1 border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-                    Primary
-                  </button>
-                  <button
-                    type="button"
-                   
-                    class="flex-1 border-[1.5px] border-brandcolor-strokeweak bg-brandcolor-white text-brandcolor-textstrong hover:bg-brandcolor-neutralhover focus:border-brandcolor-strokeweak active:border-brandcolor-strokeweak active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
-                    Neutral
-                  </button>
-                </div>
-              </div>
-          }
-          
-          <!-- Card 5: Title, Subtitle, Image, Primary & Secondary Buttons -->
-          @if (element.type === 'card5') {
-            <!-- Always show HTML on canvas for visual reference -->
-            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
-                <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title Five</h3>
-                <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle Five</p>
-                
-                <!-- Placeholder Image -->
-                <div class="mb-4">
-                  <img 
-                    src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=250&fit=crop" 
-                    alt="Placeholder" 
-                    class="w-full h-48 object-cover rounded-lg"
-                   >
-                </div>
-                
-                <!-- Buttons -->
-                <div class="flex gap-3">
-                  <button
-                    type="button"
-                   
-                    class="flex-1 border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-                    Primary
-                  </button>
-                  <button
-                    type="button"
-                   
-                    class="flex-1 border-[1.5px] border-brandcolor-secondary bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-                    Secondary
-                  </button>
-                </div>
-              </div>
-          }
-          
-          <!-- Card 6: Title, Subtitle, Divider, Hero Name, Subtitle with Paragraph, Divider, Primary & Secondary Buttons -->
-          @if (element.type === 'card6') {
-            <!-- Component deleted - showing HTML only -->
-            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
-                <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title Six</h3>
-                <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle Six</p>
-                
-                <!-- First Divider -->
-                <hr class="border-brandcolor-strokeweak mb-4">
-                
-                <!-- Hero Name -->
-                <h4 class="text-brandcolor-textstrong font-semibold text-lg mb-2">Nisarage</h4>
-                
-                <!-- Subtitle with Paragraph -->
-                <div class="mb-4">
-                  <p class="text-brandcolor-textweak text-sm font-medium mb-2">Subtitle</p>
-                  <p class="text-brandcolor-textweak text-sm leading-relaxed">
-                    This is a paragraph that provides additional context or description about the hero or the content. It can contain multiple sentences and will wrap naturally within the card.
-                  </p>
-                </div>
-                
-                <!-- Second Divider -->
-                <hr class="border-brandcolor-strokeweak mb-4">
-                
-                <!-- Buttons -->
-                <div class="flex gap-3">
-                  <button
-                    type="button"
-                   
-                    class="flex-1 border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-                    Primary
-                  </button>
-                  <button
-                    type="button"
-                   
-                    class="flex-1 border-[1.5px] border-brandcolor-secondary bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-                    Secondary
-                  </button>
-                </div>
-              </div>
-          }
-          
           <!-- Primary Button Component -->
           @if (element.type === 'primary-button') {
             <!-- Always show HTML on canvas for visual reference -->
@@ -348,8 +115,28 @@
             <!-- Always show HTML on canvas for visual reference -->
             <button
               type="button"
-              class="border-[1.5px] border-brandcolor-primary bg-transparent text-brandcolor-primary hover:bg-brandcolor-neutralhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
+              class="border-[1.5px] border-brandcolor-strokelight text-brandcolor-primary bg-brandcolor-white hover:bg-brandcolor-neutralhover active:border-brandcolor-primary active:text-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
               Primary Outline
+            </button>
+          }
+          
+          <!-- Secondary Button Component -->
+          @if (element.type === 'secondary-button') {
+            <!-- Always show HTML on canvas for visual reference -->
+            <button
+              type="button"
+              class="border-[1.5px] border-transparent bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
+              Secondary
+            </button>
+          }
+          
+          <!-- Secondary Outline Button Component -->
+          @if (element.type === 'secondary-outline-button') {
+            <!-- Always show HTML on canvas for visual reference -->
+            <button
+              type="button"
+              class="border-[1.5px] border-brandcolor-strokelight text-brandcolor-secondary bg-brandcolor-white hover:bg-brandcolor-neutralhover active:border-brandcolor-secondary active:text-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
+              Secondary Outline
             </button>
           }
           
@@ -358,9 +145,6 @@
             @switch (element.type) {
               @case ('super-component') {
                 <app-super-component></app-super-component>
-              }
-              @case ('card') {
-                <app-card></app-card>
               }
               @default {
                 <!-- Fallback: Show component info card for unknown super components -->
@@ -674,6 +458,45 @@
           </p>
         </div>
 
+        <!-- Approach Selection -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-brandcolor-textstrong mb-2">
+            Super Component Approach
+          </label>
+          <div class="flex gap-4">
+            <label class="flex-1 flex items-start gap-2 p-3 border-2 rounded-lg cursor-pointer transition-colors"
+                   [class.border-purple-600]="superComponentApproach === 'full-component'"
+                   [class.bg-purple-50]="superComponentApproach === 'full-component'"
+                   [class.border-brandcolor-strokeweak]="superComponentApproach !== 'full-component'"
+                   [class.bg-white]="superComponentApproach !== 'full-component'">
+              <input type="radio" 
+                     name="superComponentApproach"
+                     value="full-component"
+                     [(ngModel)]="superComponentApproach"
+                     class="w-4 h-4 mt-0.5">
+              <div class="flex-1">
+                <div class="font-semibold text-sm text-brandcolor-textstrong">Full Component Wrapping</div>
+                <div class="text-xs text-brandcolor-textweak mt-1">Wraps complete Angular components (e.g., &lt;app-primary-button&gt;)</div>
+              </div>
+            </label>
+            <label class="flex-1 flex items-start gap-2 p-3 border-2 rounded-lg cursor-pointer transition-colors"
+                   [class.border-purple-600]="superComponentApproach === 'style-variation'"
+                   [class.bg-purple-50]="superComponentApproach === 'style-variation'"
+                   [class.border-brandcolor-strokeweak]="superComponentApproach !== 'style-variation'"
+                   [class.bg-white]="superComponentApproach !== 'style-variation'">
+              <input type="radio" 
+                     name="superComponentApproach"
+                     value="style-variation"
+                     [(ngModel)]="superComponentApproach"
+                     class="w-4 h-4 mt-0.5">
+              <div class="flex-1">
+                <div class="font-semibold text-sm text-brandcolor-textstrong">Style Variation</div>
+                <div class="text-xs text-brandcolor-textweak mt-1">Single component with variant-based style switching (recommended for buttons)</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
         <!-- Component Selection -->
         <div class="mb-6">
           <label class="block text-sm font-medium text-brandcolor-textstrong mb-3">
@@ -714,7 +537,14 @@
             &lt;{{ superComponentName }} variant="1|2|3"&gt;&lt;/{{ superComponentName }}&gt;
           </code>
           <p class="text-xs text-blue-600 mt-2">
-            Wraps: {{ selectedComponentsForSuper.join(', ') || 'None selected' }}
+            @if (superComponentApproach === 'full-component') {
+              Wraps: {{ selectedComponentsForSuper.join(', ') || 'None selected' }}
+            } @else {
+              Style variants: {{ selectedComponentsForSuper.join(', ') || 'None selected' }}
+            }
+          </p>
+          <p class="text-xs text-purple-600 mt-1 font-medium">
+            Approach: {{ superComponentApproach === 'full-component' ? 'Full Component Wrapping' : 'Style Variation' }}
           </p>
         </div>
 

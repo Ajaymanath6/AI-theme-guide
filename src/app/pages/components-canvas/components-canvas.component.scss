@@ -95,16 +95,15 @@
 .component-wrapper {
   position: relative;
   
-  // Dim outline glow on hover
-  &:hover > div:not(.component-tooltip),
-  &:hover > aside,
-  &:hover > app-sidebar,
-  &:hover > button,
-  &:hover > app-super-component,
-  &:hover > app-card {
-    outline: 1.5px solid rgba(59, 130, 246, 0.4);
+  // Dim outline glow only when dragging (not on hover)
+  &.cdk-drag-dragging > div:not(.component-tooltip),
+  &.cdk-drag-dragging > aside,
+  &.cdk-drag-dragging > app-sidebar,
+  &.cdk-drag-dragging > button,
+  &.cdk-drag-dragging > app-super-component {
+    outline: 1.5px solid rgba(59, 130, 246, 0.2);
     outline-offset: 3px;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.05);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.03);
     transition: outline 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   }
   
@@ -119,14 +118,14 @@
   
   // Shared component styles
   &.shared-component {
-    // Blue outline for shared components
-    & > div:not(.component-tooltip),
-    & > aside,
-    & > app-sidebar,
-    & > button {
-      outline: 1.5px solid rgba(37, 99, 235, 0.4);
+    // Blue outline for shared components - only when dragging
+    &.cdk-drag-dragging > div:not(.component-tooltip),
+    &.cdk-drag-dragging > aside,
+    &.cdk-drag-dragging > app-sidebar,
+    &.cdk-drag-dragging > button {
+      outline: 1.5px solid rgba(37, 99, 235, 0.2);
       outline-offset: 3px;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.05);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.03);
     }
     
     // "SHARED" badge
@@ -148,19 +147,17 @@
   
   // Super component styles
   &.super-component {
-    // Purple outline for super components
-    & > div:not(.component-tooltip),
-    & > app-super-component,
-    & > app-card {
-      outline: 1.5px solid rgba(147, 51, 234, 0.4);
+    // Purple outline for super components - only when dragging
+    &.cdk-drag-dragging > div:not(.component-tooltip),
+    &.cdk-drag-dragging > app-super-component {
+      outline: 1.5px solid rgba(147, 51, 234, 0.2);
       outline-offset: 3px;
-      box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.05);
+      box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.03);
     }
     
     // Prevent child elements from interfering with drag
     // Only the wrapper should be draggable, children should move with it but not be draggable themselves
-    & > app-super-component,
-    & > app-card {
+    & > app-super-component {
       // Disable pointer events on children during drag (handled by CDK)
       pointer-events: auto;
       
@@ -180,8 +177,7 @@
     // Ensure only this wrapper is draggable, not nested elements
     &.cdk-drag-dragging {
       // When dragging, prevent child interactions
-      & > app-super-component *,
-      & > app-card * {
+      & > app-super-component * {
         pointer-events: none;
       }
     }

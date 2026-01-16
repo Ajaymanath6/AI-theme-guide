@@ -6,7 +6,6 @@ import { DragDropModule, CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/
 import { ComponentCatalogService, CatalogEntry } from '../../services/component-catalog.service';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { SuperComponentComponent } from '../../components/super-component/super-component.component';
-import { CardComponent } from '../../components/card/card.component';
 declare var initFlowbite: () => void;
 
 interface CanvasElement {
@@ -20,7 +19,7 @@ interface CanvasElement {
 
 @Component({
   selector: 'app-components-canvas',
-  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, SuperComponentComponent, CardComponent],
+  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, SuperComponentComponent],
   templateUrl: './components-canvas.component.html',
   styleUrl: './components-canvas.component.scss'
 })
@@ -28,7 +27,9 @@ export class ComponentsCanvasComponent implements AfterViewInit {
   canvasElements: CanvasElement[] = [
     { id: 'sidebar1', type: 'sidebar', x: 0, y: 60, content: 'Sidebar', isSharedComponent: true },
     { id: 'primary-button1', type: 'primary-button', x: 50, y: 200, content: 'Primary Button' },
-    { id: 'primary-outline-button1', type: 'primary-outline-button', x: 200, y: 200, content: 'Primary Outline Button' }
+    { id: 'primary-outline-button1', type: 'primary-outline-button', x: 200, y: 200, content: 'Primary Outline Button' },
+    { id: 'secondary-button1', type: 'secondary-button', x: 350, y: 200, content: 'Secondary Button' },
+    { id: 'secondary-outline-button1', type: 'secondary-outline-button', x: 500, y: 200, content: 'Secondary Outline Button' }
   ];
 
   isSidebarCollapsed = false;
@@ -49,6 +50,7 @@ export class ComponentsCanvasComponent implements AfterViewInit {
   superComponentName = '';
   isCreatingSuperComponent = false;
   availableSharedComponents: CatalogEntry[] = [];
+  superComponentApproach: 'full-component' | 'style-variation' = 'full-component';
 
   // Canvas pan and zoom state
   canvasPanX = 0;
@@ -632,6 +634,7 @@ export class ComponentsCanvasComponent implements AfterViewInit {
     this.showSuperComponentDialog = false;
     this.selectedComponentsForSuper = [];
     this.superComponentName = '';
+    this.superComponentApproach = 'full-component';
   }
 
   /**
@@ -708,11 +711,14 @@ export class ComponentsCanvasComponent implements AfterViewInit {
       console.log('✅ Super component code written successfully!');
 
       // Step 3: Register in catalog
+      const approachDescription = this.superComponentApproach === 'style-variation' 
+        ? 'Style variation super component' 
+        : 'Full component wrapping super component';
       const entry: CatalogEntry = {
         id: componentId,
         displayName: this.getDisplayName(componentId),
         category: 'super-components',
-        description: `Super component wrapping: ${this.selectedComponentsForSuper.join(', ')}`,
+        description: `${approachDescription} wrapping: ${this.selectedComponentsForSuper.join(', ')}`,
         htmlSelector: `app-${componentId}`,
         status: 'active',
         registeredAt: new Date().toISOString(),
@@ -786,18 +792,37 @@ export class ComponentsCanvasComponent implements AfterViewInit {
    * Generate super component TypeScript code
    */
   private generateSuperComponentTS(componentId: string): string {
-    const imports = this.selectedComponentsForSuper
-      .map(id => {
-        const className = this.toClassName(id);
-        return `import { ${className} } from '../${id}/${id}.component';`;
-      })
-      .join('\n');
+    if (this.superComponentApproach === 'style-variation') {
+      // Style-variation: No component imports, only CommonModule
+      return `import { Component, input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
-    const importsList = this.selectedComponentsForSuper
-      .map(id => this.toClassName(id))
-      .join(', ');
+export type ${this.toClassName(componentId)}Variant = ${this.selectedComponentsForSuper.map((_, idx) => `'${idx + 1}'`).join(' | ')};
 
-    return `import { Component, input } from '@angular/core';
+@Component({
+  selector: 'app-${componentId}',
+  imports: [CommonModule],
+  templateUrl: './${componentId}.component.html',
+  styleUrl: './${componentId}.component.scss'
+})
+export class ${this.toClassName(componentId)} {
+  variant = input<${this.toClassName(componentId)}Variant>('1');
+  disabled = input<boolean>(false);
+}`;
+    } else {
+      // Full-component: Import all wrapped components
+      const imports = this.selectedComponentsForSuper
+        .map(id => {
+          const className = this.toClassName(id);
+          return `import { ${className} } from '../${id}/${id}.component';`;
+        })
+        .join('\n');
+
+      const importsList = this.selectedComponentsForSuper
+        .map(id => this.toClassName(id))
+        .join(', ');
+
+      return `import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 ${imports}
 
@@ -813,26 +838,75 @@ export class ${this.toClassName(componentId)} {
   variant = input<${this.toClassName(componentId)}Variant>('1');
   disabled = input<boolean>(false);
 }`;
+    }
   }
 
   /**
    * Generate super component HTML code
    */
   private generateSuperComponentHTML(componentId: string): string {
-    const cases = this.selectedComponentsForSuper
-      .map((id, idx) => {
-        return `  @case ('${idx + 1}') {
+    if (this.superComponentApproach === 'style-variation') {
+      // Style-variation: Generate button elements with extracted styles
+      const cases = this.selectedComponentsForSuper
+        .map((id, idx) => {
+          const styles = this.extractButtonStyles(id);
+          const label = this.getButtonLabel(id);
+          
+          if (!styles) {
+            // Fallback if style not found (shouldn't happen for buttons)
+            return `  @case ('${idx + 1}') {
+    <button
+      type="button"
+      [disabled]="disabled()"
+      class="border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
+      ${label}
+    </button>
+  }`;
+          }
+          
+          return `  @case ('${idx + 1}') {
+    <button
+      type="button"
+      [disabled]="disabled()"
+      class="${styles}">
+      ${label}
+    </button>
+  }`;
+        })
+        .join('\n');
+
+      const defaultStyles = this.extractButtonStyles(this.selectedComponentsForSuper[0]) || 
+        'border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg';
+      const defaultLabel = this.getButtonLabel(this.selectedComponentsForSuper[0]);
+
+      return `@switch (variant()) {
+${cases}
+  @default {
+    <button
+      type="button"
+      [disabled]="disabled()"
+      class="${defaultStyles}">
+      ${defaultLabel}
+    </button>
+  }
+}`;
+    } else {
+      // Full-component: Generate component tags
+      const cases = this.selectedComponentsForSuper
+        .map((id, idx) => {
+          return `  @case ('${idx + 1}') {
     <app-${id}></app-${id}>
   }`;
-      })
-      .join('\n');
+        })
+        .join('\n');
 
-    return `@switch (variant()) {
+      return `@switch (variant()) {
 ${cases}
   @default {
     <app-${this.selectedComponentsForSuper[0]}></app-${this.selectedComponentsForSuper[0]}>
   }
 }`;
+    }
   }
 
   /**
@@ -869,13 +943,6 @@ ${cases}
    */
   private getDisplayName(componentId: string): string {
     const displayNames: Record<string, string> = {
-      'card1': 'Primary Content Card',
-      'card2': 'Action Card',
-      'card3': 'Compact Card',
-      'card4': 'Dual Subheading Card',
-      'card5': 'Image Card',
-      'card6': 'Hero Profile Card',
-      'card7': 'Paragraph Card',
       'sidebar': 'Navigation Sidebar',
       'dropdown': 'Action Dropdown Menu'
     };
@@ -886,7 +953,6 @@ ${cases}
    * Get category for a component
    */
   private getCategory(componentId: string): string {
-    if (componentId.startsWith('card')) return 'cards';
     if (componentId === 'sidebar') return 'navigation';
     if (componentId === 'dropdown') return 'menus';
     return 'general';
@@ -897,13 +963,6 @@ ${cases}
    */
   private getDescription(componentId: string): string {
     const descriptions: Record<string, string> = {
-      'card1': 'Card with long paragraph content, primary and secondary action buttons',
-      'card2': 'Card with two-line content, primary and primary outline buttons',
-      'card3': 'Compact card with single line content, secondary and secondary outline buttons',
-      'card4': 'Card with title, subtitle, dual subheadings (left & right), divider, primary and neutral buttons',
-      'card5': 'Card with title, subtitle, placeholder image, primary and secondary buttons',
-      'card6': 'Card with title, subtitle, divider, hero name (Nisarage), subtitle with paragraph, divider, primary and secondary buttons',
-      'card7': 'Card with title, subtitle, divider, paragraph, divider, primary and primary outline buttons',
       'sidebar': 'Collapsible navigation sidebar with logo, dropdown, menu items, and toggle button',
       'dropdown': 'Dropdown menu with header, 5 options, divider, and action buttons (primary & neutral)'
     };
@@ -1044,63 +1103,38 @@ ${cases}
    * Extract HTML content for a component from canvas
    */
   private extractComponentHTML(componentId: string): string {
-    const htmlTemplates: Record<string, string> = {
-      'card1': `<div title="card1" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
-  <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title One</h3>
-  <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle One</p>
-  <hr class="border-brandcolor-strokeweak mb-4">
-  <p class="text-brandcolor-textweak text-sm mb-4">
-    This is a long paragraph that contains multiple sentences to demonstrate how text content can span across several lines within a card component. It provides enough content to show how the card handles longer text blocks and ensures proper spacing and readability.
-  </p>
-  <div class="flex gap-3">
-    <button
-      type="button"
-      title="card1-primary-button"
-      class="border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-      Primary
-    </button>
-    <button
-      type="button"
-      title="card1-secondary-button"
-      class="border-[1.5px] border-brandcolor-secondary bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-      Secondary
-    </button>
-  </div>
-</div>`,
-      'card7': `<div title="card7" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
-  <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title Seven</h3>
-  <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle Seven</p>
-  
-  <!-- First Divider -->
-  <hr class="border-brandcolor-strokeweak mb-4">
-  
-  <!-- Paragraph -->
-  <p class="text-brandcolor-textweak text-sm mb-4">
-    This is a paragraph that provides additional context or description about the card content. It can contain multiple sentences and will wrap naturally within the card component.
-  </p>
-  
-  <!-- Second Divider -->
-  <hr class="border-brandcolor-strokeweak mb-4">
-  
-  <!-- Buttons -->
-  <div class="flex gap-3">
-    <button
-      type="button"
-      title="card7-primary-button"
-      class="border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-      Primary
-    </button>
-    <button
-      type="button"
-      title="card7-primary-outline-button"
-      class="border-[1.5px] border-brandcolor-primary bg-transparent text-brandcolor-primary hover:bg-brandcolor-neutralhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
-      Primary Outline
-    </button>
-  </div>
-</div>`
-    };
+    const htmlTemplates: Record<string, string> = {};
 
     return htmlTemplates[componentId] || `<p>${componentId} works!</p>`;
+  }
+
+  /**
+   * Extract button styles for a component
+   * Returns the class string for button components, null for non-button components
+   */
+  private extractButtonStyles(componentId: string): string | null {
+    const buttonStyles: Record<string, string> = {
+      'primary-button': 'border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg',
+      'primary-outline-button': 'border-[1.5px] border-brandcolor-strokelight text-brandcolor-primary bg-brandcolor-white hover:bg-brandcolor-neutralhover active:border-brandcolor-primary active:text-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium',
+      'secondary-button': 'border-[1.5px] border-transparent bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg',
+      'secondary-outline-button': 'border-[1.5px] border-brandcolor-strokelight text-brandcolor-secondary bg-brandcolor-white hover:bg-brandcolor-neutralhover active:border-brandcolor-secondary active:text-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium'
+    };
+
+    return buttonStyles[componentId] || null;
+  }
+
+  /**
+   * Get button label text for a component
+   */
+  private getButtonLabel(componentId: string): string {
+    const labels: Record<string, string> = {
+      'primary-button': 'Primary',
+      'primary-outline-button': 'Primary Outline',
+      'secondary-button': 'Secondary',
+      'secondary-outline-button': 'Secondary Outline'
+    };
+
+    return labels[componentId] || componentId;
   }
 
   /**

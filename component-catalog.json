@@ -1,28 +1,8 @@
 {
   "catalogId": "design-system-v1",
   "version": "1.0.0",
-  "lastUpdated": "2026-01-16T09:34:51.891Z",
+  "lastUpdated": "2026-01-16T10:51:06.442Z",
   "registeredComponents": {
-    "card": {
-      "id": "card",
-      "displayName": "card",
-      "category": "super-components",
-      "description": "Super component wrapping: card7, card1",
-      "htmlSelector": "app-card",
-      "status": "active",
-      "registeredAt": "2026-01-16T06:44:44.113Z",
-      "isSuperComponent": true,
-      "wraps": [
-        "card7",
-        "card1"
-      ],
-      "variants": [
-        "1",
-        "2"
-      ],
-      "componentPath": "src/app/components/card/card.component.ts",
-      "componentTag": "<app-card></app-card>"
-    },
     "sidebar": {
       "id": "sidebar",
       "displayName": "Navigation Sidebar",
@@ -78,6 +58,30 @@
       ],
       "componentPath": "src/app/components/super-component/super-component.component.ts",
       "componentTag": "<app-super-component></app-super-component>"
+    },
+    "secondary-button": {
+      "id": "secondary-button",
+      "displayName": "secondary-button",
+      "category": "general",
+      "description": "Component: secondary-button",
+      "htmlSelector": "[title='secondary-button']",
+      "status": "active",
+      "registeredAt": "2026-01-16T10:34:34.398Z",
+      "isSharedComponent": true,
+      "componentPath": "src/app/components/secondary-button/secondary-button.component.ts",
+      "componentTag": "<app-secondary-button></app-secondary-button>"
+    },
+    "secondary-outline-button": {
+      "id": "secondary-outline-button",
+      "displayName": "secondary-outline-button",
+      "category": "general",
+      "description": "Component: secondary-outline-button",
+      "htmlSelector": "[title='secondary-outline-button']",
+      "status": "active",
+      "registeredAt": "2026-01-16T10:34:50.181Z",
+      "isSharedComponent": true,
+      "componentPath": "src/app/components/secondary-outline-button/secondary-outline-button.component.ts",
+      "componentTag": "<app-secondary-outline-button></app-secondary-outline-button>"
     }
   }
 }
