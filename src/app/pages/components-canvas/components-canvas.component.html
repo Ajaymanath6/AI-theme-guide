@@ -65,11 +65,13 @@
           [style.cursor]="'move'"
           [style.z-index]="'1'"
           class="cursor-move draggable-element component-wrapper"
-          [class.shared-component]="element.isSharedComponent">
+          [class.shared-component]="element.isSharedComponent"
+          [class.super-component]="isSuperComponent(element.type)"
+          [cdkDragDisabled]="false">
           
           <!-- Header Component -->
           @if (element.type === 'header') {
-            <header title="header" class="bg-brandcolor-textstrong border-b border-brandcolor-strokeweak rounded-lg shadow-lg">
+            <header class="bg-brandcolor-textstrong border-b border-brandcolor-strokeweak rounded-lg shadow-lg">
               <div class="flex items-center justify-between px-4 py-[14px] min-w-[600px]">
                 <!-- Logo -->
                 <a routerLink="/projects" class="flex items-center cursor-pointer">
@@ -100,7 +102,7 @@
           
           <!-- Card 1: Long Paragraph with Primary and Secondary Buttons -->
           @if (element.type === 'card1') {
-            <div title="card1" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
+            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
               <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title One</h3>
               <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle One</p>
               <hr class="border-brandcolor-strokeweak mb-4">
@@ -110,13 +112,13 @@
               <div class="flex gap-3">
                 <button
                   type="button"
-                  title="card1-primary-button"
+                 
                   class="border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
                   Primary
                 </button>
                 <button
                   type="button"
-                  title="card1-secondary-button"
+                 
                   class="border-[1.5px] border-brandcolor-secondary bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
                   Secondary
                 </button>
@@ -124,9 +126,44 @@
             </div>
           }
           
+          <!-- Card 7: Title, Subtitle, Divider, Paragraph, Divider, Primary & Primary Outline Buttons -->
+          @if (element.type === 'card7') {
+            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
+              <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title Seven</h3>
+              <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle Seven</p>
+              
+              <!-- First Divider -->
+              <hr class="border-brandcolor-strokeweak mb-4">
+              
+              <!-- Paragraph -->
+              <p class="text-brandcolor-textweak text-sm mb-4">
+                This is a paragraph that provides additional context or description about the card content. It can contain multiple sentences and will wrap naturally within the card component.
+              </p>
+              
+              <!-- Second Divider -->
+              <hr class="border-brandcolor-strokeweak mb-4">
+              
+              <!-- Buttons -->
+              <div class="flex gap-3">
+                <button
+                  type="button"
+                 
+                  class="border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
+                  Primary
+                </button>
+                <button
+                  type="button"
+                 
+                  class="border-[1.5px] border-brandcolor-primary bg-transparent text-brandcolor-primary hover:bg-brandcolor-neutralhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
+                  Primary Outline
+                </button>
+              </div>
+            </div>
+          }
+          
           <!-- Card 2: Two Lines with Primary and Primary Outline Buttons -->
           @if (element.type === 'card2') {
-            <div title="card2" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
+            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
               <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title Two</h3>
               <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle Two</p>
               <hr class="border-brandcolor-strokeweak mb-4">
@@ -136,13 +173,13 @@
               <div class="flex gap-3">
                 <button
                   type="button"
-                  title="card2-primary-button"
+                 
                   class="border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
                   Primary
                 </button>
                 <button
                   type="button"
-                  title="card2-primary-outline-button"
+                 
                   class="border-[1.5px] border-brandcolor-primary bg-transparent text-brandcolor-primary hover:bg-brandcolor-neutralhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
                   Primary Outline
                 </button>
@@ -152,12 +189,8 @@
           
           <!-- Card 3: One Line with Secondary and Secondary Outline Buttons -->
           @if (element.type === 'card3') {
-            @if (element.isSharedComponent) {
-              <!-- Shared Component: Show component tag -->
-              
-            } @else {
-              <!-- Not Shared: Show full HTML -->
-              <div title="card3" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
+            <!-- Always show HTML on canvas for visual reference -->
+            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
                 <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title Three</h3>
                 <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle Three</p>
                 <hr class="border-brandcolor-strokeweak mb-4">
@@ -167,29 +200,24 @@
                 <div class="flex gap-3">
                   <button
                     type="button"
-                    title="card3-secondary-button"
+                   
                     class="border-[1.5px] border-brandcolor-secondary bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
                     Secondary
                   </button>
                   <button
                     type="button"
-                    title="card3-secondary-outline-button"
+                   
                     class="border-[1.5px] border-brandcolor-secondary bg-transparent text-brandcolor-secondary hover:bg-brandcolor-neutralhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
                     Secondary Outline
                   </button>
                 </div>
               </div>
-            }
           }
           
           <!-- Card 4: Title, Subtitle, Sub Headings (Left & Right), Divider, Primary & Neutral Buttons -->
           @if (element.type === 'card4') {
-            @if (element.isSharedComponent) {
-              <!-- Shared Component: Show component tag -->
-              
-            } @else {
-              <!-- Not Shared: Show full HTML -->
-              <div title="card4" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
+            <!-- Always show HTML on canvas for visual reference -->
+            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
                 <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title Four</h3>
                 <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle Four</p>
                 
@@ -215,29 +243,24 @@
                 <div class="flex gap-3">
                   <button
                     type="button"
-                    title="card4-primary-button"
+                   
                     class="flex-1 border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
                     Primary
                   </button>
                   <button
                     type="button"
-                    title="card4-neutral-button"
+                   
                     class="flex-1 border-[1.5px] border-brandcolor-strokeweak bg-brandcolor-white text-brandcolor-textstrong hover:bg-brandcolor-neutralhover focus:border-brandcolor-strokeweak active:border-brandcolor-strokeweak active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
                     Neutral
                   </button>
                 </div>
               </div>
-            }
           }
           
           <!-- Card 5: Title, Subtitle, Image, Primary & Secondary Buttons -->
           @if (element.type === 'card5') {
-            @if (element.isSharedComponent) {
-              <!-- Shared Component: Show component tag -->
-              
-            } @else {
-              <!-- Not Shared: Show full HTML -->
-              <div title="card5" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
+            <!-- Always show HTML on canvas for visual reference -->
+            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
                 <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title Five</h3>
                 <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle Five</p>
                 
@@ -247,32 +270,31 @@
                     src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&h=250&fit=crop" 
                     alt="Placeholder" 
                     class="w-full h-48 object-cover rounded-lg"
-                    title="card5-image">
+                   >
                 </div>
                 
                 <!-- Buttons -->
                 <div class="flex gap-3">
                   <button
                     type="button"
-                    title="card5-primary-button"
+                   
                     class="flex-1 border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
                     Primary
                   </button>
                   <button
                     type="button"
-                    title="card5-secondary-button"
+                   
                     class="flex-1 border-[1.5px] border-brandcolor-secondary bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
                     Secondary
                   </button>
                 </div>
               </div>
-            }
           }
           
           <!-- Card 6: Title, Subtitle, Divider, Hero Name, Subtitle with Paragraph, Divider, Primary & Secondary Buttons -->
           @if (element.type === 'card6') {
             <!-- Component deleted - showing HTML only -->
-            <div title="card6" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
+            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
                 <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title Six</h3>
                 <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle Six</p>
                 
@@ -297,18 +319,67 @@
                 <div class="flex gap-3">
                   <button
                     type="button"
-                    title="card6-primary-button"
+                   
                     class="flex-1 border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
                     Primary
                   </button>
                   <button
                     type="button"
-                    title="card6-secondary-button"
+                   
                     class="flex-1 border-[1.5px] border-brandcolor-secondary bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
                     Secondary
                   </button>
                 </div>
               </div>
+          }
+          
+          <!-- Primary Button Component -->
+          @if (element.type === 'primary-button') {
+            <!-- Always show HTML on canvas for visual reference -->
+            <button
+              type="button"
+              class="border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
+              Primary
+            </button>
+          }
+          
+          <!-- Primary Outline Button Component -->
+          @if (element.type === 'primary-outline-button') {
+            <!-- Always show HTML on canvas for visual reference -->
+            <button
+              type="button"
+              class="border-[1.5px] border-brandcolor-primary bg-transparent text-brandcolor-primary hover:bg-brandcolor-neutralhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
+              Primary Outline
+            </button>
+          }
+          
+          <!-- Super Component Rendering -->
+          @if (isSuperComponent(element.type)) {
+            @switch (element.type) {
+              @case ('super-component') {
+                <app-super-component></app-super-component>
+              }
+              @case ('card') {
+                <app-card></app-card>
+              }
+              @default {
+                <!-- Fallback: Show component info card for unknown super components -->
+                <div class="bg-purple-50 border-2 border-purple-300 rounded-lg p-4 min-w-[200px]">
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="material-symbols-outlined text-purple-600" style="font-size: 20px;">auto_awesome</span>
+                    <span class="text-sm font-bold text-purple-700 uppercase">Super Component</span>
+                  </div>
+                  <div class="text-xs font-mono text-purple-600 mb-2">
+                    &lt;app-{{ element.type }}&gt;
+                  </div>
+                  @if (getSuperComponentInfo(element.type)) {
+                    <div class="text-xs text-purple-500">
+                      Variants: {{ getSuperComponentInfo(element.type)?.variants?.join(', ') }}
+                    </div>
+                  }
+                </div>
+              }
+            }
           }
           
           <!-- Sidebar Component -->
@@ -326,11 +397,11 @@
           
           <!-- Dropdown Component: Header, 5 Options, Divider, and Two Buttons -->
           @if (element.type === 'dropdown') {
-            <div title="dropdown" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-0 w-full max-w-sm shadow-lg">
+            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-0 w-full max-w-sm shadow-lg">
               <!-- Dropdown Button -->
               <div class="relative p-4 pb-0">
                 <button 
-                  title="dropdown-button"
+                 
                   [id]="'dropdown-button-' + element.id" 
                   [attr.data-dropdown-toggle]="'dropdown-menu-' + element.id" 
                   type="button" 
@@ -351,27 +422,27 @@
                   <!-- Options -->
                   <ul class="py-2 text-sm text-brandcolor-textstrong">
                     <li>
-                      <a href="#" title="dropdown-option-1" (click)="onDropdownOption($event, 'option1')" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                      <a href="#" (click)="onDropdownOption($event, 'option1')" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
                         <span>Option 1</span>
                       </a>
                     </li>
                     <li>
-                      <a href="#" title="dropdown-option-2" (click)="onDropdownOption($event, 'option2')" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                      <a href="#" (click)="onDropdownOption($event, 'option2')" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
                         <span>Option 2</span>
                       </a>
                     </li>
                     <li>
-                      <a href="#" title="dropdown-option-3" (click)="onDropdownOption($event, 'option3')" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                      <a href="#" (click)="onDropdownOption($event, 'option3')" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
                         <span>Option 3</span>
                       </a>
                     </li>
                     <li>
-                      <a href="#" title="dropdown-option-4" (click)="onDropdownOption($event, 'option4')" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                      <a href="#" (click)="onDropdownOption($event, 'option4')" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
                         <span>Option 4</span>
                       </a>
                     </li>
                     <li>
-                      <a href="#" title="dropdown-option-5" (click)="onDropdownOption($event, 'option5')" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
+                      <a href="#" (click)="onDropdownOption($event, 'option5')" class="flex items-center gap-2 px-4 py-2 hover:bg-brandcolor-fill">
                         <span>Option 5</span>
                       </a>
                     </li>
@@ -382,14 +453,14 @@
                   <div class="p-4 flex gap-3">
                     <button
                       type="button"
-                      title="dropdown-primary-button"
+                     
                       (click)="onDropdownPrimaryButton(element.id)"
                       class="flex-1 border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
                       Primary
                     </button>
                     <button
                       type="button"
-                      title="dropdown-neutral-button"
+                     
                       (click)="onDropdownNeutralButton(element.id)"
                       class="flex-1 border-[1.5px] border-brandcolor-strokeweak bg-brandcolor-white text-brandcolor-textstrong hover:bg-brandcolor-neutralhover focus:border-brandcolor-strokeweak active:border-brandcolor-strokeweak active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
                       Neutral
@@ -412,42 +483,42 @@
               </span>
               <button (click)="copyToClipboard(element.type); $event.stopPropagation()"
                       class="p-1 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
-                      title="Copy component ID">
+                     >
                 <span class="material-symbols-outlined" style="font-size: 18px;">content_copy</span>
               </button>
               @if (!isInCatalog(element.type)) {
                 <button (click)="addToCatalog(element.type); $event.stopPropagation()"
                         class="p-1 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
-                        title="Register to catalog">
+                       >
                   <span class="material-symbols-outlined" style="font-size: 18px;">add_circle_outline</span>
                 </button>
               }
               @if (isInCatalog(element.type)) {
-                <span class="p-1 text-green-600" title="Registered">
+                <span class="p-1 text-green-600">
                   <span class="material-symbols-outlined" style="font-size: 18px;">check_circle</span>
                 </span>
                 <button (click)="removeFromCatalog(element.type); $event.stopPropagation()"
                         class="p-1 text-gray-600 hover:text-red-600 hover:bg-gray-100 rounded transition-colors"
-                        title="Remove from catalog">
+                       >
                   <span class="material-symbols-outlined" style="font-size: 18px;">delete_outline</span>
                 </button>
               }
               @if (!element.isSharedComponent) {
                 <button (click)="makeSharedComponent(element.type); $event.stopPropagation()"
                         class="p-1 text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded transition-colors"
-                        title="Make shared component">
+                       >
                   <span class="material-symbols-outlined" style="font-size: 18px;">share</span>
                 </button>
               }
               @if (element.isSharedComponent) {
-                <span class="p-1 text-blue-600" title="Shared component">
+                <span class="p-1 text-blue-600">
                   <span class="material-symbols-outlined" style="font-size: 18px;">check_circle</span>
                 </span>
               }
               <!-- Make Super Component button -->
               <button (click)="makeSuperComponent(element.type); $event.stopPropagation()"
                       class="p-1 text-gray-600 hover:text-purple-600 hover:bg-gray-100 rounded transition-colors"
-                      title="Make super component">
+                     >
                 <span class="material-symbols-outlined" style="font-size: 18px;">auto_awesome</span>
               </button>
             </div>
@@ -460,15 +531,44 @@
                 </span>
                 <button (click)="copyComponentTag(element.type); $event.stopPropagation()"
                         class="p-1 text-blue-600 hover:text-blue-900 hover:bg-blue-50 rounded transition-colors"
-                        title="Copy component tag">
+                       >
                   <span class="material-symbols-outlined" style="font-size: 18px;">content_copy</span>
                 </button>
                 <!-- Delete button -->
                 <button (click)="deleteSharedComponent(element.type); $event.stopPropagation()"
                         class="p-1 text-red-600 hover:text-red-900 hover:bg-red-50 rounded transition-colors"
-                        title="Delete component">
+                       >
                   <span class="material-symbols-outlined" style="font-size: 18px;">delete_forever</span>
                 </button>
+              </div>
+            }
+            
+            <!-- Row 3: Super Component tag (only for super components) -->
+            @if (isSuperComponent(element.type)) {
+              <div class="flex items-center gap-2 pt-1 border-t border-purple-200 bg-purple-50/50 -mx-2 px-2 py-2">
+                <span class="text-xs font-bold text-purple-700 uppercase tracking-wide">Super</span>
+                <span class="text-xs font-mono text-purple-600 font-medium">
+                  &lt;app-{{ element.type }}&gt;&lt;/app-{{ element.type }}&gt;
+                </span>
+                <button (click)="copyComponentTag(element.type); $event.stopPropagation()"
+                        class="p-1 text-purple-600 hover:text-purple-900 hover:bg-purple-100 rounded transition-colors"
+                       >
+                  <span class="material-symbols-outlined" style="font-size: 18px;">content_copy</span>
+                </button>
+                <!-- Delete super component button -->
+                <button (click)="deleteSuperComponent(element.type); $event.stopPropagation()"
+                        class="p-1 text-red-600 hover:text-red-900 hover:bg-red-50 rounded transition-colors"
+                       >
+                  <span class="material-symbols-outlined" style="font-size: 18px;">delete_forever</span>
+                </button>
+              </div>
+              
+              <!-- Variants info -->
+              <div class="text-xs text-purple-600 px-2 pb-1">
+                Variants: {{ getSuperComponentInfo(element.type)?.variants?.join(', ') || 'N/A' }}
+              </div>
+              <div class="text-xs text-purple-500 px-2 pb-2">
+                Wraps: {{ getSuperComponentInfo(element.type)?.wraps?.join(', ') || 'N/A' }}
               </div>
             }
           </div>
@@ -580,18 +680,26 @@
             Select Components to Wrap
           </label>
           <div class="space-y-2 max-h-60 overflow-y-auto border border-brandcolor-strokeweak rounded-lg p-3">
-            @for (component of availableSharedComponents; track component.id) {
-              <label class="flex items-center gap-3 p-2 hover:bg-brandcolor-fill rounded cursor-pointer">
-                <input type="checkbox" 
-                       [checked]="selectedComponentsForSuper.includes(component.id)"
-                       (change)="toggleSuperComponentSelection(component.id)"
-                       class="w-4 h-4">
-                <div class="flex-1">
-                  <div class="font-mono text-sm text-brandcolor-textstrong">{{ component.id }}</div>
-                  <div class="text-xs text-brandcolor-textweak">{{ component.displayName }}</div>
-                </div>
-                <span class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded">shared</span>
-              </label>
+            @if (availableSharedComponents.length === 0) {
+              <div class="text-center py-8 text-brandcolor-textweak">
+                <span class="material-symbols-outlined text-4xl mb-2 block">inbox</span>
+                <p class="text-sm font-medium mb-1">No shared components available</p>
+                <p class="text-xs">Create shared components first by clicking "Make Shared Component" on any UI element in the canvas.</p>
+              </div>
+            } @else {
+              @for (component of availableSharedComponents; track component.id) {
+                <label class="flex items-center gap-3 p-2 hover:bg-brandcolor-fill rounded cursor-pointer">
+                  <input type="checkbox" 
+                         [checked]="selectedComponentsForSuper.includes(component.id)"
+                         (change)="toggleSuperComponentSelection(component.id)"
+                         class="w-4 h-4">
+                  <div class="flex-1">
+                    <div class="font-mono text-sm text-brandcolor-textstrong">{{ component.id }}</div>
+                    <div class="text-xs text-brandcolor-textweak">{{ component.displayName }}</div>
+                  </div>
+                  <span class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded">shared</span>
+                </label>
+              }
             }
           </div>
           <p class="text-xs text-brandcolor-textweak mt-2">

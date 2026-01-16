@@ -2,11 +2,12 @@ import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
+import { SuperComponentComponent } from '../../components/super-component/super-component.component';
 declare var initFlowbite: () => void;
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, RouterLink, SidebarComponent],
+  imports: [CommonModule, RouterLink, SidebarComponent, SuperComponentComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })

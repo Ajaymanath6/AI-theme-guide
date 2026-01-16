@@ -1,28 +1,83 @@
 {
   "catalogId": "design-system-v1",
   "version": "1.0.0",
-  "lastUpdated": "2026-01-15T15:06:27.125Z",
+  "lastUpdated": "2026-01-16T09:34:51.891Z",
   "registeredComponents": {
-    "card5": {
-      "id": "card5",
-      "displayName": "Image Card",
-      "category": "cards",
-      "description": "Card with title, subtitle, placeholder image, primary and secondary buttons",
-      "htmlSelector": "[title='card5']",
+    "card": {
+      "id": "card",
+      "displayName": "card",
+      "category": "super-components",
+      "description": "Super component wrapping: card7, card1",
+      "htmlSelector": "app-card",
       "status": "active",
-      "registeredAt": "2026-01-15T14:01:02.152Z",
-      "isSharedComponent": true,
-      "componentPath": "src/app/components/card5/card5.component.ts",
-      "componentTag": "<app-card5></app-card5>"
+      "registeredAt": "2026-01-16T06:44:44.113Z",
+      "isSuperComponent": true,
+      "wraps": [
+        "card7",
+        "card1"
+      ],
+      "variants": [
+        "1",
+        "2"
+      ],
+      "componentPath": "src/app/components/card/card.component.ts",
+      "componentTag": "<app-card></app-card>"
     },
-    "card6": {
-      "id": "card6",
-      "displayName": "Hero Profile Card",
-      "category": "cards",
-      "description": "Card with title, subtitle, divider, hero name (Nisarage), subtitle with paragraph, divider, primary and secondary buttons",
-      "htmlSelector": "[title='card6']",
+    "sidebar": {
+      "id": "sidebar",
+      "displayName": "Navigation Sidebar",
+      "category": "navigation",
+      "description": "Collapsible navigation sidebar with logo, dropdown, menu items, and toggle button",
+      "htmlSelector": "[title='sidebar']",
       "status": "active",
-      "registeredAt": "2026-01-15T15:06:09.590Z"
+      "registeredAt": "2026-01-16T09:31:18.413Z",
+      "isSharedComponent": true,
+      "componentPath": "src/app/components/sidebar/sidebar.component.ts",
+      "componentTag": "<app-sidebar></app-sidebar>"
+    },
+    "primary-outline-button": {
+      "id": "primary-outline-button",
+      "displayName": "primary-outline-button",
+      "category": "general",
+      "description": "Component: primary-outline-button",
+      "htmlSelector": "[title='primary-outline-button']",
+      "status": "active",
+      "registeredAt": "2026-01-16T09:31:48.722Z",
+      "isSharedComponent": true,
+      "componentPath": "src/app/components/primary-outline-button/primary-outline-button.component.ts",
+      "componentTag": "<app-primary-outline-button></app-primary-outline-button>"
+    },
+    "primary-button": {
+      "id": "primary-button",
+      "displayName": "primary-button",
+      "category": "general",
+      "description": "Component: primary-button",
+      "htmlSelector": "[title='primary-button']",
+      "status": "active",
+      "registeredAt": "2026-01-16T09:32:05.898Z",
+      "isSharedComponent": true,
+      "componentPath": "src/app/components/primary-button/primary-button.component.ts",
+      "componentTag": "<app-primary-button></app-primary-button>"
+    },
+    "super-component": {
+      "id": "super-component",
+      "displayName": "super-component",
+      "category": "super-components",
+      "description": "Super component wrapping: primary-button, primary-outline-button",
+      "htmlSelector": "app-super-component",
+      "status": "active",
+      "registeredAt": "2026-01-16T09:34:51.890Z",
+      "isSuperComponent": true,
+      "wraps": [
+        "primary-button",
+        "primary-outline-button"
+      ],
+      "variants": [
+        "1",
+        "2"
+      ],
+      "componentPath": "src/app/components/super-component/super-component.component.ts",
+      "componentTag": "<app-super-component></app-super-component>"
     }
   }
 }

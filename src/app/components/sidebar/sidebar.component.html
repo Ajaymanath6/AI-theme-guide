@@ -1,5 +1,5 @@
 <aside 
-  title="sidebar"
+ 
   [class.w-[222px]]="!isSidebarCollapsed"
   [class.w-16]="isSidebarCollapsed"
   [class.p-6]="!isSidebarCollapsed"
@@ -8,7 +8,7 @@
   
   <!-- Header with Logo -->
   <div class="pb-4 border-b border-brandcolor-strokestrong flex items-center justify-center">
-    <a routerLink="/projects" title="sidebar-logo" class="flex items-center cursor-pointer">
+    <a routerLink="/projects" class="flex items-center cursor-pointer">
       @if (!isSidebarCollapsed) {
         <img src="/logo-main.svg" alt="Logo" class="h-8 transition-all">
       } @else {
@@ -21,7 +21,7 @@
   <div class="py-4 border-b border-brandcolor-strokestrong">
     <div class="relative">
       <button 
-        title="sidebar-dropdown-button"
+       
         [id]="'sidebar-dropdown-button-' + uniqueId" 
         [attr.data-dropdown-toggle]="'sidebar-dropdown-menu-' + uniqueId" 
         type="button" 
@@ -68,7 +68,7 @@
         class="hidden z-50 bg-brandcolor-sidebarhover border border-brandcolor-strokestrong rounded-lg shadow-lg absolute top-10 h-[80px] px-6 py-1">
         <ul class="text-sm text-brandcolor-white h-full flex flex-col gap-1">
           <li>
-            <a href="#" title="sidebar-dropdown-option-dart" (click)="onDropdownOptionSelect($event, 'dart')" 
+            <a href="#" (click)="onDropdownOptionSelect($event, 'dart')" 
               [class.border-brandcolor-secondary]="selectedDropdownOption === 'dart'"
               [class.border-transparent]="selectedDropdownOption !== 'dart'"
               [class.bg-brandcolor-textstrong]="selectedDropdownOption === 'dart'"
@@ -78,7 +78,7 @@
             </a>
           </li>
           <li>
-            <a href="#" title="sidebar-dropdown-option-deep" (click)="onDropdownOptionSelect($event, 'deep')" 
+            <a href="#" (click)="onDropdownOptionSelect($event, 'deep')" 
               [class.border-brandcolor-secondary]="selectedDropdownOption === 'deep'"
               [class.border-transparent]="selectedDropdownOption !== 'deep'"
               [class.bg-brandcolor-textstrong]="selectedDropdownOption === 'deep'"
@@ -97,7 +97,7 @@
     <!-- Home -->
     <a 
       href="#" 
-      title="sidebar-menu-home"
+     
       (click)="onMenuItemClick('home', $event)"
       [class.bg-brandcolor-primary]="activeMenuItem === 'home'"
       [class.px-4]="!isSidebarCollapsed"
@@ -114,7 +114,7 @@
     <!-- All projects -->
     <a 
       href="#" 
-      title="sidebar-menu-all-projects"
+     
       (click)="onMenuItemClick('all-projects', $event)"
       [class.bg-brandcolor-primary]="activeMenuItem === 'all-projects'"
       [class.px-4]="!isSidebarCollapsed"
@@ -130,7 +130,7 @@
 
     <!-- My projects with divider -->
     @if (!isSidebarCollapsed) {
-      <div title="sidebar-menu-my-projects" class="flex items-center gap-2 py-3 px-4">
+      <div class="flex items-center gap-2 py-3 px-4">
         <span class="material-symbols-outlined text-brandcolor-white material-symbols-filled" style="font-size: 20px; font-variation-settings: 'FILL' 1;">folder</span>
         <span class="text-brandcolor-white font-medium text-sm">My projects</span>
         <div class="flex-1 border-t border-brandcolor-strokestrong ml-2"></div>
@@ -140,7 +140,7 @@
     <!-- Search -->
     <a 
       href="#" 
-      title="sidebar-menu-search"
+     
       (click)="onMenuItemClick('search', $event)"
       [class.bg-brandcolor-primary]="activeMenuItem === 'search'"
       [class.px-4]="!isSidebarCollapsed"
@@ -157,7 +157,7 @@
     <!-- Tracking -->
     <a 
       href="#" 
-      title="sidebar-menu-tracking"
+     
       (click)="onMenuItemClick('tracking', $event)"
       [class.bg-brandcolor-primary]="activeMenuItem === 'tracking'"
       [class.px-4]="!isSidebarCollapsed"
@@ -174,7 +174,7 @@
     <!-- Analytics -->
     <a 
       href="#" 
-      title="sidebar-menu-analytics"
+     
       (click)="onMenuItemClick('analytics', $event)"
       [class.bg-brandcolor-primary]="activeMenuItem === 'analytics'"
       [class.px-4]="!isSidebarCollapsed"
@@ -191,7 +191,7 @@
     <!-- Pins -->
     <a 
       href="#" 
-      title="sidebar-menu-pins"
+     
       (click)="onMenuItemClick('pins', $event)"
       [class.bg-brandcolor-primary]="activeMenuItem === 'pins'"
       [class.px-4]="!isSidebarCollapsed"
@@ -208,7 +208,7 @@
     <!-- Exports -->
     <a 
       href="#" 
-      title="sidebar-menu-exports"
+     
       (click)="onMenuItemClick('exports', $event)"
       [class.bg-brandcolor-primary]="activeMenuItem === 'exports'"
       [class.px-4]="!isSidebarCollapsed"
@@ -225,7 +225,7 @@
     <!-- Orders -->
     <a 
       href="#" 
-      title="sidebar-menu-orders"
+     
       (click)="onMenuItemClick('orders', $event)"
       [class.bg-brandcolor-primary]="activeMenuItem === 'orders'"
       [class.px-4]="!isSidebarCollapsed"
@@ -243,7 +243,7 @@
   <!-- Toggle Button -->
   <div class="pt-4 border-t border-brandcolor-strokestrong" [class.flex]="!isSidebarCollapsed" [class.justify-end]="!isSidebarCollapsed">
     <button 
-      title="sidebar-toggle-button"
+     
       (click)="onToggleSidebar()"
       type="button"
       [class.w-full]="isSidebarCollapsed"

@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { DragDropModule, CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
 import { ComponentCatalogService, CatalogEntry } from '../../services/component-catalog.service';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
+import { SuperComponentComponent } from '../../components/super-component/super-component.component';
+import { CardComponent } from '../../components/card/card.component';
 declare var initFlowbite: () => void;
 
 interface CanvasElement {
@@ -18,16 +20,16 @@ interface CanvasElement {
 
 @Component({
   selector: 'app-components-canvas',
-  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent],
+  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, SuperComponentComponent, CardComponent],
   templateUrl: './components-canvas.component.html',
   styleUrl: './components-canvas.component.scss'
 })
 export class ComponentsCanvasComponent implements AfterViewInit {
   canvasElements: CanvasElement[] = [
-    { id: 'header1', type: 'header', x: 0, y: 0, content: 'Header' },
     { id: 'sidebar1', type: 'sidebar', x: 0, y: 60, content: 'Sidebar', isSharedComponent: true },
-    { id: 'card1', type: 'card1', x: 50, y: 50, content: 'Card Title One' },
-    { id: 'card2', type: 'card2', x: 400, y: 50, content: 'Card Title Two' },];
+    { id: 'primary-button1', type: 'primary-button', x: 50, y: 200, content: 'Primary Button' },
+    { id: 'primary-outline-button1', type: 'primary-outline-button', x: 200, y: 200, content: 'Primary Outline Button' }
+  ];
 
   isSidebarCollapsed = false;
   activeMenuItem: string | null = null;
@@ -75,6 +77,10 @@ export class ComponentsCanvasComponent implements AfterViewInit {
       // First, try to load catalog from JSON file
       await this.catalogService.loadCatalogFromJson();
       
+      // Debug: Log all catalog entries
+      const allCatalogEntries = this.catalogService.getAllComponents();
+      console.log('📋 All catalog entries:', allCatalogEntries.map(c => ({ id: c.id, isShared: c.isSharedComponent })));
+      
       // Then sync any components that have files but aren't marked as shared
       const needsSync = this.syncCatalogToLocalStorage();
       
@@ -85,13 +91,31 @@ export class ComponentsCanvasComponent implements AfterViewInit {
       }
       
       // Finally, apply shared status to canvas elements
+      console.log('🎨 Canvas elements:', this.canvasElements.map(e => ({ type: e.type, id: e.id })));
       this.canvasElements.forEach(element => {
         const catalogEntry = this.catalogService.getComponent(element.type);
+        console.log(`Checking ${element.type}:`, catalogEntry ? { id: catalogEntry.id, isShared: catalogEntry.isSharedComponent } : 'NOT FOUND');
         if (catalogEntry && catalogEntry.isSharedComponent) {
           element.isSharedComponent = true;
+          console.log(`✓ Applied shared status to: ${element.type}`);
+        } else {
+          // Reset if not in catalog as shared
+          element.isSharedComponent = false;
+          if (catalogEntry) {
+            console.log(`⚠️ ${element.type} is in catalog but not marked as shared component`);
+          } else {
+            console.log(`⚠️ ${element.type} not found in catalog`);
+          }
         }
       });
-      console.log('✓ Shared component status loaded from catalog');
+      
+      const sharedCount = this.canvasElements.filter(e => e.isSharedComponent).length;
+      console.log(`✓ Shared component status loaded from catalog. ${sharedCount} components marked as shared.`);
+      console.log('Shared components on canvas:', this.canvasElements.filter(e => e.isSharedComponent).map(e => e.type));
+      
+      // Load super components to canvas after catalog is loaded
+      this.loadSuperComponentsToCanvas();
+      
       this.cdr.detectChanges();
     } catch (error) {
       console.warn('Could not load catalog from JSON, using localStorage:', error);
@@ -101,9 +125,63 @@ export class ComponentsCanvasComponent implements AfterViewInit {
         const catalogEntry = this.catalogService.getComponent(element.type);
         if (catalogEntry && catalogEntry.isSharedComponent) {
           element.isSharedComponent = true;
+          console.log(`✓ Applied shared status to: ${element.type} (from localStorage)`);
+        } else {
+          element.isSharedComponent = false;
         }
       });
+      
+      const sharedCount = this.canvasElements.filter(e => e.isSharedComponent).length;
+      console.log(`✓ Shared component status loaded from localStorage. ${sharedCount} components marked as shared.`);
+      
+      // Load super components to canvas after catalog is loaded
+      this.loadSuperComponentsToCanvas();
+      
       this.cdr.detectChanges();
+    }
+  }
+
+  /**
+   * Load super components from catalog and add them to canvas if they don't exist
+   */
+  private loadSuperComponentsToCanvas(): void {
+    try {
+      const allComponents = this.catalogService.getAllComponents();
+      const superComponents = allComponents.filter(c => c.isSuperComponent === true);
+      
+      console.log('🔍 Found super components in catalog:', superComponents.map(c => c.id));
+      
+      superComponents.forEach(superComp => {
+        // Check if this super component is already on canvas
+        const existsOnCanvas = this.canvasElements.some(e => e.type === superComp.id);
+        
+        if (!existsOnCanvas) {
+          // Calculate position (to the right of existing elements)
+          const maxX = this.canvasElements.length > 0 
+            ? Math.max(...this.canvasElements.map(e => e.x)) 
+            : 0;
+          const maxY = this.canvasElements.length > 0 
+            ? Math.max(...this.canvasElements.map(e => e.y)) 
+            : 0;
+          
+          // Add super component to canvas
+          this.canvasElements.push({
+            id: `${superComp.id}1`,
+            type: superComp.id,
+            x: maxX + 350, // Position to the right
+            y: maxY > 0 ? maxY : 300,
+            content: superComp.displayName || superComp.id
+          });
+          
+          console.log(`✅ Added super component to canvas: ${superComp.id}`);
+        } else {
+          console.log(`ℹ️ Super component already on canvas: ${superComp.id}`);
+        }
+      });
+      
+      this.cdr.detectChanges();
+    } catch (error) {
+      console.warn('Could not load super components to canvas:', error);
     }
   }
 
@@ -359,6 +437,67 @@ export class ComponentsCanvasComponent implements AfterViewInit {
     }
   }
 
+  /**
+   * Delete a super component (keep wrapped components)
+   */
+  async deleteSuperComponent(componentId: string): Promise<void> {
+    const superInfo = this.getSuperComponentInfo(componentId);
+    
+    const confirmed = confirm(
+      `⚠️ Delete super component: ${componentId}?\n\n` +
+      `This will:\n` +
+      `• Delete super component files from disk\n` +
+      `• Remove from catalog\n` +
+      `• Keep wrapped components: ${superInfo?.wraps.join(', ')}\n\n` +
+      `This action cannot be undone!`
+    );
+
+    if (!confirmed) return;
+
+    try {
+      // Step 1: Call helper service to delete files
+      const response = await fetch('http://localhost:4202/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ componentId })
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to delete super component');
+      }
+
+      // Step 2: Remove from catalog
+      this.catalogService.unregisterComponent(componentId);
+
+      // Step 3: Remove from canvasElements array (only the super component, not wrapped components)
+      this.canvasElements = this.canvasElements.filter(e => e.type !== componentId);
+
+      // Step 4: Export updated catalog
+      await this.exportCatalog();
+
+      // Step 5: Force UI update
+      this.cdr.detectChanges();
+
+      this.showToast(
+        `✅ Super component deleted!\n\n` +
+        `Wrapped components still available:\n` +
+        `${superInfo?.wraps.join(', ')}`
+      );
+      console.log('✓ Super component deleted:', componentId);
+      console.log('✓ Wrapped components preserved:', superInfo?.wraps);
+
+    } catch (error) {
+      console.error('Error deleting super component:', error);
+      this.showToast(
+        `❌ Failed to delete super component.\n\n` +
+        `Make sure component-helper is running:\n` +
+        `npm run component-helper`
+      );
+    }
+  }
+
   // ============================================
   // Super Component Methods
   // ============================================
@@ -366,10 +505,57 @@ export class ComponentsCanvasComponent implements AfterViewInit {
   /**
    * Open super component creation dialog
    */
-  makeSuperComponent(componentId: string): void {
+  async makeSuperComponent(componentId: string): Promise<void> {
     // Get all shared components
-    this.availableSharedComponents = this.catalogService.getAllComponents()
+    const allShared = this.catalogService.getAllComponents()
       .filter(c => c.isSharedComponent && !c.isSuperComponent);
+
+    console.log('🔍 Found shared components in catalog:', allShared.map(c => c.id));
+
+    // Verify component files actually exist
+    this.availableSharedComponents = [];
+    
+    // Check if helper service is available
+    let helperServiceAvailable = false;
+    try {
+      const healthCheck = await fetch('http://localhost:4202/health', { 
+        method: 'GET',
+        signal: AbortSignal.timeout(2000) // 2 second timeout
+      });
+      helperServiceAvailable = healthCheck.ok;
+      console.log('✅ Helper service is available');
+    } catch (error) {
+      console.warn('⚠️ Helper service not available. Showing all catalog components without file verification.');
+      helperServiceAvailable = false;
+    }
+
+    for (const component of allShared) {
+      if (helperServiceAvailable) {
+        // Check if component directory exists
+        try {
+          const exists = await this.checkComponentExists(component.id);
+          if (exists) {
+            this.availableSharedComponents.push(component);
+            console.log(`✅ Component ${component.id} verified - files exist`);
+          } else {
+            // Component in catalog but files don't exist - don't remove, just skip for now
+            console.warn(`⚠️ Component ${component.id} in catalog but file check returned false. Still showing in list.`);
+            // Still add it to the list - user can decide
+            this.availableSharedComponents.push(component);
+          }
+        } catch (error) {
+          // If check fails, still show the component
+          console.warn(`⚠️ Error checking ${component.id}, showing anyway:`, error);
+          this.availableSharedComponents.push(component);
+        }
+      } else {
+        // Helper service not available - show all components from catalog
+        this.availableSharedComponents.push(component);
+        console.log(`📋 Showing ${component.id} from catalog (file check skipped)`);
+      }
+    }
+
+    console.log('📦 Available shared components for super component:', this.availableSharedComponents.map(c => c.id));
 
     // Pre-select components with same prefix
     const prefix = componentId.replace(/\d+$/, ''); // Remove trailing numbers
@@ -381,6 +567,24 @@ export class ComponentsCanvasComponent implements AfterViewInit {
     this.updateSuperComponentName();
 
     this.showSuperComponentDialog = true;
+  }
+
+  /**
+   * Check if component files exist
+   */
+  private async checkComponentExists(componentId: string): Promise<boolean> {
+    try {
+      const response = await fetch('http://localhost:4202/check-component', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ componentId })
+      });
+      const result = await response.json();
+      return result.exists;
+    } catch (error) {
+      console.error('Error checking component:', error);
+      return false;
+    }
   }
 
   /**
@@ -442,6 +646,19 @@ export class ComponentsCanvasComponent implements AfterViewInit {
     this.isCreatingSuperComponent = true;
 
     try {
+      // Check if helper service is running
+      try {
+        const healthCheck = await fetch('http://localhost:4202/health', { 
+          method: 'GET',
+          signal: AbortSignal.timeout(2000)
+        });
+        if (!healthCheck.ok) {
+          throw new Error('Helper service not responding');
+        }
+      } catch (error) {
+        throw new Error('Component helper service is not running. Please start it with: npm run component-helper');
+      }
+
       const componentId = this.superComponentName.replace('app-', '');
 
       // Step 1: Generate component files via helper
@@ -451,6 +668,10 @@ export class ComponentsCanvasComponent implements AfterViewInit {
         body: JSON.stringify({ componentId })
       });
 
+      if (!response.ok) {
+        throw new Error(`Helper service error (${response.status}): Make sure component-helper is running (npm run component-helper)`);
+      }
+
       const result = await response.json();
 
       if (!result.success) {
@@ -458,7 +679,33 @@ export class ComponentsCanvasComponent implements AfterViewInit {
       }
 
       // Step 2: Generate super component code
-      await this.generateSuperComponentCode(componentId);
+      const { tsCode, htmlCode } = this.generateSuperComponentCode(componentId);
+
+      // Step 2a: Write TypeScript and HTML to component files via helper
+      const writeResponse = await fetch('http://localhost:4202/write-component-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          componentId,
+          tsContent: tsCode,
+          htmlContent: htmlCode
+        })
+      });
+
+      if (!writeResponse.ok) {
+        if (writeResponse.status === 404) {
+          throw new Error(`Component directory not found. Make sure component-helper is running: npm run component-helper`);
+        }
+        const errorText = await writeResponse.text();
+        throw new Error(`Failed to write component code (${writeResponse.status}): ${errorText}`);
+      }
+
+      const writeResult = await writeResponse.json();
+      if (!writeResult.success) {
+        throw new Error(writeResult.error || 'Failed to write super component code');
+      }
+      
+      console.log('✅ Super component code written successfully!');
 
       // Step 3: Register in catalog
       const entry: CatalogEntry = {
@@ -481,7 +728,28 @@ export class ComponentsCanvasComponent implements AfterViewInit {
       // Step 4: Export catalog
       await this.exportCatalog();
 
-      // Step 5: Close dialog
+      // Step 5: Add super component to canvas
+      // Find the rightmost position of selected components to place super component
+      let maxX = 0;
+      let maxY = 0;
+      this.selectedComponentsForSuper.forEach(compId => {
+        const element = this.canvasElements.find(e => e.type === compId);
+        if (element) {
+          maxX = Math.max(maxX, element.x);
+          maxY = Math.max(maxY, element.y);
+        }
+      });
+      
+      // Add super component to canvas (positioned to the right of selected components)
+      this.canvasElements.push({
+        id: `${componentId}1`,
+        type: componentId,
+        x: maxX + 300, // Position to the right
+        y: maxY,
+        content: this.superComponentName
+      });
+
+      // Step 6: Close dialog
       this.showSuperComponentDialog = false;
       this.isCreatingSuperComponent = false;
 
@@ -501,8 +769,9 @@ export class ComponentsCanvasComponent implements AfterViewInit {
 
   /**
    * Generate super component TypeScript and HTML code
+   * Returns the generated code for auto-writing to files
    */
-  private async generateSuperComponentCode(componentId: string): Promise<void> {
+  private generateSuperComponentCode(componentId: string): { tsCode: string; htmlCode: string } {
     // Generate TypeScript
     const tsCode = this.generateSuperComponentTS(componentId);
     const htmlCode = this.generateSuperComponentHTML(componentId);
@@ -510,14 +779,7 @@ export class ComponentsCanvasComponent implements AfterViewInit {
     console.log('📝 Generated TypeScript:', tsCode);
     console.log('📝 Generated HTML:', htmlCode);
 
-    // Note: In production, you'd write these to files
-    // For now, log instructions for manual copy-paste
-    this.showToast(
-      `📝 Copy the generated code from console:\n\n` +
-      `1. Open: src/app/components/${componentId}/${componentId}.component.ts\n` +
-      `2. Open: src/app/components/${componentId}/${componentId}.component.html\n` +
-      `3. Replace with generated code from console`
-    );
+    return { tsCode, htmlCode };
   }
 
   /**
@@ -613,6 +875,7 @@ ${cases}
       'card4': 'Dual Subheading Card',
       'card5': 'Image Card',
       'card6': 'Hero Profile Card',
+      'card7': 'Paragraph Card',
       'sidebar': 'Navigation Sidebar',
       'dropdown': 'Action Dropdown Menu'
     };
@@ -640,6 +903,7 @@ ${cases}
       'card4': 'Card with title, subtitle, dual subheadings (left & right), divider, primary and neutral buttons',
       'card5': 'Card with title, subtitle, placeholder image, primary and secondary buttons',
       'card6': 'Card with title, subtitle, divider, hero name (Nisarage), subtitle with paragraph, divider, primary and secondary buttons',
+      'card7': 'Card with title, subtitle, divider, paragraph, divider, primary and primary outline buttons',
       'sidebar': 'Collapsible navigation sidebar with logo, dropdown, menu items, and toggle button',
       'dropdown': 'Dropdown menu with header, 5 options, divider, and action buttons (primary & neutral)'
     };
@@ -704,6 +968,28 @@ ${cases}
   }
 
   /**
+   * Check if component is a super component
+   */
+  isSuperComponent(componentId: string): boolean {
+    const entry = this.catalogService.getComponent(componentId);
+    return entry?.isSuperComponent === true;
+  }
+
+  /**
+   * Get super component info (wraps and variants)
+   */
+  getSuperComponentInfo(componentId: string): { wraps: string[], variants: string[] } | null {
+    const entry = this.catalogService.getComponent(componentId);
+    if (entry?.isSuperComponent) {
+      return {
+        wraps: entry.wraps || [],
+        variants: entry.variants || []
+      };
+    }
+    return null;
+  }
+
+  /**
    * Make a component shared (convert to reusable Angular component)
    * Shows popover for user confirmation
    */
@@ -752,6 +1038,69 @@ ${cases}
     this.showSharedComponentPopover = false;
     this.selectedComponentForSharing = null;
     this.isCreatingComponent = false;
+  }
+
+  /**
+   * Extract HTML content for a component from canvas
+   */
+  private extractComponentHTML(componentId: string): string {
+    const htmlTemplates: Record<string, string> = {
+      'card1': `<div title="card1" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
+  <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title One</h3>
+  <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle One</p>
+  <hr class="border-brandcolor-strokeweak mb-4">
+  <p class="text-brandcolor-textweak text-sm mb-4">
+    This is a long paragraph that contains multiple sentences to demonstrate how text content can span across several lines within a card component. It provides enough content to show how the card handles longer text blocks and ensures proper spacing and readability.
+  </p>
+  <div class="flex gap-3">
+    <button
+      type="button"
+      title="card1-primary-button"
+      class="border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
+      Primary
+    </button>
+    <button
+      type="button"
+      title="card1-secondary-button"
+      class="border-[1.5px] border-brandcolor-secondary bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
+      Secondary
+    </button>
+  </div>
+</div>`,
+      'card7': `<div title="card7" class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full max-w-sm shadow-lg">
+  <h3 class="text-brandcolor-textstrong font-semibold text-xl mb-1">Card Title Seven</h3>
+  <p class="text-brandcolor-textweak text-sm mb-4">Card Subtitle Seven</p>
+  
+  <!-- First Divider -->
+  <hr class="border-brandcolor-strokeweak mb-4">
+  
+  <!-- Paragraph -->
+  <p class="text-brandcolor-textweak text-sm mb-4">
+    This is a paragraph that provides additional context or description about the card content. It can contain multiple sentences and will wrap naturally within the card component.
+  </p>
+  
+  <!-- Second Divider -->
+  <hr class="border-brandcolor-strokeweak mb-4">
+  
+  <!-- Buttons -->
+  <div class="flex gap-3">
+    <button
+      type="button"
+      title="card7-primary-button"
+      class="border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
+      Primary
+    </button>
+    <button
+      type="button"
+      title="card7-primary-outline-button"
+      class="border-[1.5px] border-brandcolor-primary bg-transparent text-brandcolor-primary hover:bg-brandcolor-neutralhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
+      Primary Outline
+    </button>
+  </div>
+</div>`
+    };
+
+    return htmlTemplates[componentId] || `<p>${componentId} works!</p>`;
   }
 
   /**
@@ -813,8 +1162,9 @@ ${cases}
       console.log('✓ Shared component marked:', componentId);
       console.log('💡 Component tag:', `<app-${componentId}></app-${componentId}>`);
       
-      // Step 6: Trigger CLI command execution
-      await this.executeCliCommand(componentId);
+      // Step 6: Extract HTML and trigger CLI command execution with HTML content
+      const htmlContent = this.extractComponentHTML(componentId);
+      await this.executeCliCommand(componentId, htmlContent);
 
       // Step 7: Automatically save to project file
       console.log('💾 Auto-saving catalog to project file...');
@@ -830,9 +1180,12 @@ ${cases}
   /**
    * Execute CLI command to generate Angular component via helper service
    */
-  private async executeCliCommand(componentId: string): Promise<void> {
+  private async executeCliCommand(componentId: string, htmlContent?: string): Promise<void> {
     try {
       console.log(`🚀 Calling component helper service for ${componentId}...`);
+      if (htmlContent) {
+        console.log(`📝 Sending HTML content to be written automatically`);
+      }
       
       // Call the component helper service running on localhost:4202
       const response = await fetch('http://localhost:4202/generate', {
@@ -840,7 +1193,7 @@ ${cases}
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ componentId })
+        body: JSON.stringify({ componentId, htmlContent })
       });
 
       const result = await response.json();

@@ -93,6 +93,12 @@ app.get('/', (req, res) => {
         <div class="endpoint">
           <span class="method">POST</span> /delete - Delete Angular component
         </div>
+        <div class="endpoint">
+          <span class="method">POST</span> /write-component-code - Write TypeScript/HTML code to existing component
+        </div>
+        <div class="endpoint">
+          <span class="method">POST</span> /check-component - Check if component exists
+        </div>
         <p style="margin-top: 30px; color: #6b7280; font-size: 14px;">
           💡 Keep this server running while using the component canvas.
         </p>
@@ -109,7 +115,7 @@ app.get('/health', (req, res) => {
 
 // Generate component endpoint
 app.post('/generate', (req, res) => {
-  const { componentId } = req.body;
+  const { componentId, htmlContent, tsContent } = req.body;
 
   if (!componentId) {
     return res.status(400).json({ 
@@ -145,11 +151,41 @@ app.post('/generate', (req, res) => {
     console.log('✅ Component generated successfully!');
     console.log(stdout);
 
+    const componentDir = path.join(process.cwd(), 'src', 'app', 'components', componentId);
+    let filesWritten = [];
+
+    // Write TypeScript content if provided
+    if (tsContent) {
+      const tsFilePath = path.join(componentDir, `${componentId}.component.ts`);
+      try {
+        fs.writeFileSync(tsFilePath, tsContent, 'utf8');
+        console.log('✅ Written TypeScript content to component file');
+        filesWritten.push('TypeScript');
+      } catch (writeError) {
+        console.error('⚠️  Failed to write TypeScript content:', writeError.message);
+      }
+    }
+
+    // Write HTML content if provided
+    if (htmlContent) {
+      const htmlFilePath = path.join(componentDir, `${componentId}.component.html`);
+      try {
+        fs.writeFileSync(htmlFilePath, htmlContent, 'utf8');
+        console.log('✅ Written HTML content to component file');
+        filesWritten.push('HTML');
+      } catch (writeError) {
+        console.error('⚠️  Failed to write HTML content:', writeError.message);
+      }
+    }
+
     res.json({ 
       success: true, 
       message: `Component ${componentId} created successfully`,
       output: stdout,
       componentPath: `src/app/components/${componentId}/`,
+      htmlWritten: !!htmlContent,
+      tsWritten: !!tsContent,
+      filesWritten: filesWritten,
       files: [
         `${componentId}.component.ts`,
         `${componentId}.component.html`,
@@ -341,6 +377,88 @@ app.post('/delete', (req, res) => {
       error: error.message
     });
   }
+});
+
+// Write component code endpoint (for super components or updating existing components)
+app.post('/write-component-code', (req, res) => {
+  const { componentId, tsContent, htmlContent } = req.body;
+
+  if (!componentId) {
+    return res.status(400).json({ 
+      success: false, 
+      error: 'Component ID is required' 
+    });
+  }
+
+  const componentDir = path.join(process.cwd(), 'src', 'app', 'components', componentId);
+  
+  if (!fs.existsSync(componentDir)) {
+    return res.status(404).json({ 
+      success: false, 
+      error: `Component directory not found: ${componentDir}` 
+    });
+  }
+
+  let filesWritten = [];
+
+  // Write TypeScript content if provided
+  if (tsContent) {
+    const tsFilePath = path.join(componentDir, `${componentId}.component.ts`);
+    try {
+      fs.writeFileSync(tsFilePath, tsContent, 'utf8');
+      console.log(`✅ Written TypeScript content to: ${tsFilePath}`);
+      filesWritten.push('TypeScript');
+    } catch (writeError) {
+      console.error('⚠️  Failed to write TypeScript content:', writeError.message);
+      return res.status(500).json({ 
+        success: false, 
+        error: `Failed to write TypeScript: ${writeError.message}` 
+      });
+    }
+  }
+
+  // Write HTML content if provided
+  if (htmlContent) {
+    const htmlFilePath = path.join(componentDir, `${componentId}.component.html`);
+    try {
+      fs.writeFileSync(htmlFilePath, htmlContent, 'utf8');
+      console.log(`✅ Written HTML content to: ${htmlFilePath}`);
+      filesWritten.push('HTML');
+    } catch (writeError) {
+      console.error('⚠️  Failed to write HTML content:', writeError.message);
+      return res.status(500).json({ 
+        success: false, 
+        error: `Failed to write HTML: ${writeError.message}` 
+      });
+    }
+  }
+
+  res.json({ 
+    success: true, 
+    message: `Component code written successfully for ${componentId}`,
+    filesWritten: filesWritten,
+    componentPath: `src/app/components/${componentId}/`
+  });
+});
+
+// Check if component exists endpoint
+app.post('/check-component', (req, res) => {
+  const { componentId } = req.body;
+  
+  if (!componentId) {
+    return res.status(400).json({ exists: false });
+  }
+
+  const componentDir = path.join(process.cwd(), 'src', 'app', 'components', componentId);
+  const exists = fs.existsSync(componentDir);
+  
+  console.log(`📂 Checking component: ${componentId} - ${exists ? 'EXISTS' : 'NOT FOUND'}`);
+  
+  res.json({ 
+    exists,
+    componentId,
+    path: componentDir
+  });
 });
 
 // Start server
