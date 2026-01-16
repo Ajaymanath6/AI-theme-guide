@@ -49,6 +49,20 @@
 <h1 class="text-brandcolor-textstrong text-3xl font-bold">Heading</h1>
 ```
 
+## Super Component Naming Rules
+
+**CRITICAL RULE: ALL super components MUST start with "app-" prefix**
+
+### Examples:
+- Buttons: `secondary-button` + `secondary-outline-button` → `app-secondary-button`
+- Any UI: `sidebar` + `header` → `app-sidebar` (or based on first component)
+- Always format: `app-{component-name}`
+
+### Naming Logic:
+1. For buttons: Extract base button name (remove `-outline-` if present)
+2. For other components: Use common prefix or first component name
+3. **Always ensure the final name starts with "app-"**
+
 ## Validation Checklist
 
 Before submitting code, verify:
@@ -60,3 +74,4 @@ Before submitting code, verify:
 - [ ] Secondary buttons have 'border-[1.5px]' (not border/border-2)
 - [ ] Component follows componentGuidelines
 - [ ] All requiredClasses are included
+- [ ] Super component names start with "app-" prefix

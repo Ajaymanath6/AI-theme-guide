@@ -604,6 +604,11 @@ export class ComponentsCanvasComponent implements AfterViewInit {
 
   /**
    * Update super component name based on selection
+   * RULE: ALL super components MUST start with "app-" prefix
+   * IMPORTANT: Super components must have unique names that don't conflict with existing shared components
+   * Examples:
+   * - Buttons: "secondary-button" + "secondary-outline-button" -> "app-secondary-button-variants"
+   * - Any UI: "sidebar" + "header" -> "app-sidebar-variants" (or based on first component)
    */
   private updateSuperComponentName(): void {
     if (this.selectedComponentsForSuper.length === 0) {
@@ -611,20 +616,79 @@ export class ComponentsCanvasComponent implements AfterViewInit {
       return;
     }
 
-    // Extract common prefix
     const first = this.selectedComponentsForSuper[0];
-    const prefix = first.replace(/\d+$/, ''); // Remove trailing numbers
+    let baseName = '';
     
-    // Check if all selected have same prefix
-    const allSamePrefix = this.selectedComponentsForSuper.every(id => 
-      id.startsWith(prefix)
+    // For button components, extract the base button name
+    // e.g., "secondary-button" and "secondary-outline-button" -> "secondary-button"
+    const allAreButtons = this.selectedComponentsForSuper.every(id => 
+      id.endsWith('-button')
     );
 
-    if (allSamePrefix) {
-      this.superComponentName = `app-${prefix}`;
+    if (allAreButtons) {
+      // Find the base button name (the one without "-outline-")
+      const baseButton = this.selectedComponentsForSuper.find(id => 
+        !id.includes('-outline-')
+      ) || first;
+      
+      // Remove "-outline-" if present to get base name
+      baseName = baseButton.replace(/-outline-button$/, '-button');
+      
+      // Ensure it ends with "-button"
+      if (!baseName.endsWith('-button')) {
+        baseName = first.replace(/-outline-button$/, '-button');
+      }
     } else {
-      this.superComponentName = 'app-super-component';
+      // For non-button components, use common prefix logic
+      const prefix = first.replace(/\d+$/, ''); // Remove trailing numbers
+      
+      // Check if all selected have same prefix
+      const allSamePrefix = this.selectedComponentsForSuper.every(id => 
+        id.startsWith(prefix)
+      );
+
+      if (allSamePrefix) {
+        baseName = prefix;
+      } else {
+        // Try to find common base name
+        const parts = first.split('-');
+        if (parts.length > 1) {
+          const base = parts[0];
+          const allShareBase = this.selectedComponentsForSuper.every(id => 
+            id.startsWith(base + '-')
+          );
+          
+          if (allShareBase) {
+            baseName = first;
+          } else {
+            baseName = first;
+          }
+        } else {
+          baseName = first;
+        }
+      }
     }
+    
+    // CRITICAL RULE: Always ensure super component name starts with "app-"
+    // Remove any existing "app-" prefix to avoid duplication, then add it
+    let cleanName = baseName.startsWith('app-') ? baseName.replace(/^app-/, '') : baseName;
+    
+    // IMPORTANT: Check if a component with this name already exists (shared or super)
+    // If it exists, append "-variants" to make it unique
+    const proposedName = `app-${cleanName}`;
+    const componentId = cleanName;
+    const existingComponent = this.catalogService.getComponent(componentId);
+    
+    if (existingComponent && (existingComponent.isSharedComponent || existingComponent.isSuperComponent)) {
+      // Component already exists, append "-variants" to make it unique
+      cleanName = `${cleanName}-variants`;
+      console.log(`⚠️ Component ${componentId} already exists. Using unique name: app-${cleanName}`);
+    }
+    
+    // RULE: Super component names must start with "app-" prefix
+    // The componentId (folder name) will be the full name with "app-" prefix
+    // Example: "app-secondary-button-variants" (not "secondary-button-variants")
+    this.superComponentName = `app-${cleanName}`;
   }
 
   /**
@@ -662,23 +726,45 @@ export class ComponentsCanvasComponent implements AfterViewInit {
         throw new Error('Component helper service is not running. Please start it with: npm run component-helper');
       }
 
-      const componentId = this.superComponentName.replace('app-', '');
+      // RULE: Super component folder names start with "app-" prefix
+      // Example: "app-secondary-button-variants" (folder name includes "app-")
+      const componentId = this.superComponentName; // Keep "app-" prefix for folder name
 
       // Step 1: Generate component files via helper
-      const response = await fetch('http://localhost:4202/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ componentId })
-      });
+      // If component already exists, we'll skip generation and just write the code
+      try {
+        const response = await fetch('http://localhost:4202/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ componentId })
+        });
 
-      if (!response.ok) {
-        throw new Error(`Helper service error (${response.status}): Make sure component-helper is running (npm run component-helper)`);
-      }
-
-      const result = await response.json();
-
-      if (!result.success) {
-        throw new Error(result.error || 'Failed to create super component');
+        if (!response.ok) {
+          const errorText = await response.text();
+          // If component already exists or has merge conflict, continue anyway (we'll just write the code)
+          if (response.status === 500 && (errorText.includes('already exists') || errorText.includes('merge conflict'))) {
+            console.log('Component already exists or has conflicts, skipping generation and writing code directly');
+          } else {
+            throw new Error(`Helper service error (${response.status}): ${errorText || 'Make sure component-helper is running (npm run component-helper)'}`);
+          }
+        } else {
+          const result = await response.json();
+          if (!result.success) {
+            // If component already exists, continue anyway
+            if (result.error && (result.error.includes('already exists') || result.error.includes('merge conflict'))) {
+              console.log('Component already exists or has conflicts, skipping generation and writing code directly');
+            } else {
+              throw new Error(result.error || 'Failed to create super component');
+            }
+          }
+        }
+      } catch (error: any) {
+        // If generation fails due to existing component, continue to write code
+        if (error.message && (error.message.includes('already exists') || error.message.includes('merge conflict'))) {
+          console.log('Component already exists, skipping generation and writing code directly');
+        } else {
+          throw error;
+        }
       }
 
       // Step 2: Generate super component code
@@ -719,14 +805,14 @@ export class ComponentsCanvasComponent implements AfterViewInit {
         displayName: this.getDisplayName(componentId),
         category: 'super-components',
         description: `${approachDescription} wrapping: ${this.selectedComponentsForSuper.join(', ')}`,
-        htmlSelector: `app-${componentId}`,
+        htmlSelector: componentId, // componentId already includes "app-" prefix
         status: 'active',
         registeredAt: new Date().toISOString(),
         isSuperComponent: true,
         wraps: [...this.selectedComponentsForSuper],
         variants: this.selectedComponentsForSuper.map((id, idx) => (idx + 1).toString()),
         componentPath: `src/app/components/${componentId}/${componentId}.component.ts`,
-        componentTag: `<app-${componentId}></app-${componentId}>`
+        componentTag: componentId.startsWith('app-') ? `<${componentId}></${componentId}>` : `<app-${componentId}></app-${componentId}>`
       };
 
       this.catalogService.registerComponent(entry);
@@ -734,26 +820,35 @@ export class ComponentsCanvasComponent implements AfterViewInit {
       // Step 4: Export catalog
       await this.exportCatalog();
 
-      // Step 5: Add super component to canvas
-      // Find the rightmost position of selected components to place super component
-      let maxX = 0;
-      let maxY = 0;
-      this.selectedComponentsForSuper.forEach(compId => {
-        const element = this.canvasElements.find(e => e.type === compId);
-        if (element) {
-          maxX = Math.max(maxX, element.x);
-          maxY = Math.max(maxY, element.y);
-        }
-      });
+      // Step 5: Add super component to canvas (only if it doesn't already exist)
+      // Check if super component already exists on canvas
+      const existingSuperComponent = this.canvasElements.find(e => e.type === componentId);
       
-      // Add super component to canvas (positioned to the right of selected components)
-      this.canvasElements.push({
-        id: `${componentId}1`,
-        type: componentId,
-        x: maxX + 300, // Position to the right
-        y: maxY,
-        content: this.superComponentName
-      });
+      if (!existingSuperComponent) {
+        // Find the rightmost position of selected components to place super component
+        let maxX = 0;
+        let maxY = 0;
+        this.selectedComponentsForSuper.forEach(compId => {
+          const element = this.canvasElements.find(e => e.type === compId);
+          if (element) {
+            maxX = Math.max(maxX, element.x);
+            maxY = Math.max(maxY, element.y);
+          }
+        });
+        
+        // Add super component to canvas (positioned to the right of selected components)
+        this.canvasElements.push({
+          id: `${componentId}1`,
+          type: componentId,
+          x: maxX + 300, // Position to the right
+          y: maxY,
+          content: this.superComponentName
+        });
+        
+        console.log(`✅ Added super component to canvas: ${componentId}`);
+      } else {
+        console.log(`ℹ️ Super component already on canvas: ${componentId}. Skipping canvas addition.`);
+      }
 
       // Step 6: Close dialog
       this.showSuperComponentDialog = false;
@@ -800,7 +895,7 @@ import { CommonModule } from '@angular/common';
 export type ${this.toClassName(componentId)}Variant = ${this.selectedComponentsForSuper.map((_, idx) => `'${idx + 1}'`).join(' | ')};
 
 @Component({
-  selector: 'app-${componentId}',
+  selector: '${componentId}',
   imports: [CommonModule],
   templateUrl: './${componentId}.component.html',
   styleUrl: './${componentId}.component.scss'
@@ -829,7 +924,7 @@ ${imports}
 export type ${this.toClassName(componentId)}Variant = ${this.selectedComponentsForSuper.map((_, idx) => `'${idx + 1}'`).join(' | ')};
 
 @Component({
-  selector: 'app-${componentId}',
+  selector: '${componentId}',
   imports: [CommonModule, ${importsList}],
   templateUrl: './${componentId}.component.html',
   styleUrl: './${componentId}.component.scss'

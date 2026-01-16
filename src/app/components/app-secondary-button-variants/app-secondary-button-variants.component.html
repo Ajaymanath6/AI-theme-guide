@@ -1,0 +1,26 @@
+@switch (variant()) {
+  @case ('1') {
+    <button
+      type="button"
+      [disabled]="disabled()"
+      class="border-[1.5px] border-transparent bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
+      Secondary
+    </button>
+  }
+  @case ('2') {
+    <button
+      type="button"
+      [disabled]="disabled()"
+      class="border-[1.5px] border-brandcolor-strokelight text-brandcolor-secondary bg-brandcolor-white hover:bg-brandcolor-neutralhover active:border-brandcolor-secondary active:text-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
+      Secondary Outline
+    </button>
+  }
+  @default {
+    <button
+      type="button"
+      [disabled]="disabled()"
+      class="border-[1.5px] border-transparent bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
+      Secondary
+    </button>
+  }
+}
