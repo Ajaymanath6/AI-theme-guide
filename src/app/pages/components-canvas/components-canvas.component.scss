@@ -98,7 +98,7 @@
   // Dim outline glow on hover
   &:hover > div:not(.component-tooltip),
   &:hover > aside,
-  &:hover > app-sidebar {
+  &:hover > app-sidebar{
     outline: 1.5px solid rgba(59, 130, 246, 0.4);
     outline-offset: 3px;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.05);
@@ -117,7 +117,7 @@
     // Blue outline for shared components
     & > div:not(.component-tooltip),
     & > aside,
-    & > app-sidebar {
+    & > app-sidebar{
       outline: 1.5px solid rgba(37, 99, 235, 0.4);
       outline-offset: 3px;
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.05);

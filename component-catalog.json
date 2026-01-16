@@ -1,61 +1,28 @@
 {
   "catalogId": "design-system-v1",
   "version": "1.0.0",
-  "lastUpdated": "2026-01-15T11:43:40.231Z",
+  "lastUpdated": "2026-01-15T15:06:27.125Z",
   "registeredComponents": {
-    "card1": {
-      "id": "card1",
-      "displayName": "Primary Content Card",
+    "card5": {
+      "id": "card5",
+      "displayName": "Image Card",
       "category": "cards",
-      "description": "Card with long paragraph content, primary and secondary action buttons",
-      "htmlSelector": "[title='card1']",
+      "description": "Card with title, subtitle, placeholder image, primary and secondary buttons",
+      "htmlSelector": "[title='card5']",
       "status": "active",
-      "registeredAt": "2026-01-15T11:13:49.606Z"
-    },
-    "card2": {
-      "id": "card2",
-      "displayName": "Action Card",
-      "category": "cards",
-      "description": "Card with two-line content, primary and primary outline buttons",
-      "htmlSelector": "[title='card2']",
-      "status": "active",
-      "registeredAt": "2026-01-15T11:22:19.090Z"
-    },
-    "card3": {
-      "id": "card3",
-      "displayName": "Compact Card",
-      "category": "cards",
-      "description": "Compact card with single line content, secondary and secondary outline buttons",
-      "htmlSelector": "[title='card3']",
-      "status": "active",
-      "registeredAt": "2026-01-15T11:23:38.388Z",
+      "registeredAt": "2026-01-15T14:01:02.152Z",
       "isSharedComponent": true,
-      "componentPath": "src/app/components/card3/card3.component.ts",
-      "componentTag": "<app-card3></app-card3>"
+      "componentPath": "src/app/components/card5/card5.component.ts",
+      "componentTag": "<app-card5></app-card5>"
     },
-    "card4": {
-      "id": "card4",
-      "displayName": "Dual Subheading Card",
+    "card6": {
+      "id": "card6",
+      "displayName": "Hero Profile Card",
       "category": "cards",
-      "description": "Card with title, subtitle, dual subheadings (left & right), divider, primary and neutral buttons",
-      "htmlSelector": "[title='card4']",
+      "description": "Card with title, subtitle, divider, hero name (Nisarage), subtitle with paragraph, divider, primary and secondary buttons",
+      "htmlSelector": "[title='card6']",
       "status": "active",
-      "registeredAt": "2026-01-15T12:00:00.000Z",
-      "isSharedComponent": true,
-      "componentPath": "src/app/components/card4/card4.component.ts",
-      "componentTag": "<app-card4></app-card4>"
-    },
-    "sidebar": {
-      "id": "sidebar",
-      "displayName": "Navigation Sidebar",
-      "category": "navigation",
-      "description": "Collapsible navigation sidebar with logo, dropdown, menu items, and toggle button",
-      "htmlSelector": "[title='sidebar']",
-      "status": "active",
-      "registeredAt": "2026-01-15T11:42:58.711Z",
-      "isSharedComponent": true,
-      "componentPath": "src/app/components/sidebar/sidebar.component.ts",
-      "componentTag": "<app-sidebar></app-sidebar>"
+      "registeredAt": "2026-01-15T15:06:09.590Z"
     }
   }
 }

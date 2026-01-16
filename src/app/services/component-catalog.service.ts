@@ -11,6 +11,10 @@ export interface CatalogEntry {
   isSharedComponent?: boolean;
   componentPath?: string;
   componentTag?: string;
+  // Super component fields
+  isSuperComponent?: boolean;
+  wraps?: string[];  // IDs of components this super component wraps
+  variants?: string[];  // Variant names
 }
 
 export interface ComponentCatalog {
@@ -29,6 +33,8 @@ export class ComponentCatalogService {
 
   constructor() {
     this.loadCatalog();
+    // Also try to load from JSON file on init
+    this.loadCatalogFromJson();
   }
 
   /**
@@ -42,10 +48,32 @@ export class ComponentCatalogService {
         Object.entries(data.registeredComponents || {}).forEach(([id, entry]) => {
           this.catalog.set(id, entry);
         });
-        console.log('Catalog loaded:', this.catalog.size, 'components');
+        console.log('Catalog loaded from localStorage:', this.catalog.size, 'components');
       }
     } catch (error) {
       console.error('Failed to load catalog from localStorage:', error);
+    }
+  }
+
+  /**
+   * Load catalog from component-catalog.json file
+   * This ensures the JSON file is the source of truth
+   */
+  async loadCatalogFromJson(): Promise<void> {
+    try {
+      const response = await fetch('/component-catalog.json');
+      if (response.ok) {
+        const data: ComponentCatalog = await response.json();
+        // Merge JSON data into catalog (JSON takes precedence)
+        Object.entries(data.registeredComponents || {}).forEach(([id, entry]) => {
+          this.catalog.set(id, entry);
+        });
+        // Save merged data back to localStorage
+        this.saveCatalog();
+        console.log('Catalog loaded from JSON file:', this.catalog.size, 'components');
+      }
+    } catch (error) {
+      console.warn('Could not load component-catalog.json (this is normal in dev):', error);
     }
   }
 

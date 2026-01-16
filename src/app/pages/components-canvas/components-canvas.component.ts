@@ -1,12 +1,10 @@
 import { Component, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { DragDropModule, CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
 import { ComponentCatalogService, CatalogEntry } from '../../services/component-catalog.service';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
-import { Card3Component } from '../../components/card3/card3.component';
-import { Card4Component } from '../../components/card4/card4.component';
-
 declare var initFlowbite: () => void;
 
 interface CanvasElement {
@@ -20,7 +18,7 @@ interface CanvasElement {
 
 @Component({
   selector: 'app-components-canvas',
-  imports: [CommonModule, DragDropModule, RouterLink, SidebarComponent, Card3Component, Card4Component],
+  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent],
   templateUrl: './components-canvas.component.html',
   styleUrl: './components-canvas.component.scss'
 })
@@ -29,12 +27,7 @@ export class ComponentsCanvasComponent implements AfterViewInit {
     { id: 'header1', type: 'header', x: 0, y: 0, content: 'Header' },
     { id: 'sidebar1', type: 'sidebar', x: 0, y: 60, content: 'Sidebar', isSharedComponent: true },
     { id: 'card1', type: 'card1', x: 50, y: 50, content: 'Card Title One' },
-    { id: 'card2', type: 'card2', x: 400, y: 50, content: 'Card Title Two' },
-    { id: 'card3', type: 'card3', x: 750, y: 50, content: 'Card Title Three' },
-    { id: 'card4', type: 'card4', x: 1100, y: 50, content: 'Card Title Four' },
-    { id: 'card5', type: 'card5', x: 50, y: 400, content: 'Card Title Five' },
-    { id: 'dropdown1', type: 'dropdown', x: 50, y: 300, content: 'Dropdown Component' }
-  ];
+    { id: 'card2', type: 'card2', x: 400, y: 50, content: 'Card Title Two' },];
 
   isSidebarCollapsed = false;
   activeMenuItem: string | null = null;
@@ -47,6 +40,13 @@ export class ComponentsCanvasComponent implements AfterViewInit {
   showSharedComponentPopover = false;
   selectedComponentForSharing: string | null = null;
   isCreatingComponent = false;
+
+  // Super component dialog state
+  showSuperComponentDialog = false;
+  selectedComponentsForSuper: string[] = [];
+  superComponentName = '';
+  isCreatingSuperComponent = false;
+  availableSharedComponents: CatalogEntry[] = [];
 
   // Canvas pan and zoom state
   canvasPanX = 0;
@@ -70,57 +70,92 @@ export class ComponentsCanvasComponent implements AfterViewInit {
    * Load shared component status from catalog
    * This ensures the status persists across page refreshes
    */
-  private loadSharedComponentStatus(): void {
-    // Sync component-catalog.json data to localStorage if needed
-    this.syncCatalogToLocalStorage();
-    
-    this.canvasElements.forEach(element => {
-      const catalogEntry = this.catalogService.getComponent(element.type);
-      if (catalogEntry && catalogEntry.isSharedComponent) {
-        element.isSharedComponent = true;
+  private async loadSharedComponentStatus(): Promise<void> {
+    try {
+      // First, try to load catalog from JSON file
+      await this.catalogService.loadCatalogFromJson();
+      
+      // Then sync any components that have files but aren't marked as shared
+      const needsSync = this.syncCatalogToLocalStorage();
+      
+      // Only export if we added new components during sync
+      if (needsSync) {
+        console.log('💾 Synced new shared components, updating catalog file...');
+        await this.exportCatalog();
       }
-    });
-    console.log('✓ Shared component status loaded from catalog');
+      
+      // Finally, apply shared status to canvas elements
+      this.canvasElements.forEach(element => {
+        const catalogEntry = this.catalogService.getComponent(element.type);
+        if (catalogEntry && catalogEntry.isSharedComponent) {
+          element.isSharedComponent = true;
+        }
+      });
+      console.log('✓ Shared component status loaded from catalog');
+      this.cdr.detectChanges();
+    } catch (error) {
+      console.warn('Could not load catalog from JSON, using localStorage:', error);
+      // Fallback: just sync from localStorage
+      this.syncCatalogToLocalStorage();
+      this.canvasElements.forEach(element => {
+        const catalogEntry = this.catalogService.getComponent(element.type);
+        if (catalogEntry && catalogEntry.isSharedComponent) {
+          element.isSharedComponent = true;
+        }
+      });
+      this.cdr.detectChanges();
+    }
   }
 
   /**
-   * Sync hardcoded catalog data to localStorage
-   * This ensures card3 and card4 are marked as shared
+   * Sync components that have files to catalog as shared
+   * This automatically detects shared components based on file existence
+   * Returns true if any components were added/updated
    */
-  private syncCatalogToLocalStorage(): void {
-    // Check if card3 is in catalog and mark as shared if component files exist
-    if (this.catalogService.isInCatalog('card3')) {
-      const card3Entry = this.catalogService.getComponent('card3');
-      if (!card3Entry?.isSharedComponent) {
-        const updatedCard3: CatalogEntry = {
-          ...card3Entry!,
-          isSharedComponent: true,
-          componentPath: 'src/app/components/card3/card3.component.ts',
-          componentTag: '<app-card3></app-card3>'
-        };
-        this.catalogService.registerComponent(updatedCard3);
-      }
-    }
+  private syncCatalogToLocalStorage(): boolean {
+    // List of components that have been created as shared components
+    const sharedComponents = [
+      { id: 'sidebar', componentPath: 'src/app/components/sidebar/sidebar.component.ts', componentTag: '<app-sidebar></app-sidebar>' },];
 
-    // Check if card4 is in catalog and mark as shared if component files exist
-    if (this.catalogService.isInCatalog('card4')) {
-      const card4Entry = this.catalogService.getComponent('card4');
-      if (!card4Entry?.isSharedComponent) {
-        const updatedCard4: CatalogEntry = {
-          id: 'card4',
-          displayName: this.getDisplayName('card4'),
-          category: this.getCategory('card4'),
-          description: this.getDescription('card4'),
-          htmlSelector: "[title='card4']",
+    let hasChanges = false;
+
+    sharedComponents.forEach(({ id, componentPath, componentTag }) => {
+      const existingEntry = this.catalogService.getComponent(id);
+      
+      if (existingEntry) {
+        // Update existing entry to mark as shared if not already
+        if (!existingEntry.isSharedComponent) {
+          const updatedEntry: CatalogEntry = {
+            ...existingEntry,
+            isSharedComponent: true,
+            componentPath,
+            componentTag
+          };
+          this.catalogService.registerComponent(updatedEntry);
+          console.log(`✓ Marked ${id} as shared component`);
+          hasChanges = true;
+        }
+      } else {
+        // Create new entry for shared component
+        const newEntry: CatalogEntry = {
+          id,
+          displayName: this.getDisplayName(id),
+          category: this.getCategory(id),
+          description: this.getDescription(id),
+          htmlSelector: `[title='${id}']`,
           status: 'active',
           registeredAt: new Date().toISOString(),
           isSharedComponent: true,
-          componentPath: 'src/app/components/card4/card4.component.ts',
-          componentTag: '<app-card4></app-card4>'
+          componentPath,
+          componentTag
         };
-        this.catalogService.registerComponent(updatedCard4);
+        this.catalogService.registerComponent(newEntry);
+        console.log(`✓ Created catalog entry for shared component: ${id}`);
+        hasChanges = true;
       }
-    }
+    });
+
+    return hasChanges;
   }
 
   ngAfterViewInit() {
@@ -268,6 +303,287 @@ export class ComponentsCanvasComponent implements AfterViewInit {
   }
 
   /**
+   * Delete a shared component (files, catalog, canvas)
+   */
+  async deleteSharedComponent(componentId: string): Promise<void> {
+    const confirmed = confirm(
+      `⚠️ Delete ${componentId}?\n\n` +
+      `This will:\n` +
+      `• Delete component files from disk\n` +
+      `• Remove from catalog\n` +
+      `• Remove from canvas\n\n` +
+      `This action cannot be undone!`
+    );
+
+    if (!confirmed) return;
+
+    try {
+      // Step 1: Call helper service to delete files
+      const response = await fetch('http://localhost:4202/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ componentId })
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to delete component');
+      }
+
+      // Step 2: Remove from catalog
+      this.catalogService.unregisterComponent(componentId);
+
+      // Step 3: Remove from canvas
+      const index = this.canvasElements.findIndex(el => el.type === componentId);
+      if (index !== -1) {
+        this.canvasElements.splice(index, 1);
+      }
+
+      // Step 4: Export updated catalog
+      await this.exportCatalog();
+
+      // Step 5: Force UI update
+      this.cdr.detectChanges();
+
+      this.showToast(`✅ ${componentId} deleted successfully!`);
+      console.log('✓ Component deleted:', componentId);
+
+    } catch (error) {
+      console.error('Error deleting component:', error);
+      this.showToast(
+        `❌ Failed to delete component.\n\n` +
+        `Make sure component-helper is running:\n` +
+        `npm run component-helper`
+      );
+    }
+  }
+
+  // ============================================
+  // Super Component Methods
+  // ============================================
+
+  /**
+   * Open super component creation dialog
+   */
+  makeSuperComponent(componentId: string): void {
+    // Get all shared components
+    this.availableSharedComponents = this.catalogService.getAllComponents()
+      .filter(c => c.isSharedComponent && !c.isSuperComponent);
+
+    // Pre-select components with same prefix
+    const prefix = componentId.replace(/\d+$/, ''); // Remove trailing numbers
+    this.selectedComponentsForSuper = this.availableSharedComponents
+      .filter(c => c.id.startsWith(prefix))
+      .map(c => c.id);
+
+    // Auto-generate super component name
+    this.updateSuperComponentName();
+
+    this.showSuperComponentDialog = true;
+  }
+
+  /**
+   * Toggle component selection
+   */
+  toggleSuperComponentSelection(componentId: string): void {
+    const index = this.selectedComponentsForSuper.indexOf(componentId);
+    if (index === -1) {
+      this.selectedComponentsForSuper.push(componentId);
+    } else {
+      this.selectedComponentsForSuper.splice(index, 1);
+    }
+    this.updateSuperComponentName();
+  }
+
+  /**
+   * Update super component name based on selection
+   */
+  private updateSuperComponentName(): void {
+    if (this.selectedComponentsForSuper.length === 0) {
+      this.superComponentName = '';
+      return;
+    }
+
+    // Extract common prefix
+    const first = this.selectedComponentsForSuper[0];
+    const prefix = first.replace(/\d+$/, ''); // Remove trailing numbers
+    
+    // Check if all selected have same prefix
+    const allSamePrefix = this.selectedComponentsForSuper.every(id => 
+      id.startsWith(prefix)
+    );
+
+    if (allSamePrefix) {
+      this.superComponentName = `app-${prefix}`;
+    } else {
+      this.superComponentName = 'app-super-component';
+    }
+  }
+
+  /**
+   * Cancel super component creation
+   */
+  cancelSuperComponentCreation(): void {
+    this.showSuperComponentDialog = false;
+    this.selectedComponentsForSuper = [];
+    this.superComponentName = '';
+  }
+
+  /**
+   * Confirm and create super component
+   */
+  async confirmCreateSuperComponent(): Promise<void> {
+    if (this.selectedComponentsForSuper.length < 2) {
+      this.showToast('⚠️ Select at least 2 components to create a super component');
+      return;
+    }
+
+    this.isCreatingSuperComponent = true;
+
+    try {
+      const componentId = this.superComponentName.replace('app-', '');
+
+      // Step 1: Generate component files via helper
+      const response = await fetch('http://localhost:4202/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ componentId })
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to create super component');
+      }
+
+      // Step 2: Generate super component code
+      await this.generateSuperComponentCode(componentId);
+
+      // Step 3: Register in catalog
+      const entry: CatalogEntry = {
+        id: componentId,
+        displayName: this.getDisplayName(componentId),
+        category: 'super-components',
+        description: `Super component wrapping: ${this.selectedComponentsForSuper.join(', ')}`,
+        htmlSelector: `app-${componentId}`,
+        status: 'active',
+        registeredAt: new Date().toISOString(),
+        isSuperComponent: true,
+        wraps: [...this.selectedComponentsForSuper],
+        variants: this.selectedComponentsForSuper.map((id, idx) => (idx + 1).toString()),
+        componentPath: `src/app/components/${componentId}/${componentId}.component.ts`,
+        componentTag: `<app-${componentId}></app-${componentId}>`
+      };
+
+      this.catalogService.registerComponent(entry);
+
+      // Step 4: Export catalog
+      await this.exportCatalog();
+
+      // Step 5: Close dialog
+      this.showSuperComponentDialog = false;
+      this.isCreatingSuperComponent = false;
+
+      this.showToast(
+        `✅ Super component created!\n\n` +
+        `Component: ${this.superComponentName}\n` +
+        `Wraps: ${this.selectedComponentsForSuper.join(', ')}\n\n` +
+        `Use: <${this.superComponentName} variant="1|2|3"></${this.superComponentName}>`
+      );
+
+    } catch (error) {
+      console.error('Error creating super component:', error);
+      this.isCreatingSuperComponent = false;
+      this.showToast('❌ Failed to create super component. Check console for details.');
+    }
+  }
+
+  /**
+   * Generate super component TypeScript and HTML code
+   */
+  private async generateSuperComponentCode(componentId: string): Promise<void> {
+    // Generate TypeScript
+    const tsCode = this.generateSuperComponentTS(componentId);
+    const htmlCode = this.generateSuperComponentHTML(componentId);
+
+    console.log('📝 Generated TypeScript:', tsCode);
+    console.log('📝 Generated HTML:', htmlCode);
+
+    // Note: In production, you'd write these to files
+    // For now, log instructions for manual copy-paste
+    this.showToast(
+      `📝 Copy the generated code from console:\n\n` +
+      `1. Open: src/app/components/${componentId}/${componentId}.component.ts\n` +
+      `2. Open: src/app/components/${componentId}/${componentId}.component.html\n` +
+      `3. Replace with generated code from console`
+    );
+  }
+
+  /**
+   * Generate super component TypeScript code
+   */
+  private generateSuperComponentTS(componentId: string): string {
+    const imports = this.selectedComponentsForSuper
+      .map(id => {
+        const className = this.toClassName(id);
+        return `import { ${className} } from '../${id}/${id}.component';`;
+      })
+      .join('\n');
+
+    const importsList = this.selectedComponentsForSuper
+      .map(id => this.toClassName(id))
+      .join(', ');
+
+    return `import { Component, input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+${imports}
+
+export type ${this.toClassName(componentId)}Variant = ${this.selectedComponentsForSuper.map((_, idx) => `'${idx + 1}'`).join(' | ')};
+
+@Component({
+  selector: 'app-${componentId}',
+  imports: [CommonModule, ${importsList}],
+  templateUrl: './${componentId}.component.html',
+  styleUrl: './${componentId}.component.scss'
+})
+export class ${this.toClassName(componentId)} {
+  variant = input<${this.toClassName(componentId)}Variant>('1');
+  disabled = input<boolean>(false);
+}`;
+  }
+
+  /**
+   * Generate super component HTML code
+   */
+  private generateSuperComponentHTML(componentId: string): string {
+    const cases = this.selectedComponentsForSuper
+      .map((id, idx) => {
+        return `  @case ('${idx + 1}') {
+    <app-${id}></app-${id}>
+  }`;
+      })
+      .join('\n');
+
+    return `@switch (variant()) {
+${cases}
+  @default {
+    <app-${this.selectedComponentsForSuper[0]}></app-${this.selectedComponentsForSuper[0]}>
+  }
+}`;
+  }
+
+  /**
+   * Convert component ID to class name
+   */
+  private toClassName(id: string): string {
+    return id
+      .split('-')
+      .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+      .join('') + 'Component';
+  }
+
+  /**
    * Check if component is registered in catalog
    */
   isInCatalog(componentId: string): boolean {
@@ -296,6 +612,7 @@ export class ComponentsCanvasComponent implements AfterViewInit {
       'card3': 'Compact Card',
       'card4': 'Dual Subheading Card',
       'card5': 'Image Card',
+      'card6': 'Hero Profile Card',
       'sidebar': 'Navigation Sidebar',
       'dropdown': 'Action Dropdown Menu'
     };
@@ -322,6 +639,7 @@ export class ComponentsCanvasComponent implements AfterViewInit {
       'card3': 'Compact card with single line content, secondary and secondary outline buttons',
       'card4': 'Card with title, subtitle, dual subheadings (left & right), divider, primary and neutral buttons',
       'card5': 'Card with title, subtitle, placeholder image, primary and secondary buttons',
+      'card6': 'Card with title, subtitle, divider, hero name (Nisarage), subtitle with paragraph, divider, primary and secondary buttons',
       'sidebar': 'Collapsible navigation sidebar with logo, dropdown, menu items, and toggle button',
       'dropdown': 'Dropdown menu with header, 5 options, divider, and action buttons (primary & neutral)'
     };
