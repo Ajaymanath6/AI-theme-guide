@@ -461,6 +461,40 @@ app.post('/check-component', (req, res) => {
   });
 });
 
+// Update canvas with super components endpoint
+app.post('/update-canvas-super-components', (req, res) => {
+  try {
+    const { exec } = require('child_process');
+    const updateScriptPath = path.join(process.cwd(), 'update-canvas-super-components.js');
+    
+    console.log('🔄 Running canvas update script...');
+    
+    exec(`node "${updateScriptPath}"`, (error, stdout, stderr) => {
+      if (error) {
+        console.error('❌ Error running update script:', error);
+        return res.status(500).json({ 
+          success: false, 
+          error: error.message,
+          stderr: stderr
+        });
+      }
+      
+      console.log(stdout);
+      res.json({ 
+        success: true, 
+        message: 'Canvas updated successfully',
+        output: stdout
+      });
+    });
+  } catch (error) {
+    console.error('❌ Error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message 
+    });
+  }
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`\n✨ Component Helper Server Running`);

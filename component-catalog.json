@@ -1,7 +1,7 @@
 {
   "catalogId": "design-system-v1",
   "version": "1.0.0",
-  "lastUpdated": "2026-01-16T11:26:57.478Z",
+  "lastUpdated": "2026-01-16T12:32:53.024Z",
   "registeredComponents": {
     "sidebar": {
       "id": "sidebar",
@@ -102,6 +102,54 @@
       ],
       "componentPath": "src/app/components/app-secondary-button-variants/app-secondary-button-variants.component.ts",
       "componentTag": "<app-secondary-button-variants></app-secondary-button-variants>"
+    },
+    "card": {
+      "id": "card",
+      "displayName": "card",
+      "category": "general",
+      "description": "Component: card",
+      "htmlSelector": "[title='card']",
+      "status": "active",
+      "registeredAt": "2026-01-16T12:31:40.508Z",
+      "isSharedComponent": true,
+      "componentPath": "src/app/components/card/card.component.ts",
+      "componentTag": "<app-card></app-card>"
+    },
+    "card-secondary": {
+      "id": "card-secondary",
+      "displayName": "card-secondary",
+      "category": "general",
+      "description": "Component: card-secondary",
+      "htmlSelector": "[title='card-secondary']",
+      "status": "active",
+      "registeredAt": "2026-01-16T12:31:53.203Z",
+      "isSharedComponent": true,
+      "componentPath": "src/app/components/card-secondary/card-secondary.component.ts",
+      "componentTag": "<app-card-secondary></app-card-secondary>"
+    },
+    "app-card-variants": {
+      "id": "app-card-variants",
+      "displayName": "app-card-variants",
+      "category": "super-components",
+      "description": "Full component wrapping super component wrapping: card, card-secondary, super-component, app-secondary-button-variants",
+      "htmlSelector": "app-card-variants",
+      "status": "active",
+      "registeredAt": "2026-01-16T12:32:53.024Z",
+      "isSuperComponent": true,
+      "wraps": [
+        "card",
+        "card-secondary",
+        "super-component",
+        "app-secondary-button-variants"
+      ],
+      "variants": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "componentPath": "src/app/components/app-card-variants/app-card-variants.component.ts",
+      "componentTag": "<app-card-variants></app-card-variants>"
     }
   }
 }

@@ -7,6 +7,7 @@ import { ComponentCatalogService, CatalogEntry } from '../../services/component-
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { SuperComponentComponent } from '../../components/super-component/super-component.component';
 import { AppSecondaryButtonVariantsComponent } from '../../components/app-secondary-button-variants/app-secondary-button-variants.component';
+import { CardVariantsComponent } from '../../components/app-card-variants/app-card-variants.component';
 declare var initFlowbite: () => void;
 
 interface CanvasElement {
@@ -20,7 +21,7 @@ interface CanvasElement {
 
 @Component({
   selector: 'app-components-canvas',
-  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, SuperComponentComponent, AppSecondaryButtonVariantsComponent],
+  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, SuperComponentComponent, AppSecondaryButtonVariantsComponent, CardVariantsComponent],
   templateUrl: './components-canvas.component.html',
   styleUrl: './components-canvas.component.scss'
 })
@@ -30,7 +31,9 @@ export class ComponentsCanvasComponent implements AfterViewInit {
     { id: 'primary-button1', type: 'primary-button', x: 50, y: 200, content: 'Primary Button' },
     { id: 'primary-outline-button1', type: 'primary-outline-button', x: 200, y: 200, content: 'Primary Outline Button' },
     { id: 'secondary-button1', type: 'secondary-button', x: 350, y: 200, content: 'Secondary Button' },
-    { id: 'secondary-outline-button1', type: 'secondary-outline-button', x: 500, y: 200, content: 'Secondary Outline Button' }
+    { id: 'secondary-outline-button1', type: 'secondary-outline-button', x: 500, y: 200, content: 'Secondary Outline Button' },
+    { id: 'card1', type: 'card', x: 650, y: 200, content: 'Card' },
+    { id: 'card2', type: 'card-secondary', x: 1100, y: 200, content: 'Card Secondary' }
   ];
 
   isSidebarCollapsed = false;
@@ -507,13 +510,20 @@ export class ComponentsCanvasComponent implements AfterViewInit {
 
   /**
    * Open super component creation dialog
+   * Now allows selecting both shared components AND existing super components
+   * This enables composition: super components can be built from other super components
    */
   async makeSuperComponent(componentId: string): Promise<void> {
-    // Get all shared components
-    const allShared = this.catalogService.getAllComponents()
-      .filter(c => c.isSharedComponent && !c.isSuperComponent);
+    // Get ALL available components (shared AND super components)
+    // This allows composing super components from existing super components
+    const allAvailable = this.catalogService.getAllComponents()
+      .filter(c => c.isSharedComponent || c.isSuperComponent);
 
-    console.log('🔍 Found shared components in catalog:', allShared.map(c => c.id));
+    console.log('🔍 Found available components (shared + super):', allAvailable.map(c => ({ 
+      id: c.id, 
+      isShared: c.isSharedComponent, 
+      isSuper: c.isSuperComponent 
+    })));
 
     // Verify component files actually exist
     this.availableSharedComponents = [];
@@ -532,14 +542,14 @@ export class ComponentsCanvasComponent implements AfterViewInit {
       helperServiceAvailable = false;
     }
 
-    for (const component of allShared) {
+    for (const component of allAvailable) {
       if (helperServiceAvailable) {
         // Check if component directory exists
         try {
           const exists = await this.checkComponentExists(component.id);
           if (exists) {
             this.availableSharedComponents.push(component);
-            console.log(`✅ Component ${component.id} verified - files exist`);
+            console.log(`✅ Component ${component.id} verified - files exist (${component.isSuperComponent ? 'super' : 'shared'})`);
           } else {
             // Component in catalog but files don't exist - don't remove, just skip for now
             console.warn(`⚠️ Component ${component.id} in catalog but file check returned false. Still showing in list.`);
@@ -554,11 +564,14 @@ export class ComponentsCanvasComponent implements AfterViewInit {
       } else {
         // Helper service not available - show all components from catalog
         this.availableSharedComponents.push(component);
-        console.log(`📋 Showing ${component.id} from catalog (file check skipped)`);
+        console.log(`📋 Showing ${component.id} from catalog (file check skipped, ${component.isSuperComponent ? 'super' : 'shared'})`);
       }
     }
 
-    console.log('📦 Available shared components for super component:', this.availableSharedComponents.map(c => c.id));
+    console.log('📦 Available components for super component (shared + super):', this.availableSharedComponents.map(c => ({ 
+      id: c.id, 
+      type: c.isSuperComponent ? 'super' : 'shared' 
+    })));
 
     // Pre-select components with same prefix
     const prefix = componentId.replace(/\d+$/, ''); // Remove trailing numbers
@@ -851,7 +864,24 @@ export class ComponentsCanvasComponent implements AfterViewInit {
         console.log(`ℹ️ Super component already on canvas: ${componentId}. Skipping canvas addition.`);
       }
 
-      // Step 6: Close dialog
+      // Step 6: Automatically update canvas files to include new super component
+      try {
+        const updateResponse = await fetch('http://localhost:4202/update-canvas-super-components', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        
+        if (updateResponse.ok) {
+          const updateResult = await updateResponse.json();
+          console.log('✅ Canvas files updated automatically:', updateResult.message);
+        } else {
+          console.warn('⚠️ Could not auto-update canvas files. Run: npm run update-canvas');
+        }
+      } catch (error) {
+        console.warn('⚠️ Could not auto-update canvas files. Run: npm run update-canvas');
+      }
+
+      // Step 7: Close dialog
       this.showSuperComponentDialog = false;
       this.isCreatingSuperComponent = false;
 
@@ -859,7 +889,8 @@ export class ComponentsCanvasComponent implements AfterViewInit {
         `✅ Super component created!\n\n` +
         `Component: ${this.superComponentName}\n` +
         `Wraps: ${this.selectedComponentsForSuper.join(', ')}\n\n` +
-        `Use: <${this.superComponentName} variant="1|2|3"></${this.superComponentName}>`
+        `Use: <${this.superComponentName} variant="1|2|3"></${this.superComponentName}>\n\n` +
+        `💡 Canvas files updated automatically!`
       );
 
     } catch (error) {
@@ -988,18 +1019,37 @@ ${cases}
 }`;
     } else {
       // Full-component: Generate component tags
+      // Get correct selector from catalog (handles components with/without app- prefix)
       const cases = this.selectedComponentsForSuper
         .map((id, idx) => {
+          const catalogEntry = this.catalogService.getComponent(id);
+          // Use htmlSelector from catalog if available, otherwise construct it
+          let selector = id;
+          if (catalogEntry?.htmlSelector) {
+            selector = catalogEntry.htmlSelector;
+          } else if (!id.startsWith('app-')) {
+            selector = `app-${id}`;
+          }
           return `  @case ('${idx + 1}') {
-    <app-${id}></app-${id}>
+    <${selector}></${selector}>
   }`;
         })
         .join('\n');
 
+      // Get default selector
+      const defaultId = this.selectedComponentsForSuper[0];
+      const defaultEntry = this.catalogService.getComponent(defaultId);
+      let defaultSelector = defaultId;
+      if (defaultEntry?.htmlSelector) {
+        defaultSelector = defaultEntry.htmlSelector;
+      } else if (!defaultId.startsWith('app-')) {
+        defaultSelector = `app-${defaultId}`;
+      }
+
       return `@switch (variant()) {
 ${cases}
   @default {
-    <app-${this.selectedComponentsForSuper[0]}></app-${this.selectedComponentsForSuper[0]}>
+    <${defaultSelector}></${defaultSelector}>
   }
 }`;
     }
@@ -1007,9 +1057,12 @@ ${cases}
 
   /**
    * Convert component ID to class name
+   * Handles components with or without 'app-' prefix
    */
   private toClassName(id: string): string {
-    return id
+    // Remove 'app-' prefix if present for class name generation
+    const cleanId = id.startsWith('app-') ? id.replace(/^app-/, '') : id;
+    return cleanId
       .split('-')
       .map(part => part.charAt(0).toUpperCase() + part.slice(1))
       .join('') + 'Component';

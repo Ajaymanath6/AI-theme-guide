@@ -8,7 +8,8 @@
     "build:prod": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "component-helper": "node component-helper.js"
+    "component-helper": "node component-helper.js",
+    "update-canvas": "node update-canvas-super-components.js"
   },
   "private": true,
   "dependencies": {

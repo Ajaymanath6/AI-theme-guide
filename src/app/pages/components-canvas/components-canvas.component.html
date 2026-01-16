@@ -149,6 +149,9 @@
               @case ('app-secondary-button-variants') {
                 <app-secondary-button-variants variant="1"></app-secondary-button-variants>
               }
+              @case ('app-card-variants') {
+                <app-card-variants variant="1"></app-card-variants>
+              }
               @default {
                 <!-- Fallback: Show component info card for unknown super components -->
                 <div class="bg-purple-50 border-2 border-purple-300 rounded-lg p-4 min-w-[200px]">
@@ -167,6 +170,86 @@
                 </div>
               }
             }
+          }
+          
+          <!-- Card Component -->
+          @if (element.type === 'card') {
+            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg shadow-lg p-6 min-w-[400px] max-w-md">
+              <!-- Title -->
+              <h2 class="text-xl font-semibold text-brandcolor-textstrong mb-2">
+                Card Title
+              </h2>
+              
+              <!-- Subtitle -->
+              <h3 class="text-sm font-medium text-brandcolor-textweak mb-3">
+                Card Subtitle
+              </h3>
+              
+              <!-- Paragraph -->
+              <p class="text-sm text-brandcolor-textweak mb-4">
+                This is a paragraph text inside the card. It provides additional information and context about the card content.
+              </p>
+              
+              <!-- Divider -->
+              <hr class="border-brandcolor-strokeweak mb-4">
+              
+              <!-- Buttons -->
+              <div class="flex items-center gap-3">
+                <!-- Primary Button -->
+                <button
+                  type="button"
+                  class="border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
+                  Primary
+                </button>
+                
+                <!-- Primary Outline Button -->
+                <button
+                  type="button"
+                  class="border-[1.5px] border-brandcolor-strokelight text-brandcolor-primary bg-brandcolor-white hover:bg-brandcolor-neutralhover active:border-brandcolor-primary active:text-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
+                  Primary Outline
+                </button>
+              </div>
+            </div>
+          }
+          
+          <!-- Card Secondary Component -->
+          @if (element.type === 'card-secondary') {
+            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg shadow-lg p-6 min-w-[400px] max-w-md">
+              <!-- Title -->
+              <h2 class="text-xl font-semibold text-brandcolor-textstrong mb-2">
+                Card Title
+              </h2>
+              
+              <!-- Subtitle -->
+              <h3 class="text-sm font-medium text-brandcolor-textweak mb-3">
+                Card Subtitle
+              </h3>
+              
+              <!-- Paragraph -->
+              <p class="text-sm text-brandcolor-textweak mb-4">
+                This is a paragraph text inside the card. It provides additional information and context about the card content.
+              </p>
+              
+              <!-- Divider -->
+              <hr class="border-brandcolor-strokeweak mb-4">
+              
+              <!-- Buttons -->
+              <div class="flex items-center gap-3">
+                <!-- Secondary Button -->
+                <button
+                  type="button"
+                  class="border-[1.5px] border-transparent bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
+                  Secondary
+                </button>
+                
+                <!-- Secondary Outline Button -->
+                <button
+                  type="button"
+                  class="border-[1.5px] border-brandcolor-strokelight text-brandcolor-secondary bg-brandcolor-white hover:bg-brandcolor-neutralhover active:border-brandcolor-secondary active:text-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
+                  Secondary Outline
+                </button>
+              </div>
+            </div>
           }
           
           <!-- Sidebar Component -->
@@ -503,14 +586,17 @@
         <!-- Component Selection -->
         <div class="mb-6">
           <label class="block text-sm font-medium text-brandcolor-textstrong mb-3">
-            Select Components to Wrap
+            Select Components to Wrap (Shared or Super Components)
           </label>
+          <p class="text-xs text-brandcolor-textweak mb-2">
+            💡 You can now select existing super components to compose new super components!
+          </p>
           <div class="space-y-2 max-h-60 overflow-y-auto border border-brandcolor-strokeweak rounded-lg p-3">
             @if (availableSharedComponents.length === 0) {
               <div class="text-center py-8 text-brandcolor-textweak">
                 <span class="material-symbols-outlined text-4xl mb-2 block">inbox</span>
-                <p class="text-sm font-medium mb-1">No shared components available</p>
-                <p class="text-xs">Create shared components first by clicking "Make Shared Component" on any UI element in the canvas.</p>
+                <p class="text-sm font-medium mb-1">No components available</p>
+                <p class="text-xs">Create shared components or super components first.</p>
               </div>
             } @else {
               @for (component of availableSharedComponents; track component.id) {
@@ -523,7 +609,12 @@
                     <div class="font-mono text-sm text-brandcolor-textstrong">{{ component.id }}</div>
                     <div class="text-xs text-brandcolor-textweak">{{ component.displayName }}</div>
                   </div>
-                  <span class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded">shared</span>
+                  <!-- Show badge based on component type -->
+                  @if (component.isSuperComponent) {
+                    <span class="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded font-medium">super</span>
+                  } @else {
+                    <span class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded">shared</span>
+                  }
                 </label>
               }
             }
