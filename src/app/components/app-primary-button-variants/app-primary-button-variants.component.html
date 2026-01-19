@@ -24,6 +24,11 @@
       [label]="label()"
       (buttonClick)="buttonClick.emit($event)"></app-text-button>
   }
+  @case ('6') {
+    <app-primary-text-button
+      [label]="label()"
+      (buttonClick)="buttonClick.emit($event)"></app-primary-text-button>
+  }
   @default {
     <app-primary-button
       [label]="label()"

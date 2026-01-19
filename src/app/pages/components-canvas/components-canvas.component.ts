@@ -13,6 +13,7 @@ declare var initFlowbite: () => void;
 
 
 
+
 interface CanvasElement {
   id: string;
   type: string;
@@ -33,6 +34,7 @@ export class ComponentsCanvasComponent implements AfterViewInit {
     { id: 'sidebar1', type: 'sidebar', x: 0, y: 60, content: 'Sidebar', isSharedComponent: true },
     { id: 'primary-button1', type: 'primary-button', x: 200, y: 200, content: 'Primary Button' },
     { id: 'primary-outline-button1', type: 'primary-outline-button', x: 400, y: 200, content: 'Primary Outline Button' },
+    { id: 'primary-text-button1', type: 'primary-text-button', x: 1600, y: 200, content: 'Primary Text Button' },
     { id: 'ghost-button1', type: 'ghost-button', x: 1200, y: 200, content: 'Ghost Button' },
     { id: 'text-button1', type: 'text-button', x: 1400, y: 200, content: 'Text Button' },
     { id: 'neutral-button1', type: 'neutral-button', x: 1000, y: 200, content: 'Neutral Button' },
@@ -1203,7 +1205,6 @@ export class ComponentsCanvasComponent implements AfterViewInit {
     if (this.superComponentApproach === 'style-variation') {
       // Style-variation: No component imports, only CommonModule
       return `import { Component, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 export type ${this.toClassName(componentId)}Variant = ${this.selectedComponentsForSuper.map((_, idx) => `'${idx + 1}'`).join(' | ')};
 
@@ -1231,7 +1232,6 @@ export class ${this.toClassName(componentId)} {
         .join(', ');
 
       return `import { Component, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
 ${imports}
 
 export type ${this.toClassName(componentId)}Variant = ${this.selectedComponentsForSuper.map((_, idx) => `'${idx + 1}'`).join(' | ')};
@@ -1667,6 +1667,7 @@ ${cases}
     const buttonStyles: Record<string, string> = {
       'primary-button': 'border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg',
       'primary-outline-button': 'border-[1.5px] border-brandcolor-strokelight text-brandcolor-primary bg-brandcolor-white hover:bg-brandcolor-neutralhover active:border-brandcolor-primary active:text-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium',
+      'primary-text-button': 'text-brandcolor-primary bg-transparent disabled:opacity-50 px-4 py-2 font-medium',
       'ghost-button': 'text-brandcolor-primary bg-transparent hover:bg-brandcolor-fill active:bg-brandcolor-fill disabled:opacity-50 rounded-md px-4 py-2 font-medium',
       'text-button': 'text-brandcolor-secondary bg-transparent disabled:opacity-50 px-4 py-2 font-medium',
       'neutral-button': 'border-[1.5px] border-brandcolor-strokelight text-brandcolor-textweak bg-brandcolor-white hover:bg-brandcolor-neutralhover active:border-brandcolor-textweak active:text-brandcolor-textweak active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium',
@@ -1684,6 +1685,7 @@ ${cases}
     const labels: Record<string, string> = {
       'primary-button': 'Primary',
       'primary-outline-button': 'Primary Outline',
+      'primary-text-button': 'Primary Text',
       'ghost-button': 'Ghost',
       'text-button': 'Text',
       'neutral-button': 'Neutral',

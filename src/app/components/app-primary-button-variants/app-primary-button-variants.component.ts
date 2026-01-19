@@ -5,13 +5,14 @@ import { PrimaryOutlineButtonComponent } from '../primary-outline-button/primary
 import { NeutralButtonComponent } from '../neutral-button/neutral-button.component';
 import { GhostButtonComponent } from '../ghost-button/ghost-button.component';
 import { TextButtonComponent } from '../text-button/text-button.component';
+import { PrimaryTextButtonComponent } from '../primary-text-button/primary-text-button.component';
 
-export type PrimaryButtonVariantsComponentVariant = '1' | '2' | '3' | '4' | '5';
+export type PrimaryButtonVariantsComponentVariant = '1' | '2' | '3' | '4' | '5' | '6';
 
 @Component({
   selector: 'app-primary-button-variants',
   standalone: true,
-  imports: [CommonModule, PrimaryButtonComponent, PrimaryOutlineButtonComponent, NeutralButtonComponent, GhostButtonComponent, TextButtonComponent],
+  imports: [CommonModule, PrimaryButtonComponent, PrimaryOutlineButtonComponent, NeutralButtonComponent, GhostButtonComponent, TextButtonComponent, PrimaryTextButtonComponent],
   templateUrl: './app-primary-button-variants.component.html',
   styleUrl: './app-primary-button-variants.component.scss'
 })
