@@ -1,7 +1,7 @@
 {
   "catalogId": "design-system-v1",
   "version": "1.0.0",
-  "lastUpdated": "2026-01-19T12:27:01.913Z",
+  "lastUpdated": "2026-01-19T12:35:43.597Z",
   "registeredComponents": {
     "sidebar": {
       "id": "sidebar",
@@ -96,7 +96,7 @@
       "id": "app-primary-button-variants",
       "displayName": "app-primary-button-variants",
       "category": "super-components",
-      "description": "Full component wrapping super component wrapping: primary-button, primary-outline-button, neutral-button, ghost-button",
+      "description": "Full component wrapping super component wrapping: primary-button, primary-outline-button, neutral-button, ghost-button, text-button",
       "htmlSelector": "app-primary-button-variants",
       "status": "active",
       "registeredAt": "2026-01-19T11:38:10.105Z",
@@ -105,13 +105,15 @@
         "primary-button",
         "primary-outline-button",
         "neutral-button",
-        "ghost-button"
+        "ghost-button",
+        "text-button"
       ],
       "variants": [
         "1",
         "2",
         "3",
-        "4"
+        "4",
+        "5"
       ],
       "componentPath": "src/app/components/app-primary-button-variants/app-primary-button-variants.component.ts",
       "componentTag": "<app-primary-button-variants></app-primary-button-variants>"
@@ -226,6 +228,39 @@
       "isSharedComponent": true,
       "componentPath": "src/app/components/ghost-button/ghost-button.component.ts",
       "componentTag": "<app-ghost-button></app-ghost-button>",
+      "properties": {
+        "inputs": {
+          "label": true,
+          "disabled": false,
+          "loading": false,
+          "icon": false,
+          "iconRight": false,
+          "type": false,
+          "size": false,
+          "fullWidth": false,
+          "ariaLabel": false,
+          "tooltip": false
+        },
+        "outputs": {
+          "buttonClick": true,
+          "buttonFocus": false,
+          "buttonBlur": false,
+          "buttonMouseEnter": false,
+          "buttonMouseLeave": false
+        }
+      }
+    },
+    "text-button": {
+      "id": "text-button",
+      "displayName": "text-button",
+      "category": "general",
+      "description": "Button component with custom properties",
+      "htmlSelector": "[title='text-button']",
+      "status": "active",
+      "registeredAt": "2026-01-19T12:35:23.122Z",
+      "isSharedComponent": true,
+      "componentPath": "src/app/components/text-button/text-button.component.ts",
+      "componentTag": "<app-text-button></app-text-button>",
       "properties": {
         "inputs": {
           "label": true,

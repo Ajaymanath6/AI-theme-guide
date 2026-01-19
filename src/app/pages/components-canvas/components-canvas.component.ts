@@ -12,6 +12,7 @@ declare var initFlowbite: () => void;
 
 
 
+
 interface CanvasElement {
   id: string;
   type: string;
@@ -33,6 +34,7 @@ export class ComponentsCanvasComponent implements AfterViewInit {
     { id: 'primary-button1', type: 'primary-button', x: 200, y: 200, content: 'Primary Button' },
     { id: 'primary-outline-button1', type: 'primary-outline-button', x: 400, y: 200, content: 'Primary Outline Button' },
     { id: 'ghost-button1', type: 'ghost-button', x: 1200, y: 200, content: 'Ghost Button' },
+    { id: 'text-button1', type: 'text-button', x: 1400, y: 200, content: 'Text Button' },
     { id: 'neutral-button1', type: 'neutral-button', x: 1000, y: 200, content: 'Neutral Button' },
     { id: 'app-primary-button-variants1', type: 'app-primary-button-variants', x: 200, y: 300, content: 'Primary Button Variants', isSharedComponent: true },
     { id: 'secondary-button1', type: 'secondary-button', x: 600, y: 200, content: 'Secondary Button' },
@@ -1666,6 +1668,7 @@ ${cases}
       'primary-button': 'border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg',
       'primary-outline-button': 'border-[1.5px] border-brandcolor-strokelight text-brandcolor-primary bg-brandcolor-white hover:bg-brandcolor-neutralhover active:border-brandcolor-primary active:text-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium',
       'ghost-button': 'text-brandcolor-primary bg-transparent hover:bg-brandcolor-fill active:bg-brandcolor-fill disabled:opacity-50 rounded-md px-4 py-2 font-medium',
+      'text-button': 'text-brandcolor-secondary bg-transparent disabled:opacity-50 px-4 py-2 font-medium',
       'neutral-button': 'border-[1.5px] border-brandcolor-strokelight text-brandcolor-textweak bg-brandcolor-white hover:bg-brandcolor-neutralhover active:border-brandcolor-textweak active:text-brandcolor-textweak active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium',
       'secondary-button': 'border-[1.5px] border-transparent bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg',
       'secondary-outline-button': 'border-[1.5px] border-brandcolor-strokelight text-brandcolor-secondary bg-brandcolor-white hover:bg-brandcolor-neutralhover active:border-brandcolor-secondary active:text-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium'
@@ -1682,6 +1685,7 @@ ${cases}
       'primary-button': 'Primary',
       'primary-outline-button': 'Primary Outline',
       'ghost-button': 'Ghost',
+      'text-button': 'Text',
       'neutral-button': 'Neutral',
       'secondary-button': 'Secondary',
       'secondary-outline-button': 'Secondary Outline'

@@ -19,6 +19,11 @@
       [label]="label()"
       (buttonClick)="buttonClick.emit($event)"></app-ghost-button>
   }
+  @case ('5') {
+    <app-text-button
+      [label]="label()"
+      (buttonClick)="buttonClick.emit($event)"></app-text-button>
+  }
   @default {
     <app-primary-button
       [label]="label()"

@@ -178,21 +178,15 @@ function updateTypeScriptFile(superComponents) {
       })
       .map(c => c.className);
     
-    // Filter existing components to only include valid ones
+    // Keep all existing component imports that have corresponding import statements
     const validExistingComponents = existingComponents.filter(comp => {
       // Keep base imports
       if (baseComponentImports.includes(comp)) {
         return true;
       }
-      // Keep if it's a valid super component class name AND has import
-      if (validClassNames.has(comp)) {
-        const compObj = validSuperComponents.find(c => c.className === comp);
-        if (compObj) {
-          const importStatement = `import { ${comp.className} } from '${compObj.importPath}';`;
-          return content.includes(importStatement);
-        }
-      }
-      return false;
+      // Keep any component that has a valid import statement (don't remove existing super components)
+      const hasImport = content.includes(`import { ${comp} } from`);
+      return hasImport;
     });
     
     // Combine (remove duplicates and invalid components)

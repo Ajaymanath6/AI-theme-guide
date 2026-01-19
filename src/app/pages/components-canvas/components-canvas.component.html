@@ -160,9 +160,19 @@
             </button>
           }
           
+          <!-- Text Button Component -->
+          @if (element.type === 'text-button') {
+            <!-- Always show HTML on canvas for visual reference -->
+            <button
+              type="button"
+              class="text-brandcolor-secondary bg-transparent disabled:opacity-50 px-4 py-2 font-medium">
+              Text
+            </button>
+          }
+          
           <!-- Super Component Rendering -->
           @if (isSuperComponent(element.type) && getSuperComponentInfo(element.type)) {
-                                                            @switch (element.type) {
+                                                                        @switch (element.type) {
               @case ('app-secondary-button-variants') {
                 <app-secondary-button-variants variant="1"></app-secondary-button-variants>
               }
