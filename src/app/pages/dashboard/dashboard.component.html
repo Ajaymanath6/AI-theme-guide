@@ -29,13 +29,20 @@
           </div>
           
           <!-- Action Buttons -->
-          <!-- Buttons will be added here after creating new super component -->
         </div>
       </header>
 
       <!-- BOTTOM: Scrollable Layout -->
       <main class="flex-1 overflow-y-auto bg-brandcolor-white p-6">
         <!-- Scrollable content area -->
+        <!-- Primary Button Variants Super Component -->
+        <div class="mb-4">
+          <app-primary-button-variants
+            variant="1"
+            [label]="'Save'"
+            (buttonClick)="onSave()">
+          </app-primary-button-variants>
+        </div>
         <!-- Your dashboard content goes here -->
       </main>
       

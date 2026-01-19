@@ -7,6 +7,7 @@ export type PrimaryButtonVariantsComponentVariant = '1' | '2';
 
 @Component({
   selector: 'app-primary-button-variants',
+  standalone: true,
   imports: [CommonModule, PrimaryButtonComponent, PrimaryOutlineButtonComponent],
   templateUrl: './app-primary-button-variants.component.html',
   styleUrl: './app-primary-button-variants.component.scss'

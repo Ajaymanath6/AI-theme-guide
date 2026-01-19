@@ -21,7 +21,7 @@ interface CanvasElement {
 
 @Component({
   selector: 'app-components-canvas',
-  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, PrimaryButtonVariantsComponent],
+  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, AppSecondaryButtonVariantsComponent, PrimaryButtonVariantsComponent],
   templateUrl: './components-canvas.component.html',
   styleUrl: './components-canvas.component.scss'
 })
@@ -30,6 +30,7 @@ export class ComponentsCanvasComponent implements AfterViewInit {
     { id: 'sidebar1', type: 'sidebar', x: 0, y: 60, content: 'Sidebar', isSharedComponent: true },
     { id: 'primary-button1', type: 'primary-button', x: 200, y: 200, content: 'Primary Button' },
     { id: 'primary-outline-button1', type: 'primary-outline-button', x: 400, y: 200, content: 'Primary Outline Button' },
+    { id: 'app-primary-button-variants1', type: 'app-primary-button-variants', x: 200, y: 300, content: 'Primary Button Variants', isSharedComponent: true },
     { id: 'secondary-button1', type: 'secondary-button', x: 600, y: 200, content: 'Secondary Button' },
     { id: 'secondary-outline-button1', type: 'secondary-outline-button', x: 800, y: 200, content: 'Secondary Outline Button' }
   ];
@@ -445,9 +446,68 @@ export class ComponentsCanvasComponent implements AfterViewInit {
    * Copy component tag to clipboard (for shared components)
    */
   copyComponentTag(componentId: string): void {
-    const componentTag = `<app-${componentId}></app-${componentId}>`;
+    const catalogEntry = this.catalogService.getComponent(componentId);
+    let componentTag = `<app-${componentId}></app-${componentId}>`;
+    
+    // Enhanced tag generation with properties
+    if (catalogEntry) {
+      const lines: string[] = [];
+      const tagName = `app-${componentId}`;
+      
+      // Start tag
+      lines.push(`<${tagName}`);
+      
+      // Add variant for super components
+      if (catalogEntry.isSuperComponent && catalogEntry.variants && catalogEntry.variants.length > 0) {
+        lines.push(`  variant="1"`);
+      }
+      
+      // Add properties if available
+      if (catalogEntry.properties) {
+        const { inputs, outputs } = catalogEntry.properties;
+        
+        // Add input properties that are enabled
+        Object.entries(inputs).forEach(([key, enabled]) => {
+          if (enabled) {
+            // Generate default values based on property name
+            let defaultValue = '';
+            if (key === 'label') {
+              defaultValue = `"Button"`;
+            } else if (key === 'disabled' || key === 'loading' || key === 'fullWidth') {
+              defaultValue = 'false';
+            } else if (key === 'type') {
+              defaultValue = `"button"`;
+            } else if (key === 'size') {
+              defaultValue = `"md"`;
+            } else if (key === 'icon' || key === 'iconRight' || key === 'ariaLabel' || key === 'tooltip') {
+              defaultValue = 'null';
+            } else {
+              defaultValue = `"value"`;
+            }
+            lines.push(`  [${key}]="${defaultValue}"`);
+          }
+        });
+        
+        // Add output properties that are enabled
+        Object.entries(outputs).forEach(([key, enabled]) => {
+          if (enabled) {
+            // Generate handler name from output name
+            const handlerName = key.replace(/^button/, 'on').replace(/^on/, 'on');
+            const capitalizedHandler = handlerName.charAt(0).toUpperCase() + handlerName.slice(1);
+            const finalHandler = 'on' + capitalizedHandler.slice(2);
+            lines.push(`  (${key})="${finalHandler}()"`);
+          }
+        });
+      }
+      
+      // Close tag
+      lines.push(`></${tagName}>`);
+      
+      componentTag = lines.join('\n');
+    }
+    
     navigator.clipboard.writeText(componentTag).then(() => {
-      this.showToast(`✓ Copied "${componentTag}" to clipboard`);
+      this.showToast(`✓ Copied component with properties to clipboard`);
       console.log('Copied component tag to clipboard:', componentTag);
     }).catch(err => {
       console.error('Failed to copy component tag:', err);

@@ -2,12 +2,13 @@ import { Component, input, output } from '@angular/core';
 
 @Component({
   selector: 'app-primary-button',
+  standalone: true,
   imports: [],
-  templateUrl: './app-primary-button.component.html',
-  styleUrl: './app-primary-button.component.scss'
+  templateUrl: './primary-button.component.html',
+  styleUrl: './primary-button.component.scss'
 })
 export class PrimaryButtonComponent {
-  label = input<string>('primary-button');
+  label = input<string>('Primary');
   
   buttonClick = output<MouseEvent>();
 }
