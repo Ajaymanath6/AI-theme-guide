@@ -212,19 +212,21 @@ app.post('/delete', (req, res) => {
   const componentDir = path.join(process.cwd(), 'src', 'app', 'components', componentId);
   
   // Check if directory exists
-  if (!fs.existsSync(componentDir)) {
+  const componentDirExists = fs.existsSync(componentDir);
+  if (!componentDirExists) {
     console.log(`⚠️  Component directory not found: ${componentDir}`);
-    return res.status(404).json({ 
-      success: false, 
-      error: `Component directory not found: ${componentDir}` 
-    });
+    console.log(`   Proceeding to clean up references only...`);
   }
 
   try {
-    // Step 1: Delete the entire component directory
-    fs.rmSync(componentDir, { recursive: true, force: true });
-    console.log('✅ Component directory deleted successfully!');
-    console.log(`   Deleted: ${componentDir}`);
+    // Step 1: Delete the entire component directory (if it exists)
+    if (componentDirExists) {
+      fs.rmSync(componentDir, { recursive: true, force: true });
+      console.log('✅ Component directory deleted successfully!');
+      console.log(`   Deleted: ${componentDir}`);
+    } else {
+      console.log('ℹ️  No component directory to delete (cleaning up references only)');
+    }
 
     // Step 2: Clean up references in canvas component TypeScript
     const canvasComponentPath = path.join(process.cwd(), 'src', 'app', 'pages', 'components-canvas', 'components-canvas.component.ts');
@@ -258,24 +260,85 @@ app.post('/delete', (req, res) => {
       let htmlContent = fs.readFileSync(canvasHtmlPath, 'utf8');
       
       // Remove the entire @if block for this component (handle both shared and non-shared versions)
-      const htmlBlockRegex = new RegExp(`\\s*<!--[^>]*${componentId}[^>]*-->\\s*@if\\s*\\(element\\.type\\s*===\\s*'${componentId}'\\)\\s*{[\\s\\S]*?^\\s*}\\s*\\n?`, 'gm');
+      const htmlBlockRegex = new RegExp(`\\s*<!--[^>]*${componentId}[^>]*-->\\s*@if\\s*\\(element\\.type\\s*===\\s*['"]${componentId}['"]\\)\\s*{[\\s\\S]*?^\\s*}\\s*\\n?`, 'gm');
       htmlContent = htmlContent.replace(htmlBlockRegex, '');
       
+      // Remove @switch case statements for this component
+      const switchCaseRegex = new RegExp(`@case\\s*\\(['"]${componentId}['"]\\)\\s*{[\\s\\S]*?}\\s*`, 'g');
+      htmlContent = htmlContent.replace(switchCaseRegex, '');
+      
+      // Remove component tags
+      const componentTagRegex = new RegExp(`<app-${componentId}[^>]*>.*?</app-${componentId}>`, 'gs');
+      htmlContent = htmlContent.replace(componentTagRegex, '');
+      
+      // Remove self-closing tags
+      const selfClosingTagRegex = new RegExp(`<app-${componentId}[^>]*/>`, 'g');
+      htmlContent = htmlContent.replace(selfClosingTagRegex, '');
+      
+      // Remove comments referencing this component
+      const commentRegex = new RegExp(`<!--[^>]*${componentId}[^>]*-->\\s*`, 'g');
+      htmlContent = htmlContent.replace(commentRegex, '');
+      
+      // Clean up multiple consecutive blank lines (max 2)
+      htmlContent = htmlContent.replace(/\n\s*\n\s*\n+/g, '\n\n');
+      
       fs.writeFileSync(canvasHtmlPath, htmlContent, 'utf8');
-      console.log('✅ Cleaned up HTML template');
+      console.log('✅ Cleaned up canvas HTML template');
     }
 
     // Step 4: Clean up references in SCSS
     const canvasScssPath = path.join(process.cwd(), 'src', 'app', 'pages', 'components-canvas', 'components-canvas.component.scss');
     if (fs.existsSync(canvasScssPath)) {
       let scssContent = fs.readFileSync(canvasScssPath, 'utf8');
+      let originalContent = scssContent;
       
-      // Remove app-componentId from selectors
-      const scssRegex = new RegExp(`,?\\s*&:hover\\s*>\\s*app-${componentId}\\s*,?|,?\\s*&\\s*>\\s*app-${componentId}\\s*,?`, 'g');
-      scssContent = scssContent.replace(scssRegex, '');
+      // Remove app-componentId from selectors (handle variations)
+      const variations = [
+        componentId,
+        componentId.replace(/^app-app-/, 'app-'),
+        componentId.replace(/^app-/, ''),
+        componentId.replace(/^app-app-/, '')
+      ];
+      const uniqueVariations = [...new Set(variations)];
       
-      fs.writeFileSync(canvasScssPath, scssContent, 'utf8');
-      console.log('✅ Cleaned up SCSS styles');
+      uniqueVariations.forEach(variation => {
+        // Remove from selectors (handle different patterns)
+        const scssRegex = new RegExp(`,?\\s*&:hover\\s*>\\s*app-${variation.replace(/^app-/, '')}\\s*,?|,?\\s*&\\s*>\\s*app-${variation.replace(/^app-/, '')}\\s*,?`, 'g');
+        scssContent = scssContent.replace(scssRegex, '');
+        
+        // Remove entire rules that only reference this component
+        const componentRuleRegex = new RegExp(`[^}]*app-${variation.replace(/^app-/, '')}[^}]*{[^}]*}[^}]*`, 'g');
+        scssContent = scssContent.replace(componentRuleRegex, '');
+      });
+      
+      // Clean up malformed selectors (comment followed by selector)
+      scssContent = scssContent.replace(/\/\/[^\n]*\*\s*{/g, '// Fixed comment\n      * {');
+      
+      // Clean up empty rules and extra braces
+      scssContent = scssContent.replace(/\{\s*\}/g, '');
+      scssContent = scssContent.replace(/\n\s*\n\s*\n+/g, '\n\n');
+      
+      // Validate SCSS structure - ensure braces are balanced
+      const openBraces = (scssContent.match(/{/g) || []).length;
+      const closeBraces = (scssContent.match(/}/g) || []).length;
+      
+      if (openBraces !== closeBraces) {
+        console.warn(`⚠️  SCSS brace mismatch detected: ${openBraces} open, ${closeBraces} close`);
+        console.warn('   Attempting to fix...');
+        // Try to fix by adding missing closing braces at the end
+        const diff = openBraces - closeBraces;
+        if (diff > 0) {
+          scssContent += '\n' + '}'.repeat(diff);
+          console.log('   ✓ Added missing closing braces');
+        }
+      }
+      
+      if (scssContent !== originalContent) {
+        fs.writeFileSync(canvasScssPath, scssContent, 'utf8');
+        console.log('✅ Cleaned up SCSS styles');
+      } else {
+        console.log('ℹ️  No SCSS changes needed');
+      }
     }
 
     // Step 5: Search and clean up ALL TypeScript files in the project
@@ -287,24 +350,39 @@ app.post('/delete', (req, res) => {
     
     tsFiles.forEach(filePath => {
       let content = fs.readFileSync(filePath, 'utf8');
-      let modified = false;
+      let originalContent = content;
       
-      // Remove import statement
+      // Remove import statement (handles single and multiple imports)
       const importRegex = new RegExp(`import\\s*{[^}]*${componentClassName}[^}]*}\\s*from\\s*['"][^'"]*/${componentId}/${componentId}\\.component['"];?\\s*\\n?`, 'g');
-      if (importRegex.test(content)) {
-        content = content.replace(importRegex, '');
-        modified = true;
-      }
+      content = content.replace(importRegex, '');
       
-      // Remove from imports array (better comma handling)
+      // Remove from imports array in @Component decorator (better comma handling)
       // Match: ", ComponentName" or "ComponentName," or ", ComponentName,"
       const importsArrayRegex = new RegExp(`(,\\s*${componentClassName}\\s*(?=,|\\]))|((?<=\\[|,)\\s*${componentClassName}\\s*,)`, 'g');
-      if (importsArrayRegex.test(content)) {
-        content = content.replace(importsArrayRegex, '');
-        modified = true;
-      }
+      content = content.replace(importsArrayRegex, '');
       
-      if (modified) {
+      // Remove switch case statements for this component
+      // Match: case 'componentId': ... break;
+      const switchCaseRegex = new RegExp(`case\\s*['"]${componentId}['"]\\s*:[\\s\\S]*?break\\s*;`, 'g');
+      content = content.replace(switchCaseRegex, '');
+      
+      // Remove if statements checking for componentId
+      const ifComponentRegex = new RegExp(`if\\s*\\([^)]*['"]${componentId}['"][^)]*\\)\\s*{[\\s\\S]*?}\\s*`, 'g');
+      content = content.replace(ifComponentRegex, '');
+      
+      // Remove references in arrays (like canvasElements)
+      const arrayElementRegex = new RegExp(`\\s*{\\s*[^}]*type:\\s*['"]${componentId}['"][^}]*}\\s*,?\\s*\\n?`, 'g');
+      content = content.replace(arrayElementRegex, '');
+      
+      // Remove references in object properties
+      const objectPropertyRegex = new RegExp(`['"]${componentId}['"]\\s*:\\s*[^,}\\n]+[,}]?`, 'g');
+      content = content.replace(objectPropertyRegex, '');
+      
+      // Clean up multiple consecutive blank lines (max 2)
+      content = content.replace(/\n\s*\n\s*\n+/g, '\n\n');
+      
+      // Check if content was modified
+      if (content !== originalContent) {
         fs.writeFileSync(filePath, content, 'utf8');
         console.log(`   ✓ Cleaned: ${path.relative(process.cwd(), filePath)}`);
         tsFilesCleanedCount++;
@@ -320,37 +398,51 @@ app.post('/delete', (req, res) => {
     
     htmlFiles.forEach(filePath => {
       let content = fs.readFileSync(filePath, 'utf8');
-      let modified = false;
+      let originalContent = content;
       
-      // Remove <app-componentId></app-componentId> tags
+      // Remove <app-componentId></app-componentId> tags (with any attributes and content)
       const componentTagRegex = new RegExp(`<app-${componentId}[^>]*>.*?</app-${componentId}>`, 'gs');
-      if (componentTagRegex.test(content)) {
-        content = content.replace(componentTagRegex, '');
-        modified = true;
-      }
+      content = content.replace(componentTagRegex, '');
       
       // Remove self-closing tags <app-componentId />
       const selfClosingTagRegex = new RegExp(`<app-${componentId}[^>]*/>`, 'g');
-      if (selfClosingTagRegex.test(content)) {
-        content = content.replace(selfClosingTagRegex, '');
-        modified = true;
-      }
+      content = content.replace(selfClosingTagRegex, '');
+      
+      // Remove @switch case statements for this component
+      // Match: @case ('componentId') { ... <app-componentId> ... }
+      const switchCaseRegex = new RegExp(`@case\\s*\\(['"]${componentId}['"]\\)\\s*{[\\s\\S]*?}\\s*`, 'g');
+      content = content.replace(switchCaseRegex, '');
+      
+      // Remove @if blocks that check for this component type
+      // Match: @if (element.type === 'componentId') { ... }
+      const ifBlockRegex = new RegExp(`@if\\s*\\([^)]*element\\.type\\s*===\\s*['"]${componentId}['"][^)]*\\)\\s*{[\\s\\S]*?}\\s*`, 'g');
+      content = content.replace(ifBlockRegex, '');
+      
+      // Remove @if blocks with componentId in condition
+      const ifComponentRegex = new RegExp(`@if\\s*\\([^)]*['"]${componentId}['"][^)]*\\)\\s*{[\\s\\S]*?}\\s*`, 'g');
+      content = content.replace(ifComponentRegex, '');
       
       // Remove @for loops that only contain this component
       const forLoopRegex = new RegExp(`@for\\s*\\([^)]+\\)\\s*{\\s*<app-${componentId}[^>]*>.*?</app-${componentId}>\\s*}`, 'gs');
-      if (forLoopRegex.test(content)) {
-        content = content.replace(forLoopRegex, '');
-        modified = true;
-      }
+      content = content.replace(forLoopRegex, '');
       
-      // Remove grid containers that only had this component
-      const gridContainerRegex = new RegExp(`<div[^>]*grid[^>]*>\\s*@for\\s*\\([^)]+\\)\\s*{\\s*<app-${componentId}[^>]*>.*?</app-${componentId}>\\s*}\\s*</div>`, 'gs');
-      if (gridContainerRegex.test(content)) {
-        content = content.replace(gridContainerRegex, '');
-        modified = true;
-      }
+      // Remove grid/container divs that only had this component
+      const gridContainerRegex = new RegExp(`<div[^>]*>\\s*@for\\s*\\([^)]+\\)\\s*{\\s*<app-${componentId}[^>]*>.*?</app-${componentId}>\\s*}\\s*</div>`, 'gs');
+      content = content.replace(gridContainerRegex, '');
       
-      if (modified) {
+      // Remove empty @for loops that might have been left behind
+      const emptyForRegex = new RegExp(`@for\\s*\\([^)]+\\)\\s*{\\s*}\\s*`, 'g');
+      content = content.replace(emptyForRegex, '');
+      
+      // Remove comments referencing this component
+      const commentRegex = new RegExp(`<!--[^>]*${componentId}[^>]*-->\\s*`, 'g');
+      content = content.replace(commentRegex, '');
+      
+      // Clean up multiple consecutive blank lines (max 2)
+      content = content.replace(/\n\s*\n\s*\n+/g, '\n\n');
+      
+      // Check if content was modified
+      if (content !== originalContent) {
         fs.writeFileSync(filePath, content, 'utf8');
         console.log(`   ✓ Cleaned: ${path.relative(process.cwd(), filePath)}`);
         htmlFilesCleanedCount++;
@@ -488,6 +580,126 @@ app.post('/update-canvas-super-components', (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message 
+    });
+  }
+});
+
+// Comprehensive cleanup of ALL references from ALL files
+app.post('/cleanup-all-references', (req, res) => {
+  const { componentId } = req.body;
+  
+  if (!componentId) {
+    return res.status(400).json({ 
+      success: false, 
+      error: 'Component ID is required' 
+    });
+  }
+
+  console.log(`\n🧹 Comprehensive cleanup for: ${componentId}`);
+  console.log('🔍 Searching ALL files for references...\n');
+  
+  const cleanedFiles = [];
+  const srcDir = path.join(process.cwd(), 'src');
+  
+  // Generate component class name
+  const componentClassName = componentId.split('-').map(part => 
+    part.charAt(0).toUpperCase() + part.slice(1)
+  ).join('') + 'Component';
+  
+  // Handle variations
+  const variations = [
+    componentId,
+    componentId.replace(/^app-app-/, 'app-'),
+    componentId.replace(/^app-/, ''),
+    componentId.replace(/^app-app-/, '')
+  ];
+  const uniqueVariations = [...new Set(variations)];
+  
+  try {
+    // Clean up ALL TypeScript files
+    const tsFiles = findFilesRecursive(srcDir, ['.ts']);
+    tsFiles.forEach(filePath => {
+      let content = fs.readFileSync(filePath, 'utf8');
+      let originalContent = content;
+      
+      // Remove import statements (all variations)
+      uniqueVariations.forEach(variation => {
+        const className = variation.split('-').map(part => 
+          part.charAt(0).toUpperCase() + part.slice(1)
+        ).join('') + 'Component';
+        
+        // Remove import line
+        const importRegex = new RegExp(`import\\s*{[^}]*${className}[^}]*}\\s*from\\s*['"][^'"]*/${variation}/${variation}\\.component['"];?\\s*\\n?`, 'g');
+        content = content.replace(importRegex, '');
+        
+        // Remove from imports array
+        const importsArrayRegex = new RegExp(`(,\\s*${className}\\s*(?=,|\\]))|((?<=\\[|,)\\s*${className}\\s*,)`, 'g');
+        content = content.replace(importsArrayRegex, '');
+      });
+      
+      // Remove references in arrays
+      uniqueVariations.forEach(variation => {
+        const arrayElementRegex = new RegExp(`\\s*{\\s*[^}]*type:\\s*['"]${variation}['"][^}]*}\\s*,?\\s*\\n?`, 'g');
+        content = content.replace(arrayElementRegex, '');
+      });
+      
+      // Clean up blank lines
+      content = content.replace(/\n\s*\n\s*\n+/g, '\n\n');
+      
+      if (content !== originalContent) {
+        fs.writeFileSync(filePath, content, 'utf8');
+        cleanedFiles.push(path.relative(process.cwd(), filePath));
+        console.log(`   ✓ Cleaned: ${path.relative(process.cwd(), filePath)}`);
+      }
+    });
+    
+    // Clean up ALL HTML files
+    const htmlFiles = findFilesRecursive(srcDir, ['.html']);
+    htmlFiles.forEach(filePath => {
+      let content = fs.readFileSync(filePath, 'utf8');
+      let originalContent = content;
+      
+      uniqueVariations.forEach(variation => {
+        // Remove component tags
+        const componentTagRegex = new RegExp(`<app-${variation.replace(/^app-/, '')}[^>]*>.*?</app-${variation.replace(/^app-/, '')}>`, 'gs');
+        content = content.replace(componentTagRegex, '');
+        
+        // Remove self-closing tags
+        const selfClosingTagRegex = new RegExp(`<app-${variation.replace(/^app-/, '')}[^>]*/>`, 'g');
+        content = content.replace(selfClosingTagRegex, '');
+        
+        // Remove @switch case statements
+        const switchCaseRegex = new RegExp(`@case\\s*\\(['"]${variation}['"]\\)\\s*{[\\s\\S]*?}\\s*`, 'g');
+        content = content.replace(switchCaseRegex, '');
+        
+        // Remove @if blocks
+        const ifBlockRegex = new RegExp(`@if\\s*\\([^)]*['"]${variation}['"][^)]*\\)\\s*{[\\s\\S]*?}\\s*`, 'g');
+        content = content.replace(ifBlockRegex, '');
+      });
+      
+      // Clean up blank lines
+      content = content.replace(/\n\s*\n\s*\n+/g, '\n\n');
+      
+      if (content !== originalContent) {
+        fs.writeFileSync(filePath, content, 'utf8');
+        cleanedFiles.push(path.relative(process.cwd(), filePath));
+        console.log(`   ✓ Cleaned: ${path.relative(process.cwd(), filePath)}`);
+      }
+    });
+    
+    console.log(`\n✅ Cleaned ${cleanedFiles.length} file(s)`);
+    
+    res.json({ 
+      success: true, 
+      message: `Cleaned up ${cleanedFiles.length} file(s)`,
+      cleanedFiles: cleanedFiles
+    });
+    
+  } catch (error) {
+    console.error('❌ Error during cleanup:', error);
     res.status(500).json({ 
       success: false, 
       error: error.message 

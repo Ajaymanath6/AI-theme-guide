@@ -58,9 +58,24 @@ function getSuperComponents(catalog) {
   return superComponents;
 }
 
+// Check if component file exists
+function componentExists(componentId) {
+  const componentPath = path.join(__dirname, 'src/app/components', componentId, `${componentId}.component.ts`);
+  return fs.existsSync(componentPath);
+}
+
 // Update TypeScript file
 function updateTypeScriptFile(superComponents) {
   let content = fs.readFileSync(CANVAS_TS_PATH, 'utf8');
+  
+  // Filter out super components that don't have files
+  const validSuperComponents = superComponents.filter(comp => {
+    const exists = componentExists(comp.id);
+    if (!exists) {
+      console.log(`⚠️  Skipping ${comp.id} - component file not found`);
+    }
+    return exists;
+  });
   
   // Find where imports end
   const importEndIndex = content.indexOf('declare var initFlowbite');
@@ -78,11 +93,25 @@ function updateTypeScriptFile(superComponents) {
     existingImports.add(match[0]);
   }
   
+  // Remove imports for components that no longer exist
+  const validComponentIds = new Set(validSuperComponents.map(c => c.id));
+  const validClassNames = new Set(validSuperComponents.map(c => c.className));
+  
+  // Filter out imports for deleted components
+  const filteredImports = Array.from(existingImports).filter(imp => {
+    // Keep base imports
+    if (!imp.includes('components/') || imp.includes('sidebar')) {
+      return true;
+    }
+    // Check if this import is for a valid super component
+    return validSuperComponents.some(comp => imp.includes(comp.className));
+  });
+  
   // Add new super component imports
-  superComponents.forEach(comp => {
+  validSuperComponents.forEach(comp => {
     const newImport = `import { ${comp.className} } from '${comp.importPath}';`;
-    if (!Array.from(existingImports).some(imp => imp.includes(comp.className))) {
-      existingImports.add(newImport);
+    if (!filteredImports.some(imp => imp.includes(comp.className))) {
+      filteredImports.push(newImport);
     }
   });
   
@@ -97,8 +126,8 @@ function updateTypeScriptFile(superComponents) {
     "import { SidebarComponent } from '../../components/sidebar/sidebar.component';"
   ];
   
-  // Get super component imports
-  const superComponentImports = Array.from(existingImports).filter(imp => 
+  // Get super component imports (only valid ones)
+  const superComponentImports = filteredImports.filter(imp => 
     imp.includes('components/') && !imp.includes('sidebar')
   );
   
@@ -109,6 +138,22 @@ function updateTypeScriptFile(superComponents) {
   const beforeImports = content.substring(0, content.indexOf("import { Component"));
   const afterImports = content.substring(importEndIndex + 'declare var initFlowbite: () => void;'.length);
   content = beforeImports + allImports.join('\n') + '\n' + afterImports;
+  
+  // Clean up any duplicate imports
+  const lines = content.split('\n');
+  const seenImports = new Set();
+  const cleanedLines = [];
+  for (const line of lines) {
+    if (line.trim().startsWith('import ')) {
+      if (!seenImports.has(line.trim())) {
+        seenImports.add(line.trim());
+        cleanedLines.push(line);
+      }
+    } else {
+      cleanedLines.push(line);
+    }
+  }
+  content = cleanedLines.join('\n');
   
   // Update imports array in @Component decorator
   const componentDecoratorRegex = /imports:\s*\[([^\]]+)\]/;
@@ -124,11 +169,39 @@ function updateTypeScriptFile(superComponents) {
       'SidebarComponent'
     ];
     
-    // Get super component class names
-    const superComponentClasses = superComponents.map(c => c.className);
+    // Get super component class names (only valid ones that have imports)
+    const superComponentClasses = validSuperComponents
+      .filter(comp => {
+        // Verify import statement exists
+        const importStatement = `import { ${comp.className} } from '${comp.importPath}';`;
+        return content.includes(importStatement);
+      })
+      .map(c => c.className);
     
-    // Combine (remove duplicates)
-    const allComponentImports = [...new Set([...baseComponentImports, ...superComponentClasses])];
+    // Filter existing components to only include valid ones
+    const validExistingComponents = existingComponents.filter(comp => {
+      // Keep base imports
+      if (baseComponentImports.includes(comp)) {
+        return true;
+      }
+      // Keep if it's a valid super component class name AND has import
+      if (validClassNames.has(comp)) {
+        const compObj = validSuperComponents.find(c => c.className === comp);
+        if (compObj) {
+          const importStatement = `import { ${comp.className} } from '${compObj.importPath}';`;
+          return content.includes(importStatement);
+        }
+      }
+      return false;
+    });
+    
+    // Combine (remove duplicates and invalid components)
+    const allComponentImports = [
+      ...baseComponentImports,
+      ...validExistingComponents.filter(c => !baseComponentImports.includes(c)),
+      ...superComponentClasses
+    ].filter((value, index, self) => self.indexOf(value) === index); // Remove duplicates
+    
     const newImportsArray = `imports: [${allComponentImports.join(', ')}]`;
     content = content.replace(componentDecoratorRegex, newImportsArray);
   }
@@ -142,45 +215,62 @@ function updateTypeScriptFile(superComponents) {
 function updateHtmlFile(superComponents) {
   let content = fs.readFileSync(CANVAS_HTML_PATH, 'utf8');
   
+  // Filter out super components that don't have files
+  const validSuperComponents = superComponents.filter(comp => componentExists(comp.id));
+  
   // Find the switch statement for super components
   const switchStartMarker = '<!-- Super Component Rendering -->';
   const switchStart = content.indexOf(switchStartMarker);
-  const switchStartIndex = content.indexOf('@switch (element.type) {', switchStart);
-  const defaultStart = content.indexOf('@default {', switchStartIndex);
   
-  if (switchStartIndex === -1 || defaultStart === -1) {
-    console.error('❌ Could not find switch statement');
+  if (switchStart === -1) {
+    console.error('❌ Could not find "Super Component Rendering" comment');
     return false;
   }
   
-  // Extract existing cases to preserve them
-  const switchContent = content.substring(switchStartIndex, defaultStart);
-  const existingCaseIds = new Set();
-  const caseRegex = /@case\s*\(\s*['"]([^'"]+)['"]\s*\)/g;
-  let match;
-  while ((match = caseRegex.exec(switchContent)) !== null) {
-    existingCaseIds.add(match[1]);
+  const switchStartIndex = content.indexOf('@switch (element.type) {', switchStart);
+  
+  if (switchStartIndex === -1) {
+    console.error('❌ Could not find @switch statement');
+    return false;
   }
   
-  // Build case statements for all super components
+  // Find the closing brace of the switch statement
+  let braceCount = 0;
+  let switchEndIndex = switchStartIndex;
+  let inSwitch = false;
+  
+  for (let i = switchStartIndex; i < content.length; i++) {
+    if (content[i] === '{') {
+      braceCount++;
+      inSwitch = true;
+    } else if (content[i] === '}') {
+      braceCount--;
+      if (inSwitch && braceCount === 0) {
+        switchEndIndex = i + 1;
+        break;
+      }
+    }
+  }
+  
+  // Build case statements for all valid super components
   const allCases = [];
-  superComponents.forEach(comp => {
+  validSuperComponents.forEach(comp => {
     allCases.push(`              @case ('${comp.id}') {
                 <${comp.selector} variant="1"></${comp.selector}>
               }`);
   });
   
-  // Get the default case and everything after
-  const defaultCaseEnd = content.indexOf('}', defaultStart);
-  const afterSwitch = content.substring(defaultCaseEnd + 1);
-  
   // Rebuild the switch statement
   const beforeSwitch = content.substring(0, switchStartIndex);
   const switchHeader = '            @switch (element.type) {';
-  const newCases = allCases.join('\n');
-  const defaultCase = content.substring(defaultStart, defaultCaseEnd + 1);
+  const afterSwitch = content.substring(switchEndIndex);
   
-  content = beforeSwitch + switchHeader + '\n' + newCases + '\n' + defaultCase + afterSwitch;
+  // If no valid super components, keep the switch empty with just a comment
+  if (allCases.length === 0) {
+    content = beforeSwitch + switchHeader + '\n              <!-- No super components -->\n            }' + afterSwitch;
+  } else {
+    content = beforeSwitch + switchHeader + '\n' + allCases.join('\n') + '\n            }' + afterSwitch;
+  }
   
   fs.writeFileSync(CANVAS_HTML_PATH, content, 'utf8');
   console.log('✅ Updated components-canvas.component.html');

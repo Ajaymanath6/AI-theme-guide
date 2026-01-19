@@ -140,116 +140,15 @@
             </button>
           }
           
+          <!-- Neutral Button Component -->
           <!-- Super Component Rendering -->
-          @if (isSuperComponent(element.type)) {
-            @switch (element.type) {
-              @case ('super-component') {
-                <app-super-component variant="1"></app-super-component>
-              }
+          @if (isSuperComponent(element.type) && getSuperComponentInfo(element.type)) {
+                        @switch (element.type) {
               @case ('app-secondary-button-variants') {
                 <app-secondary-button-variants variant="1"></app-secondary-button-variants>
               }
-              @case ('app-card-variants') {
-                <app-card-variants variant="1"></app-card-variants>
-              }
-              @default {
-                <!-- Fallback: Show component info card for unknown super components -->
-                <div class="bg-purple-50 border-2 border-purple-300 rounded-lg p-4 min-w-[200px]">
-                  <div class="flex items-center gap-2 mb-2">
-                    <span class="material-symbols-outlined text-purple-600" style="font-size: 20px;">auto_awesome</span>
-                    <span class="text-sm font-bold text-purple-700 uppercase">Super Component</span>
-                  </div>
-                  <div class="text-xs font-mono text-purple-600 mb-2">
-                    &lt;app-{{ element.type }}&gt;
-                  </div>
-                  @if (getSuperComponentInfo(element.type)) {
-                    <div class="text-xs text-purple-500">
-                      Variants: {{ getSuperComponentInfo(element.type)?.variants?.join(', ') }}
-                    </div>
-                  }
-                </div>
-              }
             }
-          }
-          
-          <!-- Card Component -->
-          @if (element.type === 'card') {
-            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg shadow-lg p-6 min-w-[400px] max-w-md">
-              <!-- Title -->
-              <h2 class="text-xl font-semibold text-brandcolor-textstrong mb-2">
-                Card Title
-              </h2>
-              
-              <!-- Subtitle -->
-              <h3 class="text-sm font-medium text-brandcolor-textweak mb-3">
-                Card Subtitle
-              </h3>
-              
-              <!-- Paragraph -->
-              <p class="text-sm text-brandcolor-textweak mb-4">
-                This is a paragraph text inside the card. It provides additional information and context about the card content.
-              </p>
-              
-              <!-- Divider -->
-              <hr class="border-brandcolor-strokeweak mb-4">
-              
-              <!-- Buttons -->
-              <div class="flex items-center gap-3">
-                <!-- Primary Button -->
-                <button
-                  type="button"
-                  class="border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-                  Primary
-                </button>
-                
-                <!-- Primary Outline Button -->
-                <button
-                  type="button"
-                  class="border-[1.5px] border-brandcolor-strokelight text-brandcolor-primary bg-brandcolor-white hover:bg-brandcolor-neutralhover active:border-brandcolor-primary active:text-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
-                  Primary Outline
-                </button>
-              </div>
-            </div>
-          }
-          
-          <!-- Card Secondary Component -->
-          @if (element.type === 'card-secondary') {
-            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg shadow-lg p-6 min-w-[400px] max-w-md">
-              <!-- Title -->
-              <h2 class="text-xl font-semibold text-brandcolor-textstrong mb-2">
-                Card Title
-              </h2>
-              
-              <!-- Subtitle -->
-              <h3 class="text-sm font-medium text-brandcolor-textweak mb-3">
-                Card Subtitle
-              </h3>
-              
-              <!-- Paragraph -->
-              <p class="text-sm text-brandcolor-textweak mb-4">
-                This is a paragraph text inside the card. It provides additional information and context about the card content.
-              </p>
-              
-              <!-- Divider -->
-              <hr class="border-brandcolor-strokeweak mb-4">
-              
-              <!-- Buttons -->
-              <div class="flex items-center gap-3">
-                <!-- Secondary Button -->
-                <button
-                  type="button"
-                  class="border-[1.5px] border-transparent bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg">
-                  Secondary
-                </button>
-                
-                <!-- Secondary Outline Button -->
-                <button
-                  type="button"
-                  class="border-[1.5px] border-brandcolor-strokelight text-brandcolor-secondary bg-brandcolor-white hover:bg-brandcolor-neutralhover active:border-brandcolor-secondary active:text-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium">
-                  Secondary Outline
-                </button>
-              </div>
-            </div>
+            <!-- Unknown/deleted super components won't render anything -->
           }
           
           <!-- Sidebar Component -->
@@ -484,11 +383,32 @@
           </div>
 
           <!-- CLI Command -->
-          <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
             <p class="text-xs font-semibold text-blue-900 mb-2">CLI Command:</p>
             <code class="text-xs text-blue-700 font-mono break-all">
               ng generate component components/{{ selectedComponentForSharing }} --skip-tests
             </code>
+          </div>
+
+          <!-- Component Helper Requirement -->
+          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+            <p class="text-xs font-semibold text-yellow-900 mb-2">⚠️ Required: Component Helper Service</p>
+            <p class="text-xs text-yellow-800 mb-2">
+              Make sure the component helper is running before creating the component:
+            </p>
+            <div class="bg-yellow-100 border border-yellow-300 rounded p-2 mb-2 flex items-center justify-between gap-2">
+              <code class="text-xs text-yellow-900 font-mono flex-1">
+                npm run component-helper
+              </code>
+              <button (click)="copyToClipboard('npm run component-helper'); $event.stopPropagation()"
+                      class="p-1 text-yellow-700 hover:text-yellow-900 hover:bg-yellow-200 rounded transition-colors"
+                      title="Copy command">
+                <span class="material-symbols-outlined" style="font-size: 18px;">content_copy</span>
+              </button>
+            </div>
+            <p class="text-xs text-yellow-700">
+              Run this command in a separate terminal. Keep it running while using the canvas.
+            </p>
           </div>
         </div>
 
@@ -511,6 +431,131 @@
             } @else {
               <span>Create Component</span>
             }
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Property Selection Modal for Button Components -->
+  @if (showPropertySelectionModal) {
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center"
+         (click)="cancelPropertySelection()">
+      <div class="bg-white rounded-lg shadow-2xl p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto"
+           (click)="$event.stopPropagation()">
+        
+        <!-- Header -->
+        <div class="flex items-center gap-3 mb-4">
+          <span class="text-2xl">🔧</span>
+          <h2 class="text-xl font-semibold text-brandcolor-textstrong">
+            Configure Button Properties
+          </h2>
+        </div>
+        
+        <p class="text-sm text-brandcolor-textweak mb-4">
+          Select which properties to include in <span class="font-mono bg-gray-100 px-2 py-1 rounded">{{selectedComponentForSharing}}</span>
+        </p>
+        
+        <!-- Inputs Section -->
+        <div class="mb-6">
+          <h3 class="font-semibold text-brandcolor-textstrong mb-3 flex items-center gap-2">
+            <span>📥</span> Input Properties
+          </h3>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+              <input type="checkbox" [(ngModel)]="selectedButtonProperties.inputs.label" class="w-4 h-4">
+              <span class="text-sm">label</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+              <input type="checkbox" [(ngModel)]="selectedButtonProperties.inputs.disabled" class="w-4 h-4">
+              <span class="text-sm">disabled</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+              <input type="checkbox" [(ngModel)]="selectedButtonProperties.inputs.loading" class="w-4 h-4">
+              <span class="text-sm">loading</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+              <input type="checkbox" [(ngModel)]="selectedButtonProperties.inputs.icon" class="w-4 h-4">
+              <span class="text-sm">icon</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+              <input type="checkbox" [(ngModel)]="selectedButtonProperties.inputs.iconRight" class="w-4 h-4">
+              <span class="text-sm">iconRight</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+              <input type="checkbox" [(ngModel)]="selectedButtonProperties.inputs.type" class="w-4 h-4">
+              <span class="text-sm">type</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+              <input type="checkbox" [(ngModel)]="selectedButtonProperties.inputs.size" class="w-4 h-4">
+              <span class="text-sm">size</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+              <input type="checkbox" [(ngModel)]="selectedButtonProperties.inputs.fullWidth" class="w-4 h-4">
+              <span class="text-sm">fullWidth</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+              <input type="checkbox" [(ngModel)]="selectedButtonProperties.inputs.ariaLabel" class="w-4 h-4">
+              <span class="text-sm">ariaLabel</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+              <input type="checkbox" [(ngModel)]="selectedButtonProperties.inputs.tooltip" class="w-4 h-4">
+              <span class="text-sm">tooltip</span>
+            </label>
+          </div>
+        </div>
+        
+        <!-- Outputs Section -->
+        <div class="mb-6">
+          <h3 class="font-semibold text-brandcolor-textstrong mb-3 flex items-center gap-2">
+            <span>📤</span> Output Events
+          </h3>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+              <input type="checkbox" [(ngModel)]="selectedButtonProperties.outputs.buttonClick" class="w-4 h-4">
+              <span class="text-sm">buttonClick</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+              <input type="checkbox" [(ngModel)]="selectedButtonProperties.outputs.buttonFocus" class="w-4 h-4">
+              <span class="text-sm">buttonFocus</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+              <input type="checkbox" [(ngModel)]="selectedButtonProperties.outputs.buttonBlur" class="w-4 h-4">
+              <span class="text-sm">buttonBlur</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+              <input type="checkbox" [(ngModel)]="selectedButtonProperties.outputs.buttonMouseEnter" class="w-4 h-4">
+              <span class="text-sm">buttonMouseEnter</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+              <input type="checkbox" [(ngModel)]="selectedButtonProperties.outputs.buttonMouseLeave" class="w-4 h-4">
+              <span class="text-sm">buttonMouseLeave</span>
+            </label>
+          </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="flex gap-2 mb-6">
+          <button (click)="selectAllProperties()" 
+                  class="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-50">
+            Select All
+          </button>
+          <button (click)="deselectAllProperties()" 
+                  class="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-50">
+            Deselect All
+          </button>
+        </div>
+        
+        <!-- Actions -->
+        <div class="flex gap-3 justify-end">
+          <button (click)="cancelPropertySelection()"
+                  class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50">
+            Cancel
+          </button>
+          <button (click)="confirmCreateSharedComponentWithProperties()"
+                  [disabled]="isCreatingComponent"
+                  class="px-4 py-2 bg-brandcolor-primary text-white rounded-md hover:bg-brandcolor-primaryhover disabled:opacity-50">
+            {{isCreatingComponent ? 'Creating...' : 'Create Shared Component'}}
           </button>
         </div>
       </div>
@@ -671,7 +716,7 @@
             Cancel
           </button>
           <button (click)="confirmCreateSuperComponent()"
-                  [disabled]="(isEditingSuperComponent ? selectedComponentsForSuper.length < 1 : selectedComponentsForSuper.length < 2) || isCreatingSuperComponent"
+                  [disabled]="selectedComponentsForSuper.length < (isEditingSuperComponent ? 1 : 2) || isCreatingSuperComponent"
                   class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
             @if (isCreatingSuperComponent) {
               <span>@if (isEditingSuperComponent) { Updating... } @else { Creating... }</span>

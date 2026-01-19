@@ -1,7 +1,7 @@
 {
   "catalogId": "design-system-v1",
   "version": "1.0.0",
-  "lastUpdated": "2026-01-16T13:02:35.785Z",
+  "lastUpdated": "2026-01-19T11:05:05.890Z",
   "registeredComponents": {
     "sidebar": {
       "id": "sidebar",
@@ -14,50 +14,6 @@
       "isSharedComponent": true,
       "componentPath": "src/app/components/sidebar/sidebar.component.ts",
       "componentTag": "<app-sidebar></app-sidebar>"
-    },
-    "primary-outline-button": {
-      "id": "primary-outline-button",
-      "displayName": "primary-outline-button",
-      "category": "general",
-      "description": "Component: primary-outline-button",
-      "htmlSelector": "[title='primary-outline-button']",
-      "status": "active",
-      "registeredAt": "2026-01-16T09:31:48.722Z",
-      "isSharedComponent": true,
-      "componentPath": "src/app/components/primary-outline-button/primary-outline-button.component.ts",
-      "componentTag": "<app-primary-outline-button></app-primary-outline-button>"
-    },
-    "primary-button": {
-      "id": "primary-button",
-      "displayName": "primary-button",
-      "category": "general",
-      "description": "Component: primary-button",
-      "htmlSelector": "[title='primary-button']",
-      "status": "active",
-      "registeredAt": "2026-01-16T09:32:05.898Z",
-      "isSharedComponent": true,
-      "componentPath": "src/app/components/primary-button/primary-button.component.ts",
-      "componentTag": "<app-primary-button></app-primary-button>"
-    },
-    "super-component": {
-      "id": "super-component",
-      "displayName": "super-component",
-      "category": "super-components",
-      "description": "Super component wrapping: primary-button, primary-outline-button",
-      "htmlSelector": "app-super-component",
-      "status": "active",
-      "registeredAt": "2026-01-16T09:34:51.890Z",
-      "isSuperComponent": true,
-      "wraps": [
-        "primary-button",
-        "primary-outline-button"
-      ],
-      "variants": [
-        "1",
-        "2"
-      ],
-      "componentPath": "src/app/components/super-component/super-component.component.ts",
-      "componentTag": "<app-super-component></app-super-component>"
     },
     "secondary-button": {
       "id": "secondary-button",
@@ -103,49 +59,84 @@
       "componentPath": "src/app/components/app-secondary-button-variants/app-secondary-button-variants.component.ts",
       "componentTag": "<app-secondary-button-variants></app-secondary-button-variants>"
     },
-    "card": {
-      "id": "card",
-      "displayName": "card",
-      "category": "general",
-      "description": "Component: card",
-      "htmlSelector": "[title='card']",
-      "status": "active",
-      "registeredAt": "2026-01-16T12:31:40.508Z",
-      "isSharedComponent": true,
-      "componentPath": "src/app/components/card/card.component.ts",
-      "componentTag": "<app-card></app-card>"
-    },
-    "card-secondary": {
-      "id": "card-secondary",
-      "displayName": "card-secondary",
-      "category": "general",
-      "description": "Component: card-secondary",
-      "htmlSelector": "[title='card-secondary']",
-      "status": "active",
-      "registeredAt": "2026-01-16T12:31:53.203Z",
-      "isSharedComponent": true,
-      "componentPath": "src/app/components/card-secondary/card-secondary.component.ts",
-      "componentTag": "<app-card-secondary></app-card-secondary>"
-    },
     "app-card-variants": {
       "id": "app-card-variants",
       "displayName": "app-card-variants",
       "category": "super-components",
-      "description": "Full component wrapping super component wrapping: card, card-secondary",
+      "description": "Full component wrapping super component wrapping: card, card-secondary, card-tertiary",
       "htmlSelector": "app-card-variants",
       "status": "active",
       "registeredAt": "2026-01-16T12:32:53.024Z",
       "isSuperComponent": true,
       "wraps": [
-        "card",
-        "card-secondary"
+        "card-case",
+        "card-tertiary"
       ],
       "variants": [
         "1",
-        "2"
+        "2",
+        "3"
       ],
       "componentPath": "src/app/components/app-card-variants/app-card-variants.component.ts",
       "componentTag": "<app-card-variants></app-card-variants>"
+    },
+    "card-case": {
+      "id": "card-case",
+      "displayName": "card-case",
+      "category": "general",
+      "description": "Component: card-case",
+      "htmlSelector": "[title='card-case']",
+      "status": "active",
+      "registeredAt": "2026-01-19T05:56:20.509Z",
+      "isSharedComponent": true,
+      "componentPath": "src/app/components/card-case/card-case.component.ts",
+      "componentTag": "<app-card-case></app-card-case>"
+    },
+    "app-primary-button-variants": {
+      "id": "app-primary-button-variants",
+      "displayName": "app-primary-button-variants",
+      "category": "super-components",
+      "description": "Full component wrapping super component wrapping: primary-button, primary-outline-button, neutral-button",
+      "htmlSelector": "app-primary-button-variants",
+      "status": "active",
+      "registeredAt": "2026-01-19T10:50:15.578Z",
+      "isSuperComponent": true,
+      "wraps": [
+        "primary-button",
+        "primary-outline-button",
+        "neutral-button"
+      ],
+      "variants": [
+        "1",
+        "2",
+        "3"
+      ],
+      "componentPath": "src/app/components/app-primary-button-variants/app-primary-button-variants.component.ts",
+      "componentTag": "<app-primary-button-variants></app-primary-button-variants>"
+    },
+    "primary-button": {
+      "id": "primary-button",
+      "displayName": "primary-button",
+      "category": "general",
+      "description": "Button component with custom properties",
+      "htmlSelector": "[title='primary-button']",
+      "status": "active",
+      "registeredAt": "2026-01-19T11:04:47.362Z",
+      "isSharedComponent": true,
+      "componentPath": "src/app/components/primary-button/primary-button.component.ts",
+      "componentTag": "<app-primary-button></app-primary-button>"
+    },
+    "primary-outline-button": {
+      "id": "primary-outline-button",
+      "displayName": "primary-outline-button",
+      "category": "general",
+      "description": "Button component with custom properties",
+      "htmlSelector": "[title='primary-outline-button']",
+      "status": "active",
+      "registeredAt": "2026-01-19T11:05:05.890Z",
+      "isSharedComponent": true,
+      "componentPath": "src/app/components/primary-outline-button/primary-outline-button.component.ts",
+      "componentTag": "<app-primary-outline-button></app-primary-outline-button>"
     }
   }
 }

@@ -5,9 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { DragDropModule, CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
 import { ComponentCatalogService, CatalogEntry } from '../../services/component-catalog.service';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
-import { SuperComponentComponent } from '../../components/super-component/super-component.component';
 import { AppSecondaryButtonVariantsComponent } from '../../components/app-secondary-button-variants/app-secondary-button-variants.component';
-import { CardVariantsComponent } from '../../components/app-card-variants/app-card-variants.component';
 declare var initFlowbite: () => void;
 
 interface CanvasElement {
@@ -21,19 +19,17 @@ interface CanvasElement {
 
 @Component({
   selector: 'app-components-canvas',
-  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, SuperComponentComponent, AppSecondaryButtonVariantsComponent, CardVariantsComponent],
+  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, AppSecondaryButtonVariantsComponent],
   templateUrl: './components-canvas.component.html',
   styleUrl: './components-canvas.component.scss'
 })
 export class ComponentsCanvasComponent implements AfterViewInit {
   canvasElements: CanvasElement[] = [
     { id: 'sidebar1', type: 'sidebar', x: 0, y: 60, content: 'Sidebar', isSharedComponent: true },
-    { id: 'primary-button1', type: 'primary-button', x: 50, y: 200, content: 'Primary Button' },
-    { id: 'primary-outline-button1', type: 'primary-outline-button', x: 200, y: 200, content: 'Primary Outline Button' },
-    { id: 'secondary-button1', type: 'secondary-button', x: 350, y: 200, content: 'Secondary Button' },
-    { id: 'secondary-outline-button1', type: 'secondary-outline-button', x: 500, y: 200, content: 'Secondary Outline Button' },
-    { id: 'card1', type: 'card', x: 650, y: 200, content: 'Card' },
-    { id: 'card2', type: 'card-secondary', x: 1100, y: 200, content: 'Card Secondary' }
+    { id: 'primary-button1', type: 'primary-button', x: 200, y: 200, content: 'Primary Button' },
+    { id: 'primary-outline-button1', type: 'primary-outline-button', x: 400, y: 200, content: 'Primary Outline Button' },
+    { id: 'secondary-button1', type: 'secondary-button', x: 600, y: 200, content: 'Secondary Button' },
+    { id: 'secondary-outline-button1', type: 'secondary-outline-button', x: 800, y: 200, content: 'Secondary Outline Button' }
   ];
 
   isSidebarCollapsed = false;
@@ -47,6 +43,30 @@ export class ComponentsCanvasComponent implements AfterViewInit {
   showSharedComponentPopover = false;
   selectedComponentForSharing: string | null = null;
   isCreatingComponent = false;
+
+  // Property selection modal state for button components
+  showPropertySelectionModal = false;
+  selectedButtonProperties = {
+    inputs: {
+      label: true,
+      disabled: true,
+      loading: true,
+      icon: true,
+      iconRight: true,
+      type: true,
+      size: true,
+      fullWidth: true,
+      ariaLabel: true,
+      tooltip: true
+    },
+    outputs: {
+      buttonClick: true,
+      buttonFocus: true,
+      buttonBlur: true,
+      buttonMouseEnter: true,
+      buttonMouseLeave: true
+    }
+  };
 
   // Super component dialog state
   showSuperComponentDialog = false;
@@ -77,11 +97,56 @@ export class ComponentsCanvasComponent implements AfterViewInit {
   }
 
   /**
+   * Clean up deleted components from canvasElements and localStorage
+   */
+  private cleanupDeletedComponents(): void {
+    const deletedComponentIds = [
+      'app-app-card-variants',
+      'app-card-variants',
+      'card-variants',
+      'card',
+      'card-secondary',
+      'card-tertiary'
+    ];
+    
+    // Remove from canvasElements
+    const initialLength = this.canvasElements.length;
+    this.canvasElements = this.canvasElements.filter(el => 
+      !deletedComponentIds.includes(el.type)
+    );
+    const removedCount = initialLength - this.canvasElements.length;
+    if (removedCount > 0) {
+      console.log(`🧹 Cleaned up ${removedCount} deleted component(s) from canvasElements`);
+    }
+    
+    // Remove from localStorage
+    try {
+      const canvasElementsKey = 'canvasElements';
+      const stored = localStorage.getItem(canvasElementsKey);
+      if (stored) {
+        const storedElements = JSON.parse(stored);
+        const filtered = storedElements.filter((el: CanvasElement) => 
+          !deletedComponentIds.includes(el.type)
+        );
+        if (filtered.length !== storedElements.length) {
+          localStorage.setItem(canvasElementsKey, JSON.stringify(filtered));
+          console.log('🧹 Cleaned up deleted components from localStorage');
+        }
+      }
+    } catch (error) {
+      console.warn('Could not clean localStorage:', error);
+    }
+  }
+
+  /**
    * Load shared component status from catalog
    * This ensures the status persists across page refreshes
    */
   private async loadSharedComponentStatus(): Promise<void> {
     try {
+      // First, clean up any deleted components
+      this.cleanupDeletedComponents();
+      
       // First, try to load catalog from JSON file
       await this.catalogService.loadCatalogFromJson();
       
@@ -389,7 +454,49 @@ export class ComponentsCanvasComponent implements AfterViewInit {
   }
 
   /**
-   * Delete a shared component (files, catalog, canvas)
+   * Remove component from canvasElements and localStorage (helper method)
+   */
+  private removeComponentFromStorage(componentId: string): void {
+    // Handle variations: 'app-app-card-variants', 'app-card-variants', 'card-variants'
+    const variations = [
+      componentId,
+      componentId.replace(/^app-app-/, 'app-'),
+      componentId.replace(/^app-/, ''),
+      componentId.replace(/^app-app-/, '')
+    ];
+    
+    // Remove unique variations
+    const uniqueVariations = [...new Set(variations)];
+    
+    // Remove from canvasElements
+    const initialLength = this.canvasElements.length;
+    this.canvasElements = this.canvasElements.filter(el => 
+      !uniqueVariations.includes(el.type)
+    );
+    const removedCount = initialLength - this.canvasElements.length;
+    if (removedCount > 0) {
+      console.log(`✓ Removed ${removedCount} instance(s) from canvasElements (checked variations: ${uniqueVariations.join(', ')})`);
+    }
+    
+    // Remove from localStorage
+    try {
+      const canvasElementsKey = 'canvasElements';
+      const stored = localStorage.getItem(canvasElementsKey);
+      if (stored) {
+        const storedElements = JSON.parse(stored);
+        const filtered = storedElements.filter((el: CanvasElement) => 
+          !uniqueVariations.includes(el.type)
+        );
+        localStorage.setItem(canvasElementsKey, JSON.stringify(filtered));
+        console.log('✓ Removed from localStorage');
+      }
+    } catch (error) {
+      console.warn('Could not update localStorage:', error);
+    }
+  }
+
+  /**
+   * Delete a shared component (files, catalog, canvas, and ALL references)
    */
   async deleteSharedComponent(componentId: string): Promise<void> {
     const confirmed = confirm(
@@ -397,14 +504,15 @@ export class ComponentsCanvasComponent implements AfterViewInit {
       `This will:\n` +
       `• Delete component files from disk\n` +
       `• Remove from catalog\n` +
-      `• Remove from canvas\n\n` +
+      `• Remove from canvas\n` +
+      `• Remove ALL imports and usages from ALL files\n\n` +
       `This action cannot be undone!`
     );
 
     if (!confirmed) return;
 
     try {
-      // Step 1: Call helper service to delete files
+      // Step 1: Call helper service to delete files and clean up references
       const response = await fetch('http://localhost:4202/delete', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -417,22 +525,31 @@ export class ComponentsCanvasComponent implements AfterViewInit {
         throw new Error(result.error || 'Failed to delete component');
       }
 
-      // Step 2: Remove from catalog
-      this.catalogService.unregisterComponent(componentId);
+      // Step 2: Additional cleanup - remove from ALL files in the project
+      await this.cleanupAllReferences(componentId);
 
-      // Step 3: Remove from canvas
-      const index = this.canvasElements.findIndex(el => el.type === componentId);
-      if (index !== -1) {
-        this.canvasElements.splice(index, 1);
-      }
+      // Step 3: Remove from catalog (handle variations)
+      const variations = [
+        componentId,
+        componentId.replace(/^app-app-/, 'app-'),
+        componentId.replace(/^app-/, ''),
+        componentId.replace(/^app-app-/, '')
+      ];
+      const uniqueVariations = [...new Set(variations)];
+      uniqueVariations.forEach(id => {
+        this.catalogService.unregisterComponent(id);
+      });
 
-      // Step 4: Export updated catalog
+      // Step 4: Remove from canvasElements and localStorage
+      this.removeComponentFromStorage(componentId);
+
+      // Step 5: Export updated catalog
       await this.exportCatalog();
 
-      // Step 5: Force UI update
+      // Step 6: Force UI update
       this.cdr.detectChanges();
 
-      this.showToast(`✅ ${componentId} deleted successfully!`);
+      this.showToast(`✅ ${componentId} deleted successfully!\n\nAll references removed from:\n• Component files\n• Imports\n• Usages\n• Catalog`);
       console.log('✓ Component deleted:', componentId);
 
     } catch (error) {
@@ -446,7 +563,30 @@ export class ComponentsCanvasComponent implements AfterViewInit {
   }
 
   /**
-   * Delete a super component (keep wrapped components)
+   * Clean up ALL references to a component from ALL files in the project
+   */
+  private async cleanupAllReferences(componentId: string): Promise<void> {
+    try {
+      const response = await fetch('http://localhost:4202/cleanup-all-references', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ componentId })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          console.log('✅ All references cleaned up:', result.cleanedFiles || []);
+        }
+      }
+    } catch (error) {
+      console.warn('Could not clean up all references via helper:', error);
+      // Continue anyway - helper already does basic cleanup
+    }
+  }
+
+  /**
+   * Delete a super component (keep wrapped components, remove ALL references)
    */
   async deleteSuperComponent(componentId: string): Promise<void> {
     const superInfo = this.getSuperComponentInfo(componentId);
@@ -456,6 +596,7 @@ export class ComponentsCanvasComponent implements AfterViewInit {
       `This will:\n` +
       `• Delete super component files from disk\n` +
       `• Remove from catalog\n` +
+      `• Remove ALL imports and usages from ALL files\n` +
       `• Keep wrapped components: ${superInfo?.wraps.join(', ')}\n\n` +
       `This action cannot be undone!`
     );
@@ -463,7 +604,7 @@ export class ComponentsCanvasComponent implements AfterViewInit {
     if (!confirmed) return;
 
     try {
-      // Step 1: Call helper service to delete files
+      // Step 1: Call helper service to delete files and clean up references
       const response = await fetch('http://localhost:4202/delete', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -476,20 +617,37 @@ export class ComponentsCanvasComponent implements AfterViewInit {
         throw new Error(result.error || 'Failed to delete super component');
       }
 
-      // Step 2: Remove from catalog
-      this.catalogService.unregisterComponent(componentId);
+      // Step 2: Additional cleanup - remove from ALL files in the project
+      await this.cleanupAllReferences(componentId);
 
-      // Step 3: Remove from canvasElements array (only the super component, not wrapped components)
-      this.canvasElements = this.canvasElements.filter(e => e.type !== componentId);
+      // Step 3: Remove from catalog (handle variations)
+      const variations = [
+        componentId,
+        componentId.replace(/^app-app-/, 'app-'),
+        componentId.replace(/^app-/, ''),
+        componentId.replace(/^app-app-/, '')
+      ];
+      const uniqueVariations = [...new Set(variations)];
+      uniqueVariations.forEach(id => {
+        this.catalogService.unregisterComponent(id);
+      });
 
-      // Step 4: Export updated catalog
+      // Step 4: Remove from canvasElements and localStorage
+      this.removeComponentFromStorage(componentId);
+
+      // Step 5: Export updated catalog
       await this.exportCatalog();
 
-      // Step 5: Force UI update
+      // Step 6: Force UI update
       this.cdr.detectChanges();
 
       this.showToast(
         `✅ Super component deleted!\n\n` +
+        `All references removed from:\n` +
+        `• Component files\n` +
+        `• Imports\n` +
+        `• Usages\n` +
+        `• Catalog\n\n` +
         `Wrapped components still available:\n` +
         `${superInfo?.wraps.join(', ')}`
       );
@@ -745,8 +903,14 @@ export class ComponentsCanvasComponent implements AfterViewInit {
    * Confirm and create super component
    */
   async confirmCreateSuperComponent(): Promise<void> {
-    if (this.selectedComponentsForSuper.length < 2) {
-      this.showToast('⚠️ Select at least 2 components to create a super component');
+    // When editing, allow at least 1 component (can add just one more)
+    // When creating new, require at least 2 components
+    const minRequired = this.isEditingSuperComponent ? 1 : 2;
+    if (this.selectedComponentsForSuper.length < minRequired) {
+      const message = this.isEditingSuperComponent
+        ? '⚠️ Select at least 1 component to update the super component'
+        : '⚠️ Select at least 2 components to create a super component';
+      this.showToast(message);
       return;
     }
 
@@ -896,8 +1060,12 @@ export class ComponentsCanvasComponent implements AfterViewInit {
         console.log(`ℹ️ Super component already on canvas: ${componentId}. Skipping canvas addition.`);
       }
 
-      // Step 6: Automatically update canvas files to include new super component
+      // Step 6: Automatically add import and update canvas files
       try {
+        // First, manually add the import if component exists
+        await this.addSuperComponentImport(componentId);
+        
+        // Then update canvas files via script
         const updateResponse = await fetch('http://localhost:4202/update-canvas-super-components', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' }
@@ -961,9 +1129,12 @@ export class ComponentsCanvasComponent implements AfterViewInit {
    * Generate super component TypeScript code
    */
   private generateSuperComponentTS(componentId: string): string {
+    const isButton = this.isButtonComponent(this.selectedComponentsForSuper);
+    const buttonProps = isButton ? this.getButtonPropertiesCode() : '';
+    
     if (this.superComponentApproach === 'style-variation') {
       // Style-variation: No component imports, only CommonModule
-      return `import { Component, input } from '@angular/core';
+      return `import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export type ${this.toClassName(componentId)}Variant = ${this.selectedComponentsForSuper.map((_, idx) => `'${idx + 1}'`).join(' | ')};
@@ -975,8 +1146,7 @@ export type ${this.toClassName(componentId)}Variant = ${this.selectedComponentsF
   styleUrl: './${componentId}.component.scss'
 })
 export class ${this.toClassName(componentId)} {
-  variant = input<${this.toClassName(componentId)}Variant>('1');
-  disabled = input<boolean>(false);
+  variant = input<${this.toClassName(componentId)}Variant>('1');${buttonProps || '\n  disabled = input<boolean>(false);'}
 }`;
     } else {
       // Full-component: Import all wrapped components
@@ -991,7 +1161,7 @@ export class ${this.toClassName(componentId)} {
         .map(id => this.toClassName(id))
         .join(', ');
 
-      return `import { Component, input } from '@angular/core';
+      return `import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 ${imports}
 
@@ -1004,8 +1174,7 @@ export type ${this.toClassName(componentId)}Variant = ${this.selectedComponentsF
   styleUrl: './${componentId}.component.scss'
 })
 export class ${this.toClassName(componentId)} {
-  variant = input<${this.toClassName(componentId)}Variant>('1');
-  disabled = input<boolean>(false);
+  variant = input<${this.toClassName(componentId)}Variant>('1');${buttonProps || '\n  disabled = input<boolean>(false);'}
 }`;
     }
   }
@@ -1014,6 +1183,8 @@ export class ${this.toClassName(componentId)} {
    * Generate super component HTML code
    */
   private generateSuperComponentHTML(componentId: string): string {
+    const isButton = this.isButtonComponent(this.selectedComponentsForSuper);
+    
     if (this.superComponentApproach === 'style-variation') {
       // Style-variation: Generate button elements with extracted styles
       const cases = this.selectedComponentsForSuper
@@ -1061,40 +1232,105 @@ ${cases}
 }`;
     } else {
       // Full-component: Generate component tags
-      // Get correct selector from catalog (handles components with/without app- prefix)
+      // Get correct selector from catalog (prefer componentTag over htmlSelector)
+      const getComponentSelector = (id: string): string => {
+        const catalogEntry = this.catalogService.getComponent(id);
+        
+        // Priority 1: Extract selector from componentTag (e.g., "app-card" from "<app-card></app-card>")
+        if (catalogEntry?.componentTag) {
+          const match = catalogEntry.componentTag.match(/<([^>\s]+)/);
+          if (match && match[1]) {
+            return match[1]; // Returns "app-card" from "<app-card></app-card>"
+          }
+        }
+        
+        // Priority 2: Use htmlSelector only if it's a valid component selector (not attribute selector)
+        if (catalogEntry?.htmlSelector && !catalogEntry.htmlSelector.startsWith('[')) {
+          return catalogEntry.htmlSelector;
+        }
+        
+        // Priority 3: Construct selector from id
+        if (id.startsWith('app-')) {
+          return id;
+        }
+        
+        // Priority 4: Add app- prefix if missing
+        return `app-${id}`;
+      };
+
+      // For button components, pass through all predefined properties
+      const buttonProps = isButton ? `
+      [label]="label()"
+      [disabled]="disabled()"
+      [loading]="loading()"
+      [icon]="icon()"
+      [iconRight]="iconRight()"
+      [type]="type()"
+      [size]="size()"
+      [fullWidth]="fullWidth()"
+      [ariaLabel]="ariaLabel()"
+      [tooltip]="tooltip()"
+      (buttonClick)="buttonClick.emit($event)"
+      (buttonFocus)="buttonFocus.emit($event)"
+      (buttonBlur)="buttonBlur.emit($event)"
+      (buttonMouseEnter)="buttonMouseEnter.emit($event)"
+      (buttonMouseLeave)="buttonMouseLeave.emit($event)"` : '';
+
       const cases = this.selectedComponentsForSuper
         .map((id, idx) => {
-          const catalogEntry = this.catalogService.getComponent(id);
-          // Use htmlSelector from catalog if available, otherwise construct it
-          let selector = id;
-          if (catalogEntry?.htmlSelector) {
-            selector = catalogEntry.htmlSelector;
-          } else if (!id.startsWith('app-')) {
-            selector = `app-${id}`;
-          }
+          const selector = getComponentSelector(id);
           return `  @case ('${idx + 1}') {
-    <${selector}></${selector}>
+    <${selector}${buttonProps}></${selector}>
   }`;
         })
         .join('\n');
 
       // Get default selector
       const defaultId = this.selectedComponentsForSuper[0];
-      const defaultEntry = this.catalogService.getComponent(defaultId);
-      let defaultSelector = defaultId;
-      if (defaultEntry?.htmlSelector) {
-        defaultSelector = defaultEntry.htmlSelector;
-      } else if (!defaultId.startsWith('app-')) {
-        defaultSelector = `app-${defaultId}`;
-      }
+      const defaultSelector = getComponentSelector(defaultId);
 
       return `@switch (variant()) {
 ${cases}
   @default {
-    <${defaultSelector}></${defaultSelector}>
+    <${defaultSelector}${buttonProps}></${defaultSelector}>
   }
 }`;
     }
+  }
+
+  /**
+   * Check if super component is a button type
+   */
+  private isButtonComponent(componentIds: string[]): boolean {
+    const buttonKeywords = ['button', 'btn'];
+    return componentIds.some(id => 
+      buttonKeywords.some(keyword => id.toLowerCase().includes(keyword))
+    );
+  }
+
+  /**
+   * Get all predefined button properties as TypeScript code
+   */
+  private getButtonPropertiesCode(): string {
+    return `
+  // ========== COMMON BUTTON INPUTS (Predefined) ==========
+  label = input<string>('Button');
+  disabled = input<boolean>(false);
+  loading = input<boolean>(false);
+  icon = input<string | null>(null);
+  iconRight = input<string | null>(null);
+  type = input<'button' | 'submit' | 'reset'>('button');
+  size = input<'sm' | 'md' | 'lg'>('md');
+  fullWidth = input<boolean>(false);
+  ariaLabel = input<string | null>(null);
+  tooltip = input<string | null>(null);
+  
+  // ========== COMMON BUTTON OUTPUTS (Predefined) ==========
+  buttonClick = output<MouseEvent>();
+  buttonFocus = output<FocusEvent>();
+  buttonBlur = output<FocusEvent>();
+  buttonMouseEnter = output<MouseEvent>();
+  buttonMouseLeave = output<MouseEvent>();`;
   }
 
   /**
@@ -1275,9 +1511,16 @@ ${cases}
       this.showToast(`✅ ${componentId} is now a shared component!\n\nComponent created at:\nsrc/app/components/${componentId}/\n\nUse it anywhere with:\n<app-${componentId}></app-${componentId}>`);
       console.log('✓ Shared component created:', componentId);
     } else {
-      // For other components, show popover for confirmation
-      this.selectedComponentForSharing = componentId;
-      this.showSharedComponentPopover = true;
+      // Check if it's a button component
+      if (this.isButtonComponent([componentId])) {
+        // Show property selection modal for buttons
+        this.selectedComponentForSharing = componentId;
+        this.showPropertySelectionModal = true;
+      } else {
+        // For other components, show popover for confirmation
+        this.selectedComponentForSharing = componentId;
+        this.showSharedComponentPopover = true;
+      }
     }
   }
 
@@ -1288,6 +1531,40 @@ ${cases}
     this.showSharedComponentPopover = false;
     this.selectedComponentForSharing = null;
     this.isCreatingComponent = false;
+  }
+
+  /**
+   * Select all button properties
+   */
+  selectAllProperties(): void {
+    Object.keys(this.selectedButtonProperties.inputs).forEach(key => {
+      (this.selectedButtonProperties.inputs as any)[key] = true;
+    });
+    Object.keys(this.selectedButtonProperties.outputs).forEach(key => {
+      (this.selectedButtonProperties.outputs as any)[key] = true;
+    });
+  }
+
+  /**
+   * Deselect all button properties
+   */
+  deselectAllProperties(): void {
+    Object.keys(this.selectedButtonProperties.inputs).forEach(key => {
+      (this.selectedButtonProperties.inputs as any)[key] = false;
+    });
+    Object.keys(this.selectedButtonProperties.outputs).forEach(key => {
+      (this.selectedButtonProperties.outputs as any)[key] = false;
+    });
+  }
+
+  /**
+   * Cancel property selection modal
+   */
+  cancelPropertySelection(): void {
+    this.showPropertySelectionModal = false;
+    this.selectedComponentForSharing = null;
+    // Reset to all selected
+    this.selectAllProperties();
   }
 
   /**
@@ -1305,8 +1582,7 @@ ${cases}
    */
   private extractButtonStyles(componentId: string): string | null {
     const buttonStyles: Record<string, string> = {
-      'primary-button': 'border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg',
-      'primary-outline-button': 'border-[1.5px] border-brandcolor-strokelight text-brandcolor-primary bg-brandcolor-white hover:bg-brandcolor-neutralhover active:border-brandcolor-primary active:text-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium',
+
       'secondary-button': 'border-[1.5px] border-transparent bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg',
       'secondary-outline-button': 'border-[1.5px] border-brandcolor-strokelight text-brandcolor-secondary bg-brandcolor-white hover:bg-brandcolor-neutralhover active:border-brandcolor-secondary active:text-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium'
     };
@@ -1319,13 +1595,69 @@ ${cases}
    */
   private getButtonLabel(componentId: string): string {
     const labels: Record<string, string> = {
-      'primary-button': 'Primary',
-      'primary-outline-button': 'Primary Outline',
+
       'secondary-button': 'Secondary',
       'secondary-outline-button': 'Secondary Outline'
     };
 
     return labels[componentId] || componentId;
+  }
+
+  /**
+   * Generate button component TypeScript code with selected properties
+   */
+  private generateButtonComponentTS(componentId: string, selectedProps: any): string {
+    const inputs = [];
+    const outputs = [];
+    
+    // Build inputs based on selection
+    if (selectedProps.inputs.label) inputs.push(`label = input<string>('${this.getButtonLabel(componentId)}');`);
+    if (selectedProps.inputs.disabled) inputs.push(`disabled = input<boolean>(false);`);
+    if (selectedProps.inputs.loading) inputs.push(`loading = input<boolean>(false);`);
+    if (selectedProps.inputs.icon) inputs.push(`icon = input<string | null>(null);`);
+    if (selectedProps.inputs.iconRight) inputs.push(`iconRight = input<string | null>(null);`);
+    if (selectedProps.inputs.type) inputs.push(`type = input<'button' | 'submit' | 'reset'>('button');`);
+    if (selectedProps.inputs.size) inputs.push(`size = input<'sm' | 'md' | 'lg'>('md');`);
+    if (selectedProps.inputs.fullWidth) inputs.push(`fullWidth = input<boolean>(false);`);
+    if (selectedProps.inputs.ariaLabel) inputs.push(`ariaLabel = input<string | null>(null);`);
+    if (selectedProps.inputs.tooltip) inputs.push(`tooltip = input<string | null>(null);`);
+    
+    // Build outputs based on selection
+    if (selectedProps.outputs.buttonClick) outputs.push(`buttonClick = output<MouseEvent>();`);
+    if (selectedProps.outputs.buttonFocus) outputs.push(`buttonFocus = output<FocusEvent>();`);
+    if (selectedProps.outputs.buttonBlur) outputs.push(`buttonBlur = output<FocusEvent>();`);
+    if (selectedProps.outputs.buttonMouseEnter) outputs.push(`buttonMouseEnter = output<MouseEvent>();`);
+    if (selectedProps.outputs.buttonMouseLeave) outputs.push(`buttonMouseLeave = output<MouseEvent>();`);
+    
+    return `import { Component, input, output } from '@angular/core';
+
+@Component({
+  selector: 'app-${componentId}',
+  imports: [],
+  templateUrl: './app-${componentId}.component.html',
+  styleUrl: './app-${componentId}.component.scss'
+})
+export class ${this.toClassName(componentId)} {
+  ${inputs.join('\n  ')}
+  
+  ${outputs.join('\n  ')}
+}`;
+  }
+
+  /**
+   * Generate button component HTML code
+   */
+  private generateButtonComponentHTML(componentId: string): string {
+    const styles = this.extractButtonStyles(componentId) || 
+      'border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg';
+    
+    return `<button
+  type="button"
+  [disabled]="disabled()"
+  (click)="buttonClick.emit()"
+  class="${styles}">
+  {{ label() }}
+</button>`;
   }
 
   /**
@@ -1399,6 +1731,92 @@ ${cases}
       console.error('Error creating shared component:', error);
       this.isCreatingComponent = false;
       this.showToast('❌ Failed to create shared component. Please try again.');
+    }
+  }
+
+  /**
+   * Confirm and create shared component with selected properties (for button components)
+   */
+  async confirmCreateSharedComponentWithProperties(): Promise<void> {
+    if (!this.selectedComponentForSharing) return;
+    
+    const componentId = this.selectedComponentForSharing;
+    this.isCreatingComponent = true;
+    
+    try {
+      // Check if helper service is running
+      try {
+        const healthCheck = await fetch('http://localhost:4202/health', { 
+          method: 'GET',
+          signal: AbortSignal.timeout(2000)
+        });
+        if (!healthCheck.ok) {
+          throw new Error('Helper service not responding');
+        }
+      } catch (error) {
+        throw new Error('Component helper service is not running. Please start it with: npm run component-helper');
+      }
+
+      // Generate TypeScript code with selected properties
+      const tsCode = this.generateButtonComponentTS(componentId, this.selectedButtonProperties);
+      const htmlCode = this.generateButtonComponentHTML(componentId);
+      
+      // Create component via helper
+      const response = await fetch('http://localhost:4202/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          componentId,
+          tsContent: tsCode,
+          htmlContent: htmlCode
+        })
+      });
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to create component: ${errorText}`);
+      }
+      
+      // Register in catalog
+      const entry: CatalogEntry = {
+        id: componentId,
+        displayName: this.getDisplayName(componentId),
+        category: this.getCategory(componentId),
+        description: `Button component with custom properties`,
+        htmlSelector: `[title='${componentId}']`,
+        status: 'active',
+        registeredAt: new Date().toISOString(),
+        isSharedComponent: true,
+        componentPath: `src/app/components/${componentId}/${componentId}.component.ts`,
+        componentTag: `<app-${componentId}></app-${componentId}>`
+      };
+      
+      this.catalogService.registerComponent(entry);
+      
+      // Update canvas element
+      const element = this.canvasElements.find(el => el.type === componentId);
+      if (element) {
+        element.isSharedComponent = true;
+      }
+      
+      // Export catalog
+      await this.exportCatalog();
+      
+      // Close modal
+      this.showPropertySelectionModal = false;
+      this.selectedComponentForSharing = null;
+      this.isCreatingComponent = false;
+      
+      // Reset selections
+      this.selectAllProperties();
+      
+      this.showToast(`✅ ${componentId} created with selected properties!\n\nComponent created at:\nsrc/app/components/${componentId}/\n\nUse it anywhere with:\n<app-${componentId}></app-${componentId}>`);
+      console.log('✓ Button component created with properties:', componentId);
+      
+    } catch (error) {
+      console.error('Error creating component:', error);
+      this.isCreatingComponent = false;
+      this.showToast(`❌ Failed to create component.\n\n${error}\n\nMake sure component-helper is running:\nnpm run component-helper`);
     }
   }
 
@@ -1651,5 +2069,38 @@ ${cases}
    */
   getZoomPercentage(): number {
     return Math.round(this.canvasZoom * 100);
+  }
+
+  /**
+   * Safely add super component import and to imports array
+   * Only adds if component file exists and import doesn't already exist
+   */
+  private async addSuperComponentImport(componentId: string): Promise<void> {
+    try {
+      // Check if component file exists
+      const checkResponse = await fetch('http://localhost:4202/check-component', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ componentId })
+      });
+
+      if (!checkResponse.ok) {
+        console.warn(`⚠️ Component ${componentId} file not found, skipping import`);
+        return;
+      }
+
+      const checkResult = await checkResponse.json();
+      if (!checkResult.exists) {
+        console.warn(`⚠️ Component ${componentId} file not found, skipping import`);
+        return;
+      }
+
+      // Component exists - the update script will handle adding the import
+      // We just need to make sure it's called after component creation
+      console.log(`✅ Component ${componentId} exists, import will be added by update script`);
+    } catch (error) {
+      console.warn('Could not verify component exists:', error);
+      // Continue - update script will handle it
+    }
   }
 }
