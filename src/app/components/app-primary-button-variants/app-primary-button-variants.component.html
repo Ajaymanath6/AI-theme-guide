@@ -9,6 +9,11 @@
       [label]="label()"
       (buttonClick)="buttonClick.emit($event)"></app-primary-outline-button>
   }
+  @case ('3') {
+    <app-neutral-button
+      [label]="label()"
+      (buttonClick)="buttonClick.emit($event)"></app-neutral-button>
+  }
   @default {
     <app-primary-button
       [label]="label()"

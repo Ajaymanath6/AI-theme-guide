@@ -10,6 +10,7 @@ import { PrimaryButtonVariantsComponent } from '../../components/app-primary-but
 declare var initFlowbite: () => void;
 
 
+
 interface CanvasElement {
   id: string;
   type: string;
@@ -21,7 +22,7 @@ interface CanvasElement {
 
 @Component({
   selector: 'app-components-canvas',
-  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, AppSecondaryButtonVariantsComponent, PrimaryButtonVariantsComponent],
+  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, PrimaryButtonVariantsComponent],
   templateUrl: './components-canvas.component.html',
   styleUrl: './components-canvas.component.scss'
 })
@@ -30,6 +31,7 @@ export class ComponentsCanvasComponent implements AfterViewInit {
     { id: 'sidebar1', type: 'sidebar', x: 0, y: 60, content: 'Sidebar', isSharedComponent: true },
     { id: 'primary-button1', type: 'primary-button', x: 200, y: 200, content: 'Primary Button' },
     { id: 'primary-outline-button1', type: 'primary-outline-button', x: 400, y: 200, content: 'Primary Outline Button' },
+    { id: 'neutral-button1', type: 'neutral-button', x: 1000, y: 200, content: 'Neutral Button' },
     { id: 'app-primary-button-variants1', type: 'app-primary-button-variants', x: 200, y: 300, content: 'Primary Button Variants', isSharedComponent: true },
     { id: 'secondary-button1', type: 'secondary-button', x: 600, y: 200, content: 'Secondary Button' },
     { id: 'secondary-outline-button1', type: 'secondary-outline-button', x: 800, y: 200, content: 'Secondary Outline Button' }

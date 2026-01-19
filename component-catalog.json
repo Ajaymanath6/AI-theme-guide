@@ -1,7 +1,7 @@
 {
   "catalogId": "design-system-v1",
   "version": "1.0.0",
-  "lastUpdated": "2026-01-19T11:38:10.106Z",
+  "lastUpdated": "2026-01-19T12:01:56.392Z",
   "registeredComponents": {
     "sidebar": {
       "id": "sidebar",
@@ -96,18 +96,20 @@
       "id": "app-primary-button-variants",
       "displayName": "app-primary-button-variants",
       "category": "super-components",
-      "description": "Full component wrapping super component wrapping: primary-button, primary-outline-button",
+      "description": "Full component wrapping super component wrapping: primary-button, primary-outline-button, neutral-button",
       "htmlSelector": "app-primary-button-variants",
       "status": "active",
       "registeredAt": "2026-01-19T11:38:10.105Z",
       "isSuperComponent": true,
       "wraps": [
         "primary-button",
-        "primary-outline-button"
+        "primary-outline-button",
+        "neutral-button"
       ],
       "variants": [
         "1",
-        "2"
+        "2",
+        "3"
       ],
       "componentPath": "src/app/components/app-primary-button-variants/app-primary-button-variants.component.ts",
       "componentTag": "<app-primary-button-variants></app-primary-button-variants>"
@@ -156,6 +158,39 @@
       "isSharedComponent": true,
       "componentPath": "src/app/components/primary-outline-button/primary-outline-button.component.ts",
       "componentTag": "<app-primary-outline-button></app-primary-outline-button>",
+      "properties": {
+        "inputs": {
+          "label": true,
+          "disabled": false,
+          "loading": false,
+          "icon": false,
+          "iconRight": false,
+          "type": false,
+          "size": false,
+          "fullWidth": false,
+          "ariaLabel": false,
+          "tooltip": false
+        },
+        "outputs": {
+          "buttonClick": true,
+          "buttonFocus": false,
+          "buttonBlur": false,
+          "buttonMouseEnter": false,
+          "buttonMouseLeave": false
+        }
+      }
+    },
+    "neutral-button": {
+      "id": "neutral-button",
+      "displayName": "neutral-button",
+      "category": "general",
+      "description": "Button component with custom properties",
+      "htmlSelector": "[title='neutral-button']",
+      "status": "active",
+      "registeredAt": "2026-01-19T12:01:37.083Z",
+      "isSharedComponent": true,
+      "componentPath": "src/app/components/neutral-button/neutral-button.component.ts",
+      "componentTag": "<app-neutral-button></app-neutral-button>",
       "properties": {
         "inputs": {
           "label": true,
