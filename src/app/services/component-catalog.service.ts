@@ -15,6 +15,11 @@ export interface CatalogEntry {
   isSuperComponent?: boolean;
   wraps?: string[];  // IDs of components this super component wraps
   variants?: string[];  // Variant names
+  // Component properties (for buttons and other components)
+  properties?: {
+    inputs: { [key: string]: boolean };
+    outputs: { [key: string]: boolean };
+  };
 }
 
 export interface ComponentCatalog {

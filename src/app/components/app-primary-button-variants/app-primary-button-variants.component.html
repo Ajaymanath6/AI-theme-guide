@@ -1,0 +1,17 @@
+@switch (variant()) {
+  @case ('1') {
+    <app-primary-button
+      [label]="label()"
+      (buttonClick)="buttonClick.emit($event)"></app-primary-button>
+  }
+  @case ('2') {
+    <app-primary-outline-button
+      [label]="label()"
+      (buttonClick)="buttonClick.emit($event)"></app-primary-outline-button>
+  }
+  @default {
+    <app-primary-button
+      [label]="label()"
+      (buttonClick)="buttonClick.emit($event)"></app-primary-button>
+  }
+}

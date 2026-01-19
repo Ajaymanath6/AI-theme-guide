@@ -6,7 +6,9 @@ import { DragDropModule, CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/
 import { ComponentCatalogService, CatalogEntry } from '../../services/component-catalog.service';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { AppSecondaryButtonVariantsComponent } from '../../components/app-secondary-button-variants/app-secondary-button-variants.component';
+import { PrimaryButtonVariantsComponent } from '../../components/app-primary-button-variants/app-primary-button-variants.component';
 declare var initFlowbite: () => void;
+
 
 interface CanvasElement {
   id: string;
@@ -19,7 +21,7 @@ interface CanvasElement {
 
 @Component({
   selector: 'app-components-canvas',
-  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, AppSecondaryButtonVariantsComponent],
+  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, PrimaryButtonVariantsComponent],
   templateUrl: './components-canvas.component.html',
   styleUrl: './components-canvas.component.scss'
 })
@@ -1135,7 +1137,6 @@ export class ComponentsCanvasComponent implements AfterViewInit {
     if (this.superComponentApproach === 'style-variation') {
       // Style-variation: No component imports, only CommonModule
       return `import { Component, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 export type ${this.toClassName(componentId)}Variant = ${this.selectedComponentsForSuper.map((_, idx) => `'${idx + 1}'`).join(' | ')};
 
@@ -1162,7 +1163,6 @@ export class ${this.toClassName(componentId)} {
         .join(', ');
 
       return `import { Component, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
 ${imports}
 
 export type ${this.toClassName(componentId)}Variant = ${this.selectedComponentsForSuper.map((_, idx) => `'${idx + 1}'`).join(' | ')};
@@ -1258,23 +1258,36 @@ ${cases}
         return `app-${id}`;
       };
 
-      // For button components, pass through all predefined properties
-      const buttonProps = isButton ? `
-      [label]="label()"
-      [disabled]="disabled()"
-      [loading]="loading()"
-      [icon]="icon()"
-      [iconRight]="iconRight()"
-      [type]="type()"
-      [size]="size()"
-      [fullWidth]="fullWidth()"
-      [ariaLabel]="ariaLabel()"
-      [tooltip]="tooltip()"
-      (buttonClick)="buttonClick.emit($event)"
-      (buttonFocus)="buttonFocus.emit($event)"
-      (buttonBlur)="buttonBlur.emit($event)"
-      (buttonMouseEnter)="buttonMouseEnter.emit($event)"
-      (buttonMouseLeave)="buttonMouseLeave.emit($event)"` : '';
+      // For button components, detect which properties actually exist in base components
+      // and only pass those to avoid binding errors
+      let buttonProps = '';
+      if (isButton) {
+        const availableProps = this.detectAvailableButtonProperties(this.selectedComponentsForSuper);
+        const props: string[] = [];
+        
+        // Add inputs that exist (using bracket notation for index signatures)
+        if (availableProps.inputs['label']) props.push(`[label]="label()"`);
+        if (availableProps.inputs['disabled']) props.push(`[disabled]="disabled()"`);
+        if (availableProps.inputs['loading']) props.push(`[loading]="loading()"`);
+        if (availableProps.inputs['icon']) props.push(`[icon]="icon()"`);
+        if (availableProps.inputs['iconRight']) props.push(`[iconRight]="iconRight()"`);
+        if (availableProps.inputs['type']) props.push(`[type]="type()"`);
+        if (availableProps.inputs['size']) props.push(`[size]="size()"`);
+        if (availableProps.inputs['fullWidth']) props.push(`[fullWidth]="fullWidth()"`);
+        if (availableProps.inputs['ariaLabel']) props.push(`[ariaLabel]="ariaLabel()"`);
+        if (availableProps.inputs['tooltip']) props.push(`[tooltip]="tooltip()"`);
+        
+        // Add outputs that exist (using bracket notation for index signatures)
+        if (availableProps.outputs['buttonClick']) props.push(`(buttonClick)="buttonClick.emit($event)"`);
+        if (availableProps.outputs['buttonFocus']) props.push(`(buttonFocus)="buttonFocus.emit($event)"`);
+        if (availableProps.outputs['buttonBlur']) props.push(`(buttonBlur)="buttonBlur.emit($event)"`);
+        if (availableProps.outputs['buttonMouseEnter']) props.push(`(buttonMouseEnter)="buttonMouseEnter.emit($event)"`);
+        if (availableProps.outputs['buttonMouseLeave']) props.push(`(buttonMouseLeave)="buttonMouseLeave.emit($event)"`);
+        
+        if (props.length > 0) {
+          buttonProps = '\n      ' + props.join('\n      ');
+        }
+      }
 
       const cases = this.selectedComponentsForSuper
         .map((id, idx) => {
@@ -1777,7 +1790,7 @@ export class ${this.toClassName(componentId)} {
         throw new Error(`Failed to create component: ${errorText}`);
       }
       
-      // Register in catalog
+      // Register in catalog with selected properties
       const entry: CatalogEntry = {
         id: componentId,
         displayName: this.getDisplayName(componentId),
@@ -1788,7 +1801,11 @@ export class ${this.toClassName(componentId)} {
         registeredAt: new Date().toISOString(),
         isSharedComponent: true,
         componentPath: `src/app/components/${componentId}/${componentId}.component.ts`,
-        componentTag: `<app-${componentId}></app-${componentId}>`
+        componentTag: `<app-${componentId}></app-${componentId}>`,
+        properties: {
+          inputs: { ...this.selectedButtonProperties.inputs },
+          outputs: { ...this.selectedButtonProperties.outputs }
+        }
       };
       
       this.catalogService.registerComponent(entry);
@@ -2069,6 +2086,60 @@ export class ${this.toClassName(componentId)} {
    */
   getZoomPercentage(): number {
     return Math.round(this.canvasZoom * 100);
+  }
+
+  /**
+   * Detect which button properties actually exist in the base components
+   * Reads properties from catalog entries (stored when creating shared components)
+   */
+  private detectAvailableButtonProperties(componentIds: string[]): {
+    inputs: { [key: string]: boolean },
+    outputs: { [key: string]: boolean }
+  } {
+    // Get properties from catalog entries
+    const allProperties = componentIds
+      .map(id => {
+        const catalogEntry = this.catalogService.getComponent(id);
+        return catalogEntry?.properties || null;
+      })
+      .filter(p => p !== null);
+    
+    if (allProperties.length === 0) {
+      // Fallback: return all properties if none found (for backwards compatibility)
+      console.warn('No properties found in catalog for components:', componentIds);
+      console.warn('Falling back to all properties. This may cause binding errors if components don\'t have all properties.');
+      return {
+        inputs: { label: true, disabled: true, loading: true, icon: true, iconRight: true, type: true, size: true, fullWidth: true, ariaLabel: true, tooltip: true },
+        outputs: { buttonClick: true, buttonFocus: true, buttonBlur: true, buttonMouseEnter: true, buttonMouseLeave: true }
+      };
+    }
+    
+    // Return properties that exist in ALL base components (intersection)
+    // This ensures super component only passes properties that all base components have
+    const result = {
+      inputs: {
+        label: allProperties.every(p => p.inputs['label']),
+        disabled: allProperties.every(p => p.inputs['disabled']),
+        loading: allProperties.every(p => p.inputs['loading']),
+        icon: allProperties.every(p => p.inputs['icon']),
+        iconRight: allProperties.every(p => p.inputs['iconRight']),
+        type: allProperties.every(p => p.inputs['type']),
+        size: allProperties.every(p => p.inputs['size']),
+        fullWidth: allProperties.every(p => p.inputs['fullWidth']),
+        ariaLabel: allProperties.every(p => p.inputs['ariaLabel']),
+        tooltip: allProperties.every(p => p.inputs['tooltip'])
+      },
+      outputs: {
+        buttonClick: allProperties.every(p => p.outputs['buttonClick']),
+        buttonFocus: allProperties.every(p => p.outputs['buttonFocus']),
+        buttonBlur: allProperties.every(p => p.outputs['buttonBlur']),
+        buttonMouseEnter: allProperties.every(p => p.outputs['buttonMouseEnter']),
+        buttonMouseLeave: allProperties.every(p => p.outputs['buttonMouseLeave'])
+      }
+    };
+    
+    console.log('Detected available properties from catalog:', result);
+    return result;
   }
 
   /**

@@ -143,9 +143,12 @@
           <!-- Neutral Button Component -->
           <!-- Super Component Rendering -->
           @if (isSuperComponent(element.type) && getSuperComponentInfo(element.type)) {
-                        @switch (element.type) {
+                                    @switch (element.type) {
               @case ('app-secondary-button-variants') {
                 <app-secondary-button-variants variant="1"></app-secondary-button-variants>
+              }
+              @case ('app-primary-button-variants') {
+                <app-primary-button-variants variant="1"></app-primary-button-variants>
               }
             }
             <!-- Unknown/deleted super components won't render anything -->
