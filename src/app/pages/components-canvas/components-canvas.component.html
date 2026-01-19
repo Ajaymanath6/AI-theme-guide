@@ -149,9 +149,20 @@
               Neutral
             </button>
           }
+          
+          <!-- Ghost Button Component -->
+          @if (element.type === 'ghost-button') {
+            <!-- Always show HTML on canvas for visual reference -->
+            <button
+              type="button"
+              class="text-brandcolor-primary bg-transparent hover:bg-brandcolor-fill active:bg-brandcolor-fill disabled:opacity-50 rounded-md px-4 py-2 font-medium">
+              Ghost
+            </button>
+          }
+          
           <!-- Super Component Rendering -->
           @if (isSuperComponent(element.type) && getSuperComponentInfo(element.type)) {
-                                                @switch (element.type) {
+                                                            @switch (element.type) {
               @case ('app-secondary-button-variants') {
                 <app-secondary-button-variants variant="1"></app-secondary-button-variants>
               }

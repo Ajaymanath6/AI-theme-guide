@@ -1,7 +1,7 @@
 {
   "catalogId": "design-system-v1",
   "version": "1.0.0",
-  "lastUpdated": "2026-01-19T12:01:56.392Z",
+  "lastUpdated": "2026-01-19T12:27:01.913Z",
   "registeredComponents": {
     "sidebar": {
       "id": "sidebar",
@@ -96,7 +96,7 @@
       "id": "app-primary-button-variants",
       "displayName": "app-primary-button-variants",
       "category": "super-components",
-      "description": "Full component wrapping super component wrapping: primary-button, primary-outline-button, neutral-button",
+      "description": "Full component wrapping super component wrapping: primary-button, primary-outline-button, neutral-button, ghost-button",
       "htmlSelector": "app-primary-button-variants",
       "status": "active",
       "registeredAt": "2026-01-19T11:38:10.105Z",
@@ -104,12 +104,14 @@
       "wraps": [
         "primary-button",
         "primary-outline-button",
-        "neutral-button"
+        "neutral-button",
+        "ghost-button"
       ],
       "variants": [
         "1",
         "2",
-        "3"
+        "3",
+        "4"
       ],
       "componentPath": "src/app/components/app-primary-button-variants/app-primary-button-variants.component.ts",
       "componentTag": "<app-primary-button-variants></app-primary-button-variants>"
@@ -191,6 +193,39 @@
       "isSharedComponent": true,
       "componentPath": "src/app/components/neutral-button/neutral-button.component.ts",
       "componentTag": "<app-neutral-button></app-neutral-button>",
+      "properties": {
+        "inputs": {
+          "label": true,
+          "disabled": false,
+          "loading": false,
+          "icon": false,
+          "iconRight": false,
+          "type": false,
+          "size": false,
+          "fullWidth": false,
+          "ariaLabel": false,
+          "tooltip": false
+        },
+        "outputs": {
+          "buttonClick": true,
+          "buttonFocus": false,
+          "buttonBlur": false,
+          "buttonMouseEnter": false,
+          "buttonMouseLeave": false
+        }
+      }
+    },
+    "ghost-button": {
+      "id": "ghost-button",
+      "displayName": "ghost-button",
+      "category": "general",
+      "description": "Button component with custom properties",
+      "htmlSelector": "[title='ghost-button']",
+      "status": "active",
+      "registeredAt": "2026-01-19T12:26:42.758Z",
+      "isSharedComponent": true,
+      "componentPath": "src/app/components/ghost-button/ghost-button.component.ts",
+      "componentTag": "<app-ghost-button></app-ghost-button>",
       "properties": {
         "inputs": {
           "label": true,

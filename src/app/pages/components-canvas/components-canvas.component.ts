@@ -11,6 +11,7 @@ declare var initFlowbite: () => void;
 
 
 
+
 interface CanvasElement {
   id: string;
   type: string;
@@ -31,6 +32,7 @@ export class ComponentsCanvasComponent implements AfterViewInit {
     { id: 'sidebar1', type: 'sidebar', x: 0, y: 60, content: 'Sidebar', isSharedComponent: true },
     { id: 'primary-button1', type: 'primary-button', x: 200, y: 200, content: 'Primary Button' },
     { id: 'primary-outline-button1', type: 'primary-outline-button', x: 400, y: 200, content: 'Primary Outline Button' },
+    { id: 'ghost-button1', type: 'ghost-button', x: 1200, y: 200, content: 'Ghost Button' },
     { id: 'neutral-button1', type: 'neutral-button', x: 1000, y: 200, content: 'Neutral Button' },
     { id: 'app-primary-button-variants1', type: 'app-primary-button-variants', x: 200, y: 300, content: 'Primary Button Variants', isSharedComponent: true },
     { id: 'secondary-button1', type: 'secondary-button', x: 600, y: 200, content: 'Secondary Button' },
@@ -1661,7 +1663,10 @@ ${cases}
    */
   private extractButtonStyles(componentId: string): string | null {
     const buttonStyles: Record<string, string> = {
-
+      'primary-button': 'border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg',
+      'primary-outline-button': 'border-[1.5px] border-brandcolor-strokelight text-brandcolor-primary bg-brandcolor-white hover:bg-brandcolor-neutralhover active:border-brandcolor-primary active:text-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium',
+      'ghost-button': 'text-brandcolor-primary bg-transparent hover:bg-brandcolor-fill active:bg-brandcolor-fill disabled:opacity-50 rounded-md px-4 py-2 font-medium',
+      'neutral-button': 'border-[1.5px] border-brandcolor-strokelight text-brandcolor-textweak bg-brandcolor-white hover:bg-brandcolor-neutralhover active:border-brandcolor-textweak active:text-brandcolor-textweak active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium',
       'secondary-button': 'border-[1.5px] border-transparent bg-brandcolor-secondary text-brandcolor-white hover:bg-brandcolor-secondaryhover focus:border-brandcolor-secondary active:border-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg',
       'secondary-outline-button': 'border-[1.5px] border-brandcolor-strokelight text-brandcolor-secondary bg-brandcolor-white hover:bg-brandcolor-neutralhover active:border-brandcolor-secondary active:text-brandcolor-secondary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium'
     };
@@ -1674,7 +1679,10 @@ ${cases}
    */
   private getButtonLabel(componentId: string): string {
     const labels: Record<string, string> = {
-
+      'primary-button': 'Primary',
+      'primary-outline-button': 'Primary Outline',
+      'ghost-button': 'Ghost',
+      'neutral-button': 'Neutral',
       'secondary-button': 'Secondary',
       'secondary-outline-button': 'Secondary Outline'
     };
@@ -1727,14 +1735,16 @@ export class ${this.toClassName(componentId)} {
   /**
    * Generate button component HTML code
    */
-  private generateButtonComponentHTML(componentId: string): string {
+  private generateButtonComponentHTML(componentId: string, selectedProps?: any): string {
     const styles = this.extractButtonStyles(componentId) || 
       'border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press disabled:opacity-50 rounded-md px-4 py-2 font-medium shadow-lg';
     
+    // Conditionally add disabled binding only if disabled was selected
+    const disabledBinding = selectedProps?.inputs?.disabled ? '\n  [disabled]="disabled()"' : '';
+    
     return `<button
-  type="button"
-  [disabled]="disabled()"
-  (click)="buttonClick.emit()"
+  type="button"${disabledBinding}
+  (click)="buttonClick.emit($event)"
   class="${styles}">
   {{ label() }}
 </button>`;
@@ -1839,7 +1849,7 @@ export class ${this.toClassName(componentId)} {
 
       // Generate TypeScript code with selected properties
       const tsCode = this.generateButtonComponentTS(componentId, this.selectedButtonProperties);
-      const htmlCode = this.generateButtonComponentHTML(componentId);
+      const htmlCode = this.generateButtonComponentHTML(componentId, this.selectedButtonProperties);
       
       // Create component via helper
       const response = await fetch('http://localhost:4202/generate', {

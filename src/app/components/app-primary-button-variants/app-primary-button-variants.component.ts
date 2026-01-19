@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { PrimaryButtonComponent } from '../primary-button/primary-button.component';
 import { PrimaryOutlineButtonComponent } from '../primary-outline-button/primary-outline-button.component';
 import { NeutralButtonComponent } from '../neutral-button/neutral-button.component';
+import { GhostButtonComponent } from '../ghost-button/ghost-button.component';
 
-export type PrimaryButtonVariantsComponentVariant = '1' | '2' | '3';
+export type PrimaryButtonVariantsComponentVariant = '1' | '2' | '3' | '4';
 
 @Component({
   selector: 'app-primary-button-variants',
-  imports: [CommonModule, PrimaryButtonComponent, PrimaryOutlineButtonComponent, NeutralButtonComponent],
+  standalone: true,
+  imports: [CommonModule, PrimaryButtonComponent, PrimaryOutlineButtonComponent, NeutralButtonComponent, GhostButtonComponent],
   templateUrl: './app-primary-button-variants.component.html',
   styleUrl: './app-primary-button-variants.component.scss'
 })
