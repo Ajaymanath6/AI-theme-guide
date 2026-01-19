@@ -22,7 +22,7 @@ interface CanvasElement {
 
 @Component({
   selector: 'app-components-canvas',
-  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, PrimaryButtonVariantsComponent],
+  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, AppSecondaryButtonVariantsComponent, PrimaryButtonVariantsComponent],
   templateUrl: './components-canvas.component.html',
   styleUrl: './components-canvas.component.scss'
 })
@@ -1199,11 +1199,13 @@ export class ComponentsCanvasComponent implements AfterViewInit {
     if (this.superComponentApproach === 'style-variation') {
       // Style-variation: No component imports, only CommonModule
       return `import { Component, input, output } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 export type ${this.toClassName(componentId)}Variant = ${this.selectedComponentsForSuper.map((_, idx) => `'${idx + 1}'`).join(' | ')};
 
 @Component({
   selector: '${componentId}',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './${componentId}.component.html',
   styleUrl: './${componentId}.component.scss'
@@ -1225,12 +1227,14 @@ export class ${this.toClassName(componentId)} {
         .join(', ');
 
       return `import { Component, input, output } from '@angular/core';
+import { CommonModule } from '@angular/common';
 ${imports}
 
 export type ${this.toClassName(componentId)}Variant = ${this.selectedComponentsForSuper.map((_, idx) => `'${idx + 1}'`).join(' | ')};
 
 @Component({
   selector: '${componentId}',
+  standalone: true,
   imports: [CommonModule, ${importsList}],
   templateUrl: './${componentId}.component.html',
   styleUrl: './${componentId}.component.scss'
@@ -1708,9 +1712,10 @@ ${cases}
 
 @Component({
   selector: 'app-${componentId}',
+  standalone: true,
   imports: [],
-  templateUrl: './app-${componentId}.component.html',
-  styleUrl: './app-${componentId}.component.scss'
+  templateUrl: './${componentId}.component.html',
+  styleUrl: './${componentId}.component.scss'
 })
 export class ${this.toClassName(componentId)} {
   ${inputs.join('\n  ')}

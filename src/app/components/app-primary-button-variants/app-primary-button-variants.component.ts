@@ -1,4 +1,5 @@
 import { Component, input, output } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { PrimaryButtonComponent } from '../primary-button/primary-button.component';
 import { PrimaryOutlineButtonComponent } from '../primary-outline-button/primary-outline-button.component';
 import { NeutralButtonComponent } from '../neutral-button/neutral-button.component';

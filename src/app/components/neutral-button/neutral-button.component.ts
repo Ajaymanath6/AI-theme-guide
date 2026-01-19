@@ -2,12 +2,13 @@ import { Component, input, output } from '@angular/core';
 
 @Component({
   selector: 'app-neutral-button',
+  standalone: true,
   imports: [],
-  templateUrl: './app-neutral-button.component.html',
-  styleUrl: './app-neutral-button.component.scss'
+  templateUrl: './neutral-button.component.html',
+  styleUrl: './neutral-button.component.scss'
 })
 export class NeutralButtonComponent {
-  label = input<string>('neutral-button');
+  label = input<string>('Neutral');
   
   buttonClick = output<MouseEvent>();
 }
