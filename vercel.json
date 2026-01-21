@@ -1,4 +1,9 @@
 {
+  "buildCommand": "ng build",
+  "outputDirectory": "dist/angular-tailwind-flowbite-app"
+}
+
+{
   "buildCommand": "npm run build:prod",
   "outputDirectory": "dist/angular-tailwind-flowbite-app/browser",
   "installCommand": "npm ci",
