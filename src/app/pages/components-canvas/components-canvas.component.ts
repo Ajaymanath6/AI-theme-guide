@@ -32,12 +32,17 @@ interface CanvasElement {
 export class ComponentsCanvasComponent implements AfterViewInit {
   canvasElements: CanvasElement[] = [
     { id: 'sidebar1', type: 'sidebar', x: 0, y: 60, content: 'Sidebar', isSharedComponent: true },
+    { id: 'account-header1', type: 'account-header', x: 300, y: 60, content: 'Account Header' },
+    { id: 'search-section1', type: 'search-section', x: 300, y: 150, content: 'Search Section' },
     { id: 'primary-button1', type: 'primary-button', x: 200, y: 200, content: 'Primary Button' },
     { id: 'primary-outline-button1', type: 'primary-outline-button', x: 400, y: 200, content: 'Primary Outline Button' },
     { id: 'primary-text-button1', type: 'primary-text-button', x: 1600, y: 200, content: 'Primary Text Button' },
     { id: 'ghost-button1', type: 'ghost-button', x: 1200, y: 200, content: 'Ghost Button' },
     { id: 'text-button1', type: 'text-button', x: 1400, y: 200, content: 'Text Button' },
     { id: 'neutral-button1', type: 'neutral-button', x: 1000, y: 200, content: 'Neutral Button' },
+    { id: 'banner-neutral1', type: 'banner-neutral', x: 200, y: 450, content: 'Neutral Banner' },
+    { id: 'banner-info1', type: 'banner-info', x: 200, y: 600, content: 'Info Banner' },
+    { id: 'banner-warning1', type: 'banner-warning', x: 200, y: 750, content: 'Warning Banner' },
     { id: 'app-primary-button-variants1', type: 'app-primary-button-variants', x: 200, y: 300, content: 'Primary Button Variants', isSharedComponent: true },
     { id: 'secondary-button1', type: 'secondary-button', x: 600, y: 200, content: 'Secondary Button' },
     { id: 'secondary-outline-button1', type: 'secondary-outline-button', x: 800, y: 200, content: 'Secondary Outline Button' }

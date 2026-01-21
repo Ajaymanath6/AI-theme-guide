@@ -1,0 +1,19 @@
+<div class="flex items-center justify-between rounded-lg bg-brandcolor-banner-info-bg w-full py-4 px-[18px]">
+  <div class="flex items-start gap-3">
+    <span class="material-symbols-outlined text-brandcolor-textstrong" style="font-size: 18px;">info</span>
+    <div class="flex flex-col">
+      <div class="text-brandcolor-textstrong font-medium uppercase tracking-[0.08em] text-xs">
+        BETA
+      </div>
+      <p class="mt-[6px] text-brandcolor-textstrong text-sm">
+        Welcome to the UniCourt DART Beta! Some features may change as we refine your experience.
+      </p>
+    </div>
+  </div>
+  <button
+    type="button"
+    class="bg-brandcolor-secondary text-brandcolor-white rounded-md px-4 py-2 text-sm font-medium"
+    (click)="cancel.emit()">
+    Cancel
+  </button>
+</div>

@@ -4,21 +4,26 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { AppSecondaryButtonVariantsComponent } from '../../components/app-secondary-button-variants/app-secondary-button-variants.component';
 import { PrimaryButtonVariantsComponent } from '../../components/app-primary-button-variants/app-primary-button-variants.component';
+import { BannerInfoComponent } from '../../components/banner-info/banner-info.component';
+import { AccountHeaderComponent } from '../../components/account-header/account-header.component';
+import { SearchSectionComponent } from '../../components/search-section/search-section.component';
+import { CaseResultsComponent } from '../case-results/case-results.component';
 
 declare var initFlowbite: () => void;
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, RouterLink, SidebarComponent, AppSecondaryButtonVariantsComponent, PrimaryButtonVariantsComponent],
+  imports: [CommonModule, RouterLink, SidebarComponent, AppSecondaryButtonVariantsComponent, PrimaryButtonVariantsComponent, BannerInfoComponent, AccountHeaderComponent, SearchSectionComponent, CaseResultsComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements AfterViewInit {
   projectId: string | null = null;
+  showBetaBanner = true;
   
   // Sidebar state
   isSidebarCollapsed = false;
-  activeMenuItem: string | null = null;
+  activeMenuItem: string | null = 'home'; // default to Home
   selectedDropdownOption: string | null = null;
 
   constructor(private route: ActivatedRoute) {
@@ -63,5 +68,9 @@ export class DashboardComponent implements AfterViewInit {
   onCancel(): void {
     console.log('Cancel clicked!');
     // Your cancel logic here
+  }
+
+  onBannerDismiss(): void {
+    this.showBetaBanner = false;
   }
 }

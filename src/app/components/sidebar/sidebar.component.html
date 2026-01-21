@@ -94,23 +94,6 @@
 
   <!-- Menu Items -->
   <nav class="py-2 flex-1">
-    <!-- Home -->
-    <a 
-      href="#" 
-     
-      (click)="onMenuItemClick('home', $event)"
-      [class.bg-brandcolor-primary]="activeMenuItem === 'home'"
-      [class.px-4]="!isSidebarCollapsed"
-      [class.px-0]="isSidebarCollapsed"
-      [class.justify-start]="!isSidebarCollapsed"
-      [class.justify-center]="isSidebarCollapsed"
-      class="flex items-center gap-3 py-3 hover:bg-brandcolor-sidebarhover transition-colors cursor-pointer text-brandcolor-white rounded-md">
-      <span class="material-symbols-outlined text-brandcolor-white" style="font-size: 20px;">home</span>
-      @if (!isSidebarCollapsed) {
-        <span class="text-sm font-medium text-brandcolor-white">Home</span>
-      }
-    </a>
-
     <!-- All projects -->
     <a 
       href="#" 
@@ -136,6 +119,23 @@
         <div class="flex-1 border-t border-brandcolor-strokestrong ml-2"></div>
       </div>
     }
+
+    <!-- Home (moved below My projects and above Search) -->
+    <a 
+      href="#" 
+     
+      (click)="onMenuItemClick('home', $event)"
+      [class.bg-brandcolor-primary]="activeMenuItem === 'home'"
+      [class.px-4]="!isSidebarCollapsed"
+      [class.px-0]="isSidebarCollapsed"
+      [class.justify-start]="!isSidebarCollapsed"
+      [class.justify-center]="isSidebarCollapsed"
+      class="flex items-center gap-3 py-3 hover:bg-brandcolor-sidebarhover transition-colors cursor-pointer text-brandcolor-white rounded-md">
+      <span class="material-symbols-outlined text-brandcolor-white" style="font-size: 20px;">home</span>
+      @if (!isSidebarCollapsed) {
+        <span class="text-sm font-medium text-brandcolor-white">Home</span>
+      }
+    </a>
 
     <!-- Search -->
     <a 

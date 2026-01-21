@@ -71,7 +71,7 @@
           
           <!-- Header Component -->
           @if (element.type === 'header') {
-            <header class="bg-brandcolor-textstrong border-b border-brandcolor-strokeweak rounded-lg shadow-lg">
+            <header class="bg-brandcolor-textstrong border-b border-brandcolor-strokeweak rounded-lg shadow-header">
               <div class="flex items-center justify-between px-4 py-[14px] min-w-[600px]">
                 <!-- Logo -->
                 <a routerLink="/projects" class="flex items-center cursor-pointer">
@@ -98,6 +98,104 @@
                 </div>
               </div>
             </header>
+          }
+
+          <!-- Account Header Component -->
+          @if (element.type === 'account-header') {
+            <header class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg shadow-header min-w-[600px]">
+              <div class="flex items-center justify-between px-4 py-[14px]">
+                <!-- Left: Account Name + Subtext -->
+                <div class="flex flex-col">
+                  <span class="text-brandcolor-textstrong font-medium">
+                    UniCourt Dev
+                  </span>
+                  <span class="text-brandcolor-secondary text-sm">
+                    Select Project
+                  </span>
+                </div>
+
+                <!-- Right: Notification + User Profile -->
+                <div class="flex items-center gap-4">
+                  <button
+                    type="button"
+                    class="flex items-center justify-center w-9 h-9 rounded-full hover:bg-brandcolor-fill text-brandcolor-textstrong">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">notifications</span>
+                  </button>
+                  <div class="flex items-center gap-2">
+                    <div class="flex items-center justify-center w-9 h-9 rounded-full bg-brandcolor-fill text-brandcolor-textstrong text-sm font-semibold">
+                      UD
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </header>
+          }
+
+          <!-- Search Section Component -->
+          @if (element.type === 'search-section') {
+            <div class="bg-brandcolor-white rounded-lg shadow-header min-w-[700px] px-6 py-5 space-y-4">
+              <!-- Top: FILTER PILLS -->
+              <div class="flex items-center gap-3">
+                <span class="text-brandcolor-textweak text-sm">
+                  Search for:
+                </span>
+                <div class="flex items-center gap-2">
+                  <!-- Active pill -->
+                  <button
+                    type="button"
+                    class="px-3 py-1 rounded-full bg-brandcolor-fill text-brandcolor-textstrong text-xs font-medium">
+                    Cases
+                  </button>
+                  <!-- Inactive pills (ghost style, text-weak) -->
+                  <button
+                    type="button"
+                    class="px-3 py-1 rounded-full bg-transparent text-brandcolor-textweak text-xs font-medium">
+                    Attorneys
+                  </button>
+                  <button
+                    type="button"
+                    class="px-3 py-1 rounded-full bg-transparent text-brandcolor-textweak text-xs font-medium">
+                    Law Firms
+                  </button>
+                  <button
+                    type="button"
+                    class="px-3 py-1 rounded-full bg-transparent text-brandcolor-textweak text-xs font-medium">
+                    Judges
+                  </button>
+                  <button
+                    type="button"
+                    class="px-3 py-1 rounded-full bg-transparent text-brandcolor-textweak text-xs font-medium">
+                    Parties
+                  </button>
+                </div>
+              </div>
+
+              <!-- Second row: Search input with embedded search button -->
+              <div class="flex items-center gap-3">
+                <!-- Main search input -->
+                <div class="flex-1 flex items-center border border-brandcolor-strokeweak rounded-md bg-brandcolor-white px-3 py-2 gap-3">
+                  <!-- Left: Dropdown (Natural language / Filter / Advanced) -->
+                  <button
+                    type="button"
+                    class="flex items-center gap-2 px-4 py-[7px] border border-brandcolor-strokeweak rounded-md text-brandcolor-textstrong text-sm bg-brandcolor-white">
+                    <span>Natural language</span>
+                    <span class="material-symbols-outlined text-brandcolor-textweak" style="font-size: 18px;">expand_more</span>
+                  </button>
+                  <!-- Divider -->
+                  <div class="h-6 w-px bg-brandcolor-strokeweak"></div>
+                  <!-- Placeholder text -->
+                  <span class="flex-1 text-brandcolor-textweak text-sm">
+                    Use natural language to find your case...
+                  </span>
+                  <!-- Search button inside input -->
+                  <button
+                    type="button"
+                    class="ml-auto flex items-center gap-2 px-4 py-[7px] border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press rounded-md text-sm font-medium">
+                    <span class="material-symbols-outlined" style="font-size: 18px;">search</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           }
           
           <!-- Primary Button Component -->
@@ -178,6 +276,72 @@
               class="text-brandcolor-primary bg-transparent disabled:opacity-50 px-4 py-2 font-medium">
               Primary Text
             </button>
+          }
+
+          <!-- Neutral Banner Variant -->
+          @if (element.type === 'banner-neutral') {
+            <div class="flex items-center justify-between rounded-lg bg-brandcolor-neutralhover min-w-[500px] py-4 px-[18px]">
+              <div class="flex items-start gap-3">
+                <span class="material-symbols-outlined text-brandcolor-textstrong" style="font-size: 18px;">info</span>
+                <div class="flex flex-col">
+                  <div class="text-brandcolor-textstrong font-medium">
+                    Neutral banner title
+                  </div>
+                  <p class="mt-[6px] text-brandcolor-textweak text-sm">
+                    This is the neutral banner content text.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="bg-brandcolor-textstrong text-brandcolor-white rounded-md px-4 py-2 text-sm font-medium">
+                Action
+              </button>
+            </div>
+          }
+
+          <!-- Info Banner Variant -->
+          @if (element.type === 'banner-info') {
+            <div class="flex items-center justify-between rounded-lg bg-brandcolor-banner-info-bg min-w-[500px] py-4 px-[18px]">
+              <div class="flex items-start gap-3">
+                <span class="material-symbols-outlined text-brandcolor-textstrong" style="font-size: 18px;">info</span>
+                <div class="flex flex-col">
+                  <div class="text-brandcolor-textstrong font-medium">
+                    Info banner title
+                  </div>
+                  <p class="mt-[6px] text-brandcolor-textweak text-sm">
+                    This is the informational banner content text.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="bg-brandcolor-secondary text-brandcolor-white rounded-md px-4 py-2 text-sm font-medium">
+                Action
+              </button>
+            </div>
+          }
+
+          <!-- Warning Banner Variant -->
+          @if (element.type === 'banner-warning') {
+            <div class="flex items-center justify-between rounded-lg bg-brandcolor-banner-warning-bg min-w-[500px] py-4 px-[18px]">
+              <div class="flex items-start gap-3">
+                <span class="material-symbols-outlined text-brandcolor-textstrong" style="font-size: 18px;">warning</span>
+                <div class="flex flex-col">
+                  <div class="text-brandcolor-textstrong font-medium">
+                    Warning banner title
+                  </div>
+                  <p class="mt-[6px] text-brandcolor-textweak text-sm">
+                    This is the warning banner content text.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="bg-brandcolor-banner-warning-button text-brandcolor-white rounded-md px-4 py-2 text-sm font-medium">
+                Action
+              </button>
+            </div>
           }
           
           <!-- Super Component Rendering -->

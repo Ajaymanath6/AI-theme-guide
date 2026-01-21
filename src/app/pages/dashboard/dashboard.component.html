@@ -18,30 +18,25 @@
     <div class="flex-1 flex flex-col overflow-hidden bg-brandcolor-white">
       
       <!-- TOP: Search Bar Header (Fixed) -->
-      <header class="flex-shrink-0 bg-brandcolor-white border-b border-brandcolor-strokeweak px-6 py-4">
-        <div class="flex items-center gap-4">
-          <!-- Search Bar -->
-          <div class="flex-1">
-            <input
-              type="text"
-              placeholder="Search..."
-              class="w-full px-4 py-2 border border-brandcolor-strokestrong rounded-lg focus:outline-none focus:border-brandcolor-textstrong focus:ring-0 bg-brandcolor-white text-brandcolor-textstrong">
-          </div>
-          
-          <!-- Action Buttons -->
+      <header class="flex-shrink-0 bg-brandcolor-white border-b border-brandcolor-strokeweak ">
+        <div class="space-y-4">
+          <!-- Banner Info (full width above search) -->
+          @if (showBetaBanner) {
+            <app-banner-info (cancel)="onBannerDismiss()"></app-banner-info>
+          }
+
+          <!-- Account Header (full width) -->
+          <app-account-header></app-account-header>
+
+          <!-- Search Section (full width) -->
+          <app-search-section></app-search-section>
         </div>
       </header>
 
       <!-- BOTTOM: Scrollable Layout -->
-      <main class="flex-1 overflow-y-auto bg-brandcolor-white p-6">
-        <!-- Scrollable content area -->
-        <!-- Your dashboard content goes here -->
-         <div class="p-6 border-t border-brandcolor-strokeweak">
-        <app-primary-button-variants
-        (buttonClick)="onSave()"
-          variant="6">
-        </app-primary-button-variants>
-      </div>
+      <main class="flex-1 overflow-y-auto bg-brandcolor-white">
+        <!-- Case results layout below the search header -->
+        <app-case-results></app-case-results>
       </main>
       
       <!-- Primary Button Variants Component -->

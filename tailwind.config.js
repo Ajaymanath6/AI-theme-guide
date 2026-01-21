@@ -21,12 +21,18 @@ module.exports = {
         'brandcolor-fill': '#F5F5F5',
         'brandcolor-white': '#FFFFFF',
         'brandcolor-sidebarhover': '#2E3C48',
+        'brandcolor-banner-info-bg': '#D5DFFF',
+        'brandcolor-banner-warning-bg': '#FFEBE1',
+        'brandcolor-banner-warning-button': '#F26333',
+        // Page backgrounds
+        'brandcolor-pagebg': '#F8F9FB',
       },
       boxShadow: {
         'button-press': 'inset 3px 3px 10px 0px rgba(0, 26, 49, 0.33)',
         'border-inset-strokelight': 'inset 0 0 0 1.5px #C5C5C5',
         'border-inset-secondary': 'inset 0 0 0 1.5px #2F55D9',
         'border-inset-secondary-press': 'inset 0 0 0 1.5px #2F55D9, inset 3px 3px 10px 0px rgba(0, 26, 49, 0.33)',
+        'header': '0px 4px 4px 0px rgba(115, 115, 115, 0.05)',
       },
       borderWidth: {
         '1.5': '1.5px',

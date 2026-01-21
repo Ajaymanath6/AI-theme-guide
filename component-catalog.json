@@ -1,7 +1,7 @@
 {
   "catalogId": "design-system-v1",
   "version": "1.0.0",
-  "lastUpdated": "2026-01-19T12:46:26.239Z",
+  "lastUpdated": "2026-01-21T11:34:39.137Z",
   "registeredComponents": {
     "sidebar": {
       "id": "sidebar",
@@ -317,6 +317,42 @@
           "buttonMouseLeave": false
         }
       }
+    },
+    "banner-info": {
+      "id": "banner-info",
+      "displayName": "banner-info",
+      "category": "general",
+      "description": "Component: banner-info",
+      "htmlSelector": "[title='banner-info']",
+      "status": "active",
+      "registeredAt": "2026-01-21T10:55:22.922Z",
+      "isSharedComponent": true,
+      "componentPath": "src/app/components/banner-info/banner-info.component.ts",
+      "componentTag": "<app-banner-info></app-banner-info>"
+    },
+    "account-header": {
+      "id": "account-header",
+      "displayName": "account-header",
+      "category": "general",
+      "description": "Component: account-header",
+      "htmlSelector": "[title='account-header']",
+      "status": "active",
+      "registeredAt": "2026-01-21T11:09:57.748Z",
+      "isSharedComponent": true,
+      "componentPath": "src/app/components/account-header/account-header.component.ts",
+      "componentTag": "<app-account-header></app-account-header>"
+    },
+    "search-section": {
+      "id": "search-section",
+      "displayName": "search-section",
+      "category": "general",
+      "description": "Component: search-section",
+      "htmlSelector": "[title='search-section']",
+      "status": "active",
+      "registeredAt": "2026-01-21T11:34:35.467Z",
+      "isSharedComponent": true,
+      "componentPath": "src/app/components/search-section/search-section.component.ts",
+      "componentTag": "<app-search-section></app-search-section>"
     }
   }
 }

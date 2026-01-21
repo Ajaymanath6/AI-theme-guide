@@ -250,6 +250,48 @@
         "Dropdown menu background: bg-brandcolor-sidebarhover"
       ],
       "logic": "Used specifically for sidebar navigation items when hovered and for dropdown menu backgrounds. Provides a darker background (#2E3C48) for better visual feedback on sidebar interactions and consistent dropdown styling."
+    },
+    "brandcolor-banner-info-bg": {
+      "hex": "#D5DFFF",
+      "usage": "Background color for informational banners",
+      "utilityClasses": {
+        "background": "bg-brandcolor-banner-info-bg"
+      },
+      "whenToUse": [
+        "Informational banners with secondary button",
+        "Non-critical messages that relate to secondary actions"
+      ],
+      "examples": [
+        "Info banner: bg-brandcolor-banner-info-bg with secondary button using bg-brandcolor-secondary text-brandcolor-white"
+      ]
+    },
+    "brandcolor-banner-warning-bg": {
+      "hex": "#FFEBE1",
+      "usage": "Background color for warning / alert banners",
+      "utilityClasses": {
+        "background": "bg-brandcolor-banner-warning-bg"
+      },
+      "whenToUse": [
+        "Warning banners",
+        "Destructive or irreversible action warnings"
+      ],
+      "examples": [
+        "Warning banner: bg-brandcolor-banner-warning-bg with warning button using bg-brandcolor-banner-warning-button text-brandcolor-white"
+      ]
+    },
+    "brandcolor-banner-warning-button": {
+      "hex": "#F26333",
+      "usage": "Button background color for warning banners",
+      "utilityClasses": {
+        "background": "bg-brandcolor-banner-warning-button",
+        "text": "text-brandcolor-white"
+      },
+      "whenToUse": [
+        "Primary action button inside warning banners"
+      ],
+      "examples": [
+        "Warning banner button: bg-brandcolor-banner-warning-button text-brandcolor-white rounded-md px-4 py-2"
+      ]
     }
   },
   "componentGuidelines": {
@@ -494,6 +536,41 @@
         "Wrong: <div class=\"bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 w-full\">Content</div>",
         "Wrong: <div class=\"bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-6 max-w-4xl\">Content</div>"
       ]
+    },
+    "banner": {
+      "description": "Horizontal banners with icon, title, content text, and right-aligned action button",
+      "structure": {
+        "layout": "Use flex layout: top row for icon + title, second row for content text with right-aligned button",
+        "icon": "Use a Material icon or placeholder circle on the left",
+        "title": "Title text sits next to or below the icon using text-brandcolor-textstrong",
+        "content": "Body copy uses text-brandcolor-textstrong",
+        "button": "Action button is aligned to the right end of the content row"
+      },
+      "variants": {
+        "neutral": {
+          "usage": "Default neutral informational banner",
+          "background": "bg-brandcolor-neutralhover",
+          "button": "bg-brandcolor-textstrong text-brandcolor-white rounded-md px-4 py-2",
+          "example": "Neutral banner with bg-brandcolor-neutralhover and button using bg-brandcolor-textstrong text-brandcolor-white"
+        },
+        "info": {
+          "usage": "Informational banner tied to secondary actions",
+          "background": "bg-brandcolor-banner-info-bg",
+          "button": "bg-brandcolor-secondary text-brandcolor-white rounded-md px-4 py-2",
+          "example": "Info banner with bg-brandcolor-banner-info-bg and button using bg-brandcolor-secondary text-brandcolor-white"
+        },
+        "warning": {
+          "usage": "Warning / alert banner with stronger call-to-action",
+          "background": "bg-brandcolor-banner-warning-bg",
+          "button": "bg-brandcolor-banner-warning-button text-brandcolor-white rounded-md px-4 py-2",
+          "example": "Warning banner with bg-brandcolor-banner-warning-bg and button using bg-brandcolor-banner-warning-button text-brandcolor-white"
+        }
+      },
+      "layoutClasses": "flex flex-col gap-2 p-4 rounded-lg",
+      "contentRowClasses": "flex items-center justify-between gap-4",
+      "iconClasses": "flex items-center justify-center w-8 h-8 rounded-full bg-brandcolor-white text-brandcolor-strokestrong",
+      "titleClasses": "text-brandcolor-textstrong font-medium",
+      "bodyTextClasses": "text-brandcolor-textstrong text-sm"
     },
     "table": {
       "description": "Data tables with proper semantic structure, borders, expandable rows, and Material Icons",
