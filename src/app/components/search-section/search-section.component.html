@@ -38,7 +38,7 @@
   <!-- Second row: Search input with embedded search button -->
   <div class="flex items-center gap-3">
     <!-- Main search input -->
-    <div class="flex-1 flex items-center border border-brandcolor-strokeweak rounded-md bg-brandcolor-white px-4 py-2 gap-3">
+    <div class="flex-1 flex items-center border border-brandcolor-strokeweak focus-within:border-brandcolor-strokestrong rounded-md bg-brandcolor-white px-2 py-2 gap-3 transition-colors">
       <!-- Left: Dropdown (Natural language / Filter / Advanced) -->
       <div class="relative">
         <button
@@ -81,13 +81,22 @@
       </div>
       <!-- Divider -->
       <div class="h-6 w-px bg-brandcolor-strokeweak"></div>
-      <!-- Placeholder text -->
-      <span class="flex-1 text-brandcolor-textweak text-sm">
-        Use natural language to find your case...
-      </span>
+      <!-- Search input field -->
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="onSearch()"
+        placeholder="Use natural language to find your case..."
+        class="flex-1 outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 active:outline-none bg-transparent text-brandcolor-textstrong text-sm placeholder:text-brandcolor-textweak">
+      <!-- Clear button -->
+      <app-ghost-button
+        [label]="'Clear'"
+        (buttonClick)="onClear()"
+      ></app-ghost-button>
       <!-- Search button inside input -->
       <button
         type="button"
+        (click)="onSearch()"
         class="ml-auto flex items-center gap-2 pl-[10px] pr-[12px] py-3 border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover focus:border-brandcolor-primary active:border-brandcolor-primary active:shadow-button-press rounded-md text-sm font-medium">
         <span class="material-symbols-outlined" style="font-size: 18px;">search</span>
         <span>Search</span>

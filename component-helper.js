@@ -178,6 +178,10 @@ app.post('/generate', (req, res) => {
       }
     }
 
+    // After component is created, update canvas if it's a shared component
+    // Note: This will be called automatically when component is marked as shared
+    // For now, we'll let the canvas component handle the update via the update script
+    
     res.json({ 
       success: true, 
       message: `Component ${componentId} created successfully`,
@@ -193,6 +197,48 @@ app.post('/generate', (req, res) => {
       ]
     });
   });
+});
+
+// Update canvas for shared component endpoint
+app.post('/update-canvas-shared-component', (req, res) => {
+  const { componentId } = req.body;
+  
+  if (!componentId) {
+    return res.status(400).json({ 
+      success: false, 
+      error: 'Component ID is required' 
+    });
+  }
+
+  try {
+    const updateScriptPath = path.join(process.cwd(), 'update-canvas-shared-components.js');
+    
+    console.log(`🔄 Updating canvas for shared component: ${componentId}`);
+    
+    exec(`node "${updateScriptPath}" "${componentId}"`, (error, stdout, stderr) => {
+      if (error) {
+        console.error('❌ Error running update script:', error);
+        return res.status(500).json({ 
+          success: false, 
+          error: error.message,
+          stderr: stderr
+        });
+      }
+      
+      console.log(stdout);
+      res.json({ 
+        success: true, 
+        message: 'Canvas updated successfully',
+        output: stdout
+      });
+    });
+  } catch (error) {
+    console.error('❌ Error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message 
+    });
+  }
 });
 
 // Delete component endpoint
@@ -551,6 +597,93 @@ app.post('/check-component', (req, res) => {
     componentId,
     path: componentDir
   });
+});
+
+// Read component HTML file endpoint
+app.post('/read-component-html', (req, res) => {
+  const { componentId } = req.body;
+  
+  if (!componentId) {
+    return res.status(400).json({ 
+      success: false, 
+      error: 'Component ID is required' 
+    });
+  }
+
+  const componentDir = path.join(process.cwd(), 'src', 'app', 'components', componentId);
+  const htmlFilePath = path.join(componentDir, `${componentId}.component.html`);
+  
+  if (!fs.existsSync(htmlFilePath)) {
+    return res.status(404).json({ 
+      success: false, 
+      error: `Component HTML file not found: ${htmlFilePath}` 
+    });
+  }
+
+  try {
+    const htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
+    res.json({ 
+      success: true, 
+      htmlContent: htmlContent,
+      componentId: componentId,
+      filePath: htmlFilePath
+    });
+  } catch (error) {
+    console.error('❌ Error reading component HTML:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message 
+    });
+  }
+});
+
+// Store file modification times for change detection
+const fileModTimes = new Map();
+
+// Check if component file was modified endpoint
+app.post('/check-component-modified', (req, res) => {
+  const { componentId } = req.body;
+  
+  if (!componentId) {
+    return res.status(400).json({ modified: false });
+  }
+
+  const componentDir = path.join(process.cwd(), 'src', 'app', 'components', componentId);
+  const htmlFilePath = path.join(componentDir, `${componentId}.component.html`);
+  const tsFilePath = path.join(componentDir, `${componentId}.component.ts`);
+  
+  if (!fs.existsSync(htmlFilePath) && !fs.existsSync(tsFilePath)) {
+    return res.json({ modified: false });
+  }
+
+  try {
+    let modified = false;
+    const filesToCheck = [htmlFilePath, tsFilePath].filter(f => fs.existsSync(f));
+    
+    for (const filePath of filesToCheck) {
+      const stats = fs.statSync(filePath);
+      const currentModTime = stats.mtime.getTime();
+      const key = `${componentId}:${filePath}`;
+      
+      if (fileModTimes.has(key)) {
+        if (fileModTimes.get(key) !== currentModTime) {
+          modified = true;
+          fileModTimes.set(key, currentModTime);
+        }
+      } else {
+        // First time checking, store the time
+        fileModTimes.set(key, currentModTime);
+      }
+    }
+    
+    res.json({ 
+      modified: modified,
+      componentId: componentId
+    });
+  } catch (error) {
+    console.error('Error checking file modification:', error);
+    res.json({ modified: false });
+  }
 });
 
 // Update canvas with super components endpoint

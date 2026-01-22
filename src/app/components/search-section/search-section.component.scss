@@ -1,0 +1,13 @@
+input[type="text"] {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  
+  &:focus,
+  &:focus-visible,
+  &:active {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+}

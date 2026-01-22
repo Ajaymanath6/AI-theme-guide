@@ -294,8 +294,68 @@
       ]
     }
   },
+  "typography": {
+    "fontFamilies": {
+      "heading": {
+        "fontFamily": "Lora",
+        "type": "serif",
+        "usage": "All headings (h1, h2, h3, h4, h5, h6)",
+        "utilityClass": "font-heading",
+        "whenToUse": [
+          "Page titles",
+          "Section headings",
+          "Card titles",
+          "Modal titles",
+          "All h1, h2, h3, h4, h5, h6 elements"
+        ],
+        "examples": [
+          "h1: <h1 class=\"font-heading text-brandcolor-textstrong text-3xl font-bold\">Title</h1>",
+          "h2: <h2 class=\"font-heading text-brandcolor-textstrong text-2xl font-semibold\">Section</h2>"
+        ],
+        "note": "Lora is automatically applied to all heading elements via global styles. Use font-heading utility class if needed for non-heading elements that should use heading font."
+      },
+      "body": {
+        "fontFamily": "IBM Plex Sans",
+        "type": "sans-serif",
+        "usage": "All body text, component text, labels, buttons, inputs, and non-heading text",
+        "utilityClass": "font-body",
+        "whenToUse": [
+          "Body text",
+          "Paragraphs",
+          "Labels",
+          "Button text",
+          "Input field text",
+          "Component text",
+          "Table text",
+          "All non-heading text elements"
+        ],
+        "examples": [
+          "Body: <p class=\"font-body text-brandcolor-textweak\">Body text</p>",
+          "Label: <label class=\"font-body text-brandcolor-textstrong text-sm\">Label</label>",
+          "Button: <button class=\"font-body bg-brandcolor-primary text-brandcolor-white\">Button</button>"
+        ],
+        "note": "IBM Plex Sans is automatically applied to body and all components via global styles. This is the default font for all text except headings."
+      }
+    },
+    "rules": [
+      "CRITICAL: All headings (h1-h6) MUST use Lora font - automatically applied via global styles",
+      "CRITICAL: All body text, labels, buttons, inputs, and component text MUST use IBM Plex Sans - automatically applied via global styles",
+      "Headings automatically get Lora font - no need to add font-heading class unless overriding",
+      "Body and components automatically get IBM Plex Sans - no need to add font-body class unless overriding",
+      "When creating components, ensure labels and text use the default body font (IBM Plex Sans)",
+      "Only headings should use Lora font - all other text uses IBM Plex Sans"
+    ],
+    "utilityClasses": {
+      "font-heading": "font-heading - Apply Lora font to non-heading elements",
+      "font-body": "font-body - Explicitly apply IBM Plex Sans (usually not needed as it's default)"
+    }
+  },
   "componentGuidelines": {
     "button": {
+      "fontFamily": {
+        "value": "IBM Plex Sans",
+        "description": "ALL button text MUST use IBM Plex Sans font (automatically applied via global styles). No need to add font-body class."
+      },
       "cornerRadius": {
         "value": "6px",
         "tailwindClass": "rounded-md",
@@ -438,6 +498,10 @@
     },
     "input": {
       "description": "Input fields with proper borders - MUST override Flowbite and browser defaults",
+      "fontFamily": {
+        "value": "IBM Plex Sans",
+        "description": "ALL input field text MUST use IBM Plex Sans font (automatically applied via global styles). No need to add font-body class."
+      },
       "classes": "border-brandcolor-strokestrong focus:border-brandcolor-textstrong focus:outline-none focus:ring-0 text-brandcolor-textstrong",
       "logic": "Strong stroke border by default, changes to text-strong color on focus. No extra border/ring on focus. Text color is always text-strong. CRITICAL: Must use focus:ring-0 to prevent Flowbite's default ring styles. Must use focus:outline-none to prevent browser default outline.",
       "criticalRules": [
@@ -456,13 +520,17 @@
       "overrideExample": "If styles still don't work, add to component SCSS: input:focus { border-color: #001A31 !important; outline: none !important; box-shadow: none !important; }"
     },
     "heading": {
+      "fontFamily": {
+        "value": "Lora",
+        "description": "ALL headings (h1-h6) MUST use Lora font (automatically applied via global styles). No need to add font-heading class."
+      },
       "h1": {
         "classes": "text-brandcolor-textstrong text-3xl font-bold",
-        "logic": "Strong text color for main headings"
+        "logic": "Strong text color for main headings. Uses Lora font automatically."
       },
       "h2": {
         "classes": "text-brandcolor-textstrong text-2xl font-semibold",
-        "logic": "Strong text color for secondary headings"
+        "logic": "Strong text color for secondary headings. Uses Lora font automatically."
       },
       "h3": {
         "classes": "text-brandcolor-textstrong text-xl font-semibold",
@@ -917,8 +985,14 @@
       "Secondary button: bg-brandcolor-secondary + text-brandcolor-white + hover:bg-brandcolor-secondaryhover",
       "Secondary-outline button: border-brandcolor-strokelight + text-brandcolor-secondary + hover:bg-brandcolor-neutralhover",
       "IMPORTANT: ALL secondary buttons use border-brandcolor-strokeweak (#DDDDDD) for border, NOT border-brandcolor-secondary",
-      "Headings: Always use text-brandcolor-textstrong",
-      "Body text: Use text-brandcolor-textweak",
+      "Headings: Always use text-brandcolor-textstrong with Lora font (automatically applied)",
+      "Body text: Use text-brandcolor-textweak with IBM Plex Sans font (automatically applied)",
+      "FONT RULES - CRITICAL:",
+      "All headings (h1-h6): Automatically use Lora font via global styles",
+      "All body text, labels, buttons, inputs, component text: Automatically use IBM Plex Sans via global styles",
+      "Component labels: MUST use IBM Plex Sans (default body font)",
+      "Button text: MUST use IBM Plex Sans (default body font)",
+      "Input field text: MUST use IBM Plex Sans (default body font)",
       "BORDER RULES - CRITICAL:",
       "Sidebar borders: ALWAYS use border-brandcolor-strokestrong",
       "Input field borders: ALWAYS use border-brandcolor-strokestrong",

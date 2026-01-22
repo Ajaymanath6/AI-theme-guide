@@ -7,6 +7,9 @@ import { ComponentCatalogService, CatalogEntry } from '../../services/component-
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { AppSecondaryButtonVariantsComponent } from '../../components/app-secondary-button-variants/app-secondary-button-variants.component';
 import { PrimaryButtonVariantsComponent } from '../../components/app-primary-button-variants/app-primary-button-variants.component';
+import { GhostButtonComponent } from '../../components/ghost-button/ghost-button.component';
+import { SearchSectionComponent } from '../../components/search-section/search-section.component';
+import { AccountHeaderComponent } from '../../components/account-header/account-header.component';
 declare var initFlowbite: () => void;
 
 
@@ -25,7 +28,7 @@ interface CanvasElement {
 
 @Component({
   selector: 'app-components-canvas',
-  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, AppSecondaryButtonVariantsComponent, PrimaryButtonVariantsComponent],
+  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, AppSecondaryButtonVariantsComponent, PrimaryButtonVariantsComponent, GhostButtonComponent, SearchSectionComponent, AccountHeaderComponent],
   templateUrl: './components-canvas.component.html',
   styleUrl: './components-canvas.component.scss'
 })
@@ -110,6 +113,9 @@ export class ComponentsCanvasComponent implements AfterViewInit {
   ) {
     // Load shared component status from catalog on init
     this.loadSharedComponentStatus();
+    
+    // Set up automatic file watching for shared components
+    this.setupFileWatcher();
   }
 
   /**
@@ -436,6 +442,11 @@ export class ComponentsCanvasComponent implements AfterViewInit {
     this.selectedDropdownOption = option;
     console.log('Sidebar dropdown option selected:', option);
     // Add your dropdown option logic here
+  }
+
+  onGhostButtonClick(): void {
+    console.log('Ghost button clicked');
+    // Handle ghost button click if needed
   }
 
   // ============================================
@@ -1828,6 +1839,9 @@ export class ${this.toClassName(componentId)} {
       console.log('💾 Auto-saving catalog to project file...');
       await this.exportCatalog();
       
+      // Step 8: Update canvas to use component tag instead of hardcoded HTML
+      await this.updateCanvasForSharedComponent(componentId);
+      
     } catch (error) {
       console.error('Error creating shared component:', error);
       this.isCreatingComponent = false;
@@ -1906,6 +1920,9 @@ export class ${this.toClassName(componentId)} {
       
       // Export catalog
       await this.exportCatalog();
+      
+      // Update canvas to use component tag instead of hardcoded HTML
+      await this.updateCanvasForSharedComponent(componentId);
       
       // Close modal
       this.showPropertySelectionModal = false;
@@ -2260,6 +2277,143 @@ export class ${this.toClassName(componentId)} {
     } catch (error) {
       console.warn('Could not verify component exists:', error);
       // Continue - update script will handle it
+    }
+  }
+
+  /**
+   * Update canvas HTML and TypeScript to use component tag for shared components
+   * This ensures changes to component files reflect on the canvas
+   */
+  private async updateCanvasForSharedComponent(componentId: string): Promise<void> {
+    try {
+      const response = await fetch('http://localhost:4202/update-canvas-shared-component', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ componentId })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('✅ Canvas updated for shared component:', componentId);
+        console.log(result.output);
+      } else {
+        console.warn('⚠️ Could not update canvas automatically. You may need to refresh the page.');
+      }
+    } catch (error) {
+      console.warn('⚠️ Could not update canvas automatically:', error);
+      // Don't fail the component creation if canvas update fails
+    }
+  }
+
+  /**
+   * Sync shared component from canvas to file
+   * Reads the current component HTML and ensures it's saved to file
+   */
+  async syncSharedComponentToFile(componentId: string): Promise<void> {
+    try {
+      // Read current component HTML file
+      const response = await fetch('http://localhost:4202/read-component-html', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ componentId })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.htmlContent) {
+          // Write it back to ensure sync (this triggers file watchers)
+          const writeResponse = await fetch('http://localhost:4202/write-component-code', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              componentId, 
+              htmlContent: result.htmlContent 
+            })
+          });
+
+          if (writeResponse.ok) {
+            this.showToast(`✅ ${componentId} synced to file successfully!`);
+            console.log('✅ Component synced to file:', componentId);
+            // Force change detection to refresh canvas
+            this.cdr.detectChanges();
+          } else {
+            this.showToast(`⚠️ Could not sync ${componentId} to file`);
+          }
+        }
+      } else {
+        this.showToast(`⚠️ Could not read ${componentId} file`);
+      }
+    } catch (error) {
+      console.error('Error syncing component to file:', error);
+      this.showToast(`❌ Failed to sync ${componentId}. Make sure component-helper is running.`);
+    }
+  }
+
+  /**
+   * Reload shared component from file
+   * Forces Angular to reload the component by triggering change detection
+   */
+  async reloadSharedComponentFromFile(componentId: string): Promise<void> {
+    try {
+      // Force change detection to reload component
+      this.cdr.detectChanges();
+      
+      // Also trigger a re-render by toggling the component visibility briefly
+      const element = this.canvasElements.find(el => el.type === componentId);
+      if (element) {
+        // Mark for change detection
+        element.isSharedComponent = !element.isSharedComponent;
+        this.cdr.detectChanges();
+        // Restore immediately
+        element.isSharedComponent = true;
+        this.cdr.detectChanges();
+      }
+      
+      this.showToast(`✅ ${componentId} reloaded from file!`);
+      console.log('✅ Component reloaded from file:', componentId);
+    } catch (error) {
+      console.error('Error reloading component:', error);
+      this.showToast(`❌ Failed to reload ${componentId}`);
+    }
+  }
+
+  /**
+   * Set up automatic file watching for shared components
+   * Polls for file changes and automatically reloads components
+   */
+  private setupFileWatcher(): void {
+    // Poll every 2 seconds for file changes on shared components
+    setInterval(() => {
+      this.checkForFileChanges();
+    }, 2000);
+  }
+
+  /**
+   * Check for changes in shared component files
+   * If files changed, automatically reload the component on canvas
+   */
+  private async checkForFileChanges(): Promise<void> {
+    const sharedComponents = this.canvasElements.filter(el => el.isSharedComponent);
+    
+    for (const element of sharedComponents) {
+      try {
+        const response = await fetch('http://localhost:4202/check-component-modified', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ componentId: element.type })
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          if (result.modified) {
+            // File was modified, reload component
+            console.log(`🔄 File changed for ${element.type}, reloading...`);
+            this.cdr.detectChanges();
+          }
+        }
+      } catch (error) {
+        // Silently fail - component-helper might not be running
+      }
     }
   }
 }

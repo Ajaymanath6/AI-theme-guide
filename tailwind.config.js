@@ -6,6 +6,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'heading': ['Lora', 'serif'],
+        'body': ['IBM Plex Sans', 'sans-serif'],
+      },
       colors: {
         'brandcolor-primary': '#008B31',
         'brandcolor-primaryhover': '#016323',
