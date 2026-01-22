@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GhostButtonComponent } from '../ghost-button/ghost-button.component';
@@ -14,6 +14,8 @@ export class SearchSectionComponent {
   selectedSearchType: string = 'Natural language';
   isDropdownOpen: boolean = false;
   searchQuery: string = '';
+  
+  search = output<string>();
 
   toggleDropdown(): void {
     this.isDropdownOpen = !this.isDropdownOpen;
@@ -37,9 +39,7 @@ export class SearchSectionComponent {
 
   onSearch(): void {
     if (this.searchQuery.trim()) {
-      console.log('Searching for:', this.searchQuery);
-      console.log('Search type:', this.selectedSearchType);
-      // TODO: Implement actual search logic here
+      this.search.emit(this.searchQuery);
     }
   }
 

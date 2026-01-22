@@ -18,8 +18,8 @@
     <div class="flex-1 flex flex-col overflow-hidden bg-brandcolor-white">
       
       <!-- TOP: Search Bar Header (Fixed) -->
-      <header class="flex-shrink-0 bg-brandcolor-white border-b border-brandcolor-strokeweak ">
-        <div class="space-y-4">
+      <header class="flex-shrink-0 bg-brandcolor-white overflow-visible relative z-10 pb-2">
+        <div class="space-y-4 overflow-visible">
           <!-- Banner Info (full width above search) -->
           @if (showBetaBanner) {
             <app-banner-info (cancel)="onBannerDismiss()"></app-banner-info>
@@ -29,14 +29,13 @@
           <app-account-header></app-account-header>
 
           <!-- Search Section (full width) -->
-          <app-search-section></app-search-section>
+          <app-search-section (search)="onSearch($event)"></app-search-section>
         </div>
       </header>
 
-      <!-- BOTTOM: Scrollable Layout -->
-      <main class="flex-1 overflow-y-auto bg-brandcolor-white">
-        <!-- Case results layout below the search header -->
-        <app-case-results></app-case-results>
+      <!-- BOTTOM: Case Results Layout (below search section) -->
+      <main class="flex-1 overflow-hidden">
+        <app-case-results-layout></app-case-results-layout>
       </main>
       
       <!-- Primary Button Variants Component -->

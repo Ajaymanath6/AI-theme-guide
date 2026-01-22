@@ -1,4 +1,4 @@
-<div class="bg-brandcolor-white rounded-lg shadow-header shadow-md w-full px-6 py-5 space-y-4">
+<div class="bg-brandcolor-white rounded-lg shadow-header shadow-md w-full px-6 py-5 space-y-4 overflow-visible relative">
   <!-- Top: FILTER PILLS -->
   <div class="flex items-center gap-3">
     <span class="text-brandcolor-textweak text-sm uppercase tracking-[0.08em]">
@@ -87,7 +87,7 @@
         [(ngModel)]="searchQuery"
         (keyup.enter)="onSearch()"
         placeholder="Use natural language to find your case..."
-        class="flex-1 outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 active:outline-none bg-transparent text-brandcolor-textstrong text-sm placeholder:text-brandcolor-textweak">
+        class="flex-1 outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 focus-visible:outline-none focus-visible:ring-0 active:outline-none bg-transparent text-brandcolor-textstrong text-sm placeholder:text-brandcolor-textweak border-0">
       <!-- Clear button -->
       <app-ghost-button
         [label]="'Clear'"

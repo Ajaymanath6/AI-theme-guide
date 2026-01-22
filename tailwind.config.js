@@ -6,9 +6,12 @@ module.exports = {
   ],
   theme: {
     extend: {
+      screens: {
+        'c_md': '768px',
+        'c_xl': '1280px',
+      },
       fontFamily: {
-        'heading': ['Lora', 'serif'],
-        'body': ['IBM Plex Sans', 'sans-serif'],
+        'sans': ['IBM Plex Sans', 'sans-serif'],
       },
       colors: {
         'brandcolor-primary': '#008B31',
@@ -28,8 +31,7 @@ module.exports = {
         'brandcolor-banner-info-bg': '#D5DFFF',
         'brandcolor-banner-warning-bg': '#FFEBE1',
         'brandcolor-banner-warning-button': '#F26333',
-        // Page backgrounds
-        'brandcolor-pagebg': '#F8F9FB',
+        'brandcolor-results-bg': '#F8F9FB',
       },
       boxShadow: {
         'button-press': 'inset 3px 3px 10px 0px rgba(0, 26, 49, 0.33)',

@@ -2,15 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global font defaults */
-@layer base {
-  body {
-    font-family: 'IBM Plex Sans', sans-serif;
-  }
-  
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Lora', serif;
-  }
-}
-
 /* You can add global styles to this file, and also import other style files */
+
+/* Apply IBM Plex Sans font globally */
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+}

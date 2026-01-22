@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-case-results',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './case-results.component.html',
   styleUrl: './case-results.component.scss'
 })
-export class CaseResultsComponent {}
+export class CaseResultsComponent {
 
+}

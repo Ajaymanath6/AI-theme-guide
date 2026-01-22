@@ -7,23 +7,24 @@ import { PrimaryButtonVariantsComponent } from '../../components/app-primary-but
 import { BannerInfoComponent } from '../../components/banner-info/banner-info.component';
 import { AccountHeaderComponent } from '../../components/account-header/account-header.component';
 import { SearchSectionComponent } from '../../components/search-section/search-section.component';
-import { CaseResultsComponent } from '../case-results/case-results.component';
+import { CaseResultsLayoutComponent } from '../layouts/case-results-layout/case-results-layout.component';
 
 declare var initFlowbite: () => void;
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, RouterLink, SidebarComponent, AppSecondaryButtonVariantsComponent, PrimaryButtonVariantsComponent, BannerInfoComponent, AccountHeaderComponent, SearchSectionComponent, CaseResultsComponent],
+  imports: [CommonModule, RouterLink, SidebarComponent, AppSecondaryButtonVariantsComponent, PrimaryButtonVariantsComponent, BannerInfoComponent, AccountHeaderComponent, SearchSectionComponent, CaseResultsLayoutComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements AfterViewInit {
   projectId: string | null = null;
   showBetaBanner = true;
+  showCaseResults = false;
   
   // Sidebar state
   isSidebarCollapsed = false;
-  activeMenuItem: string | null = 'home'; // default to Home
+  activeMenuItem: string | null = null;
   selectedDropdownOption: string | null = null;
 
   constructor(private route: ActivatedRoute) {
@@ -72,5 +73,11 @@ export class DashboardComponent implements AfterViewInit {
 
   onBannerDismiss(): void {
     this.showBetaBanner = false;
+  }
+
+  onSearch(query: string): void {
+    this.showCaseResults = true;
+    // Handle search logic here
+    console.log('Search query:', query);
   }
 }
