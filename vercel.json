@@ -1,6 +1,6 @@
 {
   "buildCommand": "ng build",
-  "outputDirectory": "dist/angular-tailwind-flowbite-app",
+  "outputDirectory": "dist/angular-tailwind-flowbite-app/browser",
   "installCommand": "npm ci",
   "framework": "angular",
   "rewrites": [
