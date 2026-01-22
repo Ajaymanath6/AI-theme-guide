@@ -14,6 +14,7 @@ export class SearchSectionComponent {
   selectedSearchType: string = 'Natural language';
   isDropdownOpen: boolean = false;
   searchQuery: string = '';
+  isLoading: boolean = false;
   
   search = output<string>();
 
@@ -38,12 +39,19 @@ export class SearchSectionComponent {
   }
 
   onSearch(): void {
-    if (this.searchQuery.trim()) {
+    if (this.searchQuery.trim() && !this.isLoading) {
+      this.isLoading = true;
       this.search.emit(this.searchQuery);
+      
+      // Reset loading state after 2 seconds (simulating API call)
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 2000);
     }
   }
 
   onClear(): void {
     this.searchQuery = '';
+    this.isLoading = false;
   }
 }

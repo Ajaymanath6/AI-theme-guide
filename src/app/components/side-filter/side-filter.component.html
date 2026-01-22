@@ -3,11 +3,12 @@
   <h2 class="text-brandcolor-textstrong font-semibold text-lg mb-4 font-sans">Filter your results</h2>
 
   <!-- Accordion Container -->
-  <div id="accordion-collapse" data-accordion="collapse" class="font-sans space-y-2">
+  <div id="accordion-collapse" class="font-sans">
       
       <!-- State Accordion -->
       <h3 id="accordion-collapse-heading-state">
         <button type="button" 
+                (click)="onAccordionClick('state', $event)"
                 class="flex items-center justify-between w-full p-3 font-medium text-left text-brandcolor-textstrong bg-transparent hover:bg-brandcolor-fill transition-colors font-sans"
                 data-accordion-target="#accordion-collapse-body-state" 
                 aria-expanded="false" 
@@ -19,40 +20,37 @@
         </button>
       </h3>
       <div id="accordion-collapse-body-state" class="hidden" aria-labelledby="accordion-collapse-heading-state">
-        <div class="p-3 font-sans space-y-2">
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Florida</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">6M</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">California</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">4M</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Texas</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">3M</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Ohio</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">2M</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">New York</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">2M</span>
-          </label>
+        <div class="pt-3 px-3 pb-0 font-sans space-y-2">
+          @if (accordionStates['state'].isLoading) {
+            <div class="flex items-center justify-center py-4">
+              <svg class="animate-spin h-6 w-6 text-brandcolor-secondary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </div>
+          } @else {
+            @for (item of getVisibleItems('state'); track item.label) {
+              <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
+                <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
+                <span class="text-sm text-brandcolor-textstrong font-sans">{{ item.label }}</span>
+                <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">{{ item.count }}</span>
+              </label>
+            }
+            @if (hasMoreItems('state') && !accordionStates['state'].showAll) {
+              <div class="pt-2 pb-1">
+                <app-ghost-button label="Show more" (buttonClick)="showMore('state')"></app-ghost-button>
+              </div>
+            }
+          }
         </div>
       </div>
       <!-- Divider below State accordion -->
-      <div class="w-full h-px bg-brandcolor-strokeweak my-2"></div>
+      <div class="w-full h-px bg-brandcolor-strokeweak"></div>
 
       <!-- Court System Accordion -->
       <h3 id="accordion-collapse-heading-court-system">
         <button type="button" 
+                (click)="onAccordionClick('court-system', $event)"
                 class="flex items-center justify-between w-full p-3 font-medium text-left text-brandcolor-textstrong bg-transparent hover:bg-brandcolor-fill transition-colors font-sans"
                 data-accordion-target="#accordion-collapse-body-court-system" 
                 aria-expanded="false" 
@@ -64,40 +62,37 @@
         </button>
       </h3>
       <div id="accordion-collapse-body-court-system" class="hidden" aria-labelledby="accordion-collapse-heading-court-system">
-        <div class="p-3 font-sans space-y-2">
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Florida County Courts</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">4M</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">California Superior Courts</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">3M</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Florida Circuit Courts</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">2M</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Wisconsin Circuit Courts</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">2M</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Ohio Court of Common Pleas</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">1M</span>
-          </label>
+        <div class="pt-3 px-3 pb-0 font-sans space-y-2">
+          @if (accordionStates['court-system'].isLoading) {
+            <div class="flex items-center justify-center py-4">
+              <svg class="animate-spin h-6 w-6 text-brandcolor-secondary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </div>
+          } @else {
+            @for (item of getVisibleItems('court-system'); track item.label) {
+              <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
+                <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
+                <span class="text-sm text-brandcolor-textstrong font-sans">{{ item.label }}</span>
+                <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">{{ item.count }}</span>
+              </label>
+            }
+            @if (hasMoreItems('court-system') && !accordionStates['court-system'].showAll) {
+              <div class="pt-2 pb-1">
+                <app-ghost-button label="Show more" (buttonClick)="showMore('court-system')"></app-ghost-button>
+              </div>
+            }
+          }
         </div>
       </div>
       <!-- Divider below Court System accordion -->
-      <div class="w-full h-px bg-brandcolor-strokeweak my-2"></div>
+      <div class="w-full h-px bg-brandcolor-strokeweak"></div>
 
       <!-- Court Accordion -->
       <h3 id="accordion-collapse-heading-court">
         <button type="button" 
+                (click)="onAccordionClick('court', $event)"
                 class="flex items-center justify-between w-full p-3 font-medium text-left text-brandcolor-textstrong bg-transparent hover:bg-brandcolor-fill transition-colors font-sans"
                 data-accordion-target="#accordion-collapse-body-court" 
                 aria-expanded="false" 
@@ -109,40 +104,37 @@
         </button>
       </h3>
       <div id="accordion-collapse-body-court" class="hidden" aria-labelledby="accordion-collapse-heading-court">
-        <div class="p-3 font-sans space-y-2">
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">California Superior Courts - Los Angeles County Superior Court</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">919K</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Wisconsin Circuit Courts - Milwaukee County Circuit Court</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">463K</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Florida County Courts - Pinellas County Court</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">449K</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Florida Circuit Courts - Ninth Judicial Circuit</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">416K</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Illinois Circuit Courts - 1st Municipal District, Cook County Circuit Court</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">384K</span>
-          </label>
+        <div class="pt-3 px-3 pb-0 font-sans space-y-2">
+          @if (accordionStates['court'].isLoading) {
+            <div class="flex items-center justify-center py-4">
+              <svg class="animate-spin h-6 w-6 text-brandcolor-secondary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </div>
+          } @else {
+            @for (item of getVisibleItems('court'); track item.label) {
+              <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
+                <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
+                <span class="text-sm text-brandcolor-textstrong font-sans">{{ item.label }}</span>
+                <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">{{ item.count }}</span>
+              </label>
+            }
+            @if (hasMoreItems('court') && !accordionStates['court'].showAll) {
+              <div class="pt-2 pb-1">
+                <app-ghost-button label="Show more" (buttonClick)="showMore('court')"></app-ghost-button>
+              </div>
+            }
+          }
         </div>
       </div>
       <!-- Divider below Court accordion -->
-      <div class="w-full h-px bg-brandcolor-strokeweak my-2"></div>
+      <div class="w-full h-px bg-brandcolor-strokeweak"></div>
 
       <!-- Filing Date Accordion -->
       <h3 id="accordion-collapse-heading-filing-date">
         <button type="button" 
+                (click)="onAccordionClick('filing-date', $event)"
                 class="flex items-center justify-between w-full p-3 font-medium text-left text-brandcolor-textstrong bg-transparent hover:bg-brandcolor-fill transition-colors font-sans"
                 data-accordion-target="#accordion-collapse-body-filing-date" 
                 aria-expanded="false" 
@@ -154,16 +146,26 @@
         </button>
       </h3>
       <div id="accordion-collapse-body-filing-date" class="hidden" aria-labelledby="accordion-collapse-heading-filing-date">
-        <div class="p-3 font-sans">
-          <p class="text-sm text-brandcolor-textweak font-sans">Filing Date options will go here</p>
+        <div class="pt-3 px-3 pb-0 font-sans">
+          @if (accordionStates['filing-date']?.isLoading) {
+            <div class="flex items-center justify-center py-4">
+              <svg class="animate-spin h-6 w-6 text-brandcolor-secondary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </div>
+          } @else {
+            <p class="text-sm text-brandcolor-textweak font-sans">Filing Date options will go here</p>
+          }
         </div>
       </div>
       <!-- Divider below Filing Date accordion -->
-      <div class="w-full h-px bg-brandcolor-strokeweak my-2"></div>
+      <div class="w-full h-px bg-brandcolor-strokeweak"></div>
 
       <!-- Area of Law Accordion -->
       <h3 id="accordion-collapse-heading-area-of-law">
         <button type="button" 
+                (click)="onAccordionClick('area-of-law', $event)"
                 class="flex items-center justify-between w-full p-3 font-medium text-left text-brandcolor-textstrong bg-transparent hover:bg-brandcolor-fill transition-colors font-sans"
                 data-accordion-target="#accordion-collapse-body-area-of-law" 
                 aria-expanded="false" 
@@ -175,40 +177,37 @@
         </button>
       </h3>
       <div id="accordion-collapse-body-area-of-law" class="hidden" aria-labelledby="accordion-collapse-heading-area-of-law">
-        <div class="p-3 font-sans space-y-2">
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Commercial and Trade</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">4M</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Real Property</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">4M</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Personal Injury and Torts</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">3M</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Personal and Family</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">3M</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Probate</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">1M</span>
-          </label>
+        <div class="pt-3 px-3 pb-0 font-sans space-y-2">
+          @if (accordionStates['area-of-law'].isLoading) {
+            <div class="flex items-center justify-center py-4">
+              <svg class="animate-spin h-6 w-6 text-brandcolor-secondary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </div>
+          } @else {
+            @for (item of getVisibleItems('area-of-law'); track item.label) {
+              <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
+                <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
+                <span class="text-sm text-brandcolor-textstrong font-sans">{{ item.label }}</span>
+                <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">{{ item.count }}</span>
+              </label>
+            }
+            @if (hasMoreItems('area-of-law') && !accordionStates['area-of-law'].showAll) {
+              <div class="pt-2 pb-1">
+                <app-ghost-button label="Show more" (buttonClick)="showMore('area-of-law')"></app-ghost-button>
+              </div>
+            }
+          }
         </div>
       </div>
       <!-- Divider below Area of Law accordion -->
-      <div class="w-full h-px bg-brandcolor-strokeweak my-2"></div>
+      <div class="w-full h-px bg-brandcolor-strokeweak"></div>
 
       <!-- Case Type Group Accordion -->
       <h3 id="accordion-collapse-heading-case-type-group">
         <button type="button" 
+                (click)="onAccordionClick('case-type-group', $event)"
                 class="flex items-center justify-between w-full p-3 font-medium text-left text-brandcolor-textstrong bg-transparent hover:bg-brandcolor-fill transition-colors font-sans"
                 data-accordion-target="#accordion-collapse-body-case-type-group" 
                 aria-expanded="false" 
@@ -220,16 +219,26 @@
         </button>
       </h3>
       <div id="accordion-collapse-body-case-type-group" class="hidden" aria-labelledby="accordion-collapse-heading-case-type-group">
-        <div class="p-3 font-sans">
-          <p class="text-sm text-brandcolor-textweak font-sans">Case Type Group options will go here</p>
+        <div class="pt-3 px-3 pb-0 font-sans">
+          @if (accordionStates['case-type-group']?.isLoading) {
+            <div class="flex items-center justify-center py-4">
+              <svg class="animate-spin h-6 w-6 text-brandcolor-secondary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </div>
+          } @else {
+            <p class="text-sm text-brandcolor-textweak font-sans">Case Type Group options will go here</p>
+          }
         </div>
       </div>
       <!-- Divider below Case Type Group accordion -->
-      <div class="w-full h-px bg-brandcolor-strokeweak my-2"></div>
+      <div class="w-full h-px bg-brandcolor-strokeweak"></div>
 
       <!-- Case Type Accordion -->
       <h3 id="accordion-collapse-heading-case-type">
         <button type="button" 
+                (click)="onAccordionClick('case-type', $event)"
                 class="flex items-center justify-between w-full p-3 font-medium text-left text-brandcolor-textstrong bg-transparent hover:bg-brandcolor-fill transition-colors font-sans"
                 data-accordion-target="#accordion-collapse-body-case-type" 
                 aria-expanded="false" 
@@ -241,40 +250,37 @@
         </button>
       </h3>
       <div id="accordion-collapse-body-case-type" class="hidden" aria-labelledby="accordion-collapse-heading-case-type">
-        <div class="p-3 font-sans space-y-2">
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Real Property</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">3M</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Personal Injury and Torts</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">2M</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Small Claims</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">2M</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Divorce/Separation</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">1M</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Contract</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">1M</span>
-          </label>
+        <div class="pt-3 px-3 pb-0 font-sans space-y-2">
+          @if (accordionStates['case-type'].isLoading) {
+            <div class="flex items-center justify-center py-4">
+              <svg class="animate-spin h-6 w-6 text-brandcolor-secondary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </div>
+          } @else {
+            @for (item of getVisibleItems('case-type'); track item.label) {
+              <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
+                <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
+                <span class="text-sm text-brandcolor-textstrong font-sans">{{ item.label }}</span>
+                <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">{{ item.count }}</span>
+              </label>
+            }
+            @if (hasMoreItems('case-type') && !accordionStates['case-type'].showAll) {
+              <div class="pt-2 pb-1">
+                <app-ghost-button label="Show more" (buttonClick)="showMore('case-type')"></app-ghost-button>
+              </div>
+            }
+          }
         </div>
       </div>
       <!-- Divider below Case Type accordion -->
-      <div class="w-full h-px bg-brandcolor-strokeweak my-2"></div>
+      <div class="w-full h-px bg-brandcolor-strokeweak"></div>
 
       <!-- Case Status Accordion -->
       <h3 id="accordion-collapse-heading-case-status">
         <button type="button" 
+                (click)="onAccordionClick('case-status', $event)"
                 class="flex items-center justify-between w-full p-3 font-medium text-left text-brandcolor-textstrong bg-transparent hover:bg-brandcolor-fill transition-colors font-sans"
                 data-accordion-target="#accordion-collapse-body-case-status" 
                 aria-expanded="false" 
@@ -286,32 +292,28 @@
         </button>
       </h3>
       <div id="accordion-collapse-body-case-status" class="hidden" aria-labelledby="accordion-collapse-heading-case-status">
-        <div class="p-3 font-sans space-y-2">
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Closed</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">16M</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Open</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">5M</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Dismissed</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">1M</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Judgment Entered</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">1M</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
-            <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
-            <span class="text-sm text-brandcolor-textstrong font-sans">Inactive</span>
-            <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">437K</span>
-          </label>
+        <div class="pt-3 px-3 pb-0 font-sans space-y-2">
+          @if (accordionStates['case-status'].isLoading) {
+            <div class="flex items-center justify-center py-4">
+              <svg class="animate-spin h-6 w-6 text-brandcolor-secondary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </div>
+          } @else {
+            @for (item of getVisibleItems('case-status'); track item.label) {
+              <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
+                <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
+                <span class="text-sm text-brandcolor-textstrong font-sans">{{ item.label }}</span>
+                <span class="text-sm font-semibold text-brandcolor-secondary font-sans ml-auto">{{ item.count }}</span>
+              </label>
+            }
+            @if (hasMoreItems('case-status') && !accordionStates['case-status'].showAll) {
+              <div class="pt-2 pb-1">
+                <app-ghost-button label="Show more" (buttonClick)="showMore('case-status')"></app-ghost-button>
+              </div>
+            }
+          }
         </div>
       </div>
 

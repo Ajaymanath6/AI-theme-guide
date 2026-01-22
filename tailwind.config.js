@@ -45,6 +45,7 @@ module.exports = {
       },
       borderRadius: {
         'button': '6px', // Standard button corner radius
+        'large': '12px', // Large corner radius
       }
     },
   },

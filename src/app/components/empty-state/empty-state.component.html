@@ -1,0 +1,20 @@
+@if (currentScenario) {
+  <div class="flex flex-col items-center justify-center p-8 text-center font-sans">
+    <!-- Icon -->
+    <div class="mb-2">
+      <span class="material-symbols-outlined text-brandcolor-textweak" style="font-size: 48px;">
+        {{ currentScenario.icon }}
+      </span>
+    </div>
+    
+    <!-- Title -->
+    <h3 class="text-xl font-semibold text-brandcolor-textweak mb-2 font-sans">
+      {{ currentScenario.title }}
+    </h3>
+    
+    <!-- Content - Max 2 lines -->
+    <p class="text-sm text-brandcolor-textweak max-w-md font-sans leading-relaxed line-clamp-2">
+      {{ currentScenario.content }}
+    </p>
+  </div>
+}

@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
@@ -18,9 +18,15 @@ declare var initFlowbite: () => void;
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements AfterViewInit {
+  @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLElement>;
+  
   projectId: string | null = null;
   showBetaBanner = true;
   showCaseResults = false;
+  currentSearchQuery: string = '';
+  isAccountHeaderHidden: boolean = false;
+  isBannerHidden: boolean = false;
+  isSearchLoading: boolean = false;
   
   // Sidebar state
   isSidebarCollapsed = false;
@@ -77,7 +83,28 @@ export class DashboardComponent implements AfterViewInit {
 
   onSearch(query: string): void {
     this.showCaseResults = true;
+    this.currentSearchQuery = query;
+    this.isSearchLoading = true;
+    
+    // Simulate API call - show loading for 2 seconds
+    setTimeout(() => {
+      this.isSearchLoading = false;
+    }, 2000);
+    
     // Handle search logic here
     console.log('Search query:', query);
+  }
+
+  onScroll(event: Event): void {
+    const target = event.target as HTMLElement;
+    const scrollTop = target.scrollTop;
+    
+    // Hide account header when scrolling down, show when at top
+    this.isAccountHeaderHidden = scrollTop > 50;
+    
+    // Hide banner when scrolling (permanently hidden once scrolled)
+    if (scrollTop > 50 && !this.isBannerHidden) {
+      this.isBannerHidden = true;
+    }
   }
 }

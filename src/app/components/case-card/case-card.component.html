@@ -1,0 +1,77 @@
+@if (isLoading()) {
+  <!-- Skeleton Loading -->
+  <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-4 w-full font-sans animate-pulse">
+    <!-- Header: Icon + Case Heading skeleton -->
+    <div class="flex items-center gap-3 mb-3">
+      <div class="w-6 h-6 bg-brandcolor-strokeweak rounded"></div>
+      <div class="h-6 bg-brandcolor-strokeweak rounded flex-1"></div>
+    </div>
+    
+    <!-- Case Details skeleton -->
+    <div class="flex items-center gap-4 font-sans mb-4">
+      <div class="h-4 bg-brandcolor-strokeweak rounded w-24"></div>
+      <div class="h-4 bg-brandcolor-strokeweak rounded w-32"></div>
+      <div class="h-4 bg-brandcolor-strokeweak rounded w-20"></div>
+      <div class="h-4 bg-brandcolor-strokeweak rounded w-16"></div>
+      <div class="h-4 bg-brandcolor-strokeweak rounded w-12"></div>
+    </div>
+    
+    <!-- Badges skeleton -->
+    <div class="flex items-center gap-2 mt-4">
+      <div class="h-6 bg-brandcolor-strokeweak rounded w-20"></div>
+      <div class="h-4 bg-brandcolor-strokeweak rounded w-32"></div>
+    </div>
+  </div>
+} @else {
+  <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-4 w-full font-sans">
+    <!-- Header: Icon + Case Heading on same line -->
+    <div class="flex items-center gap-3 mb-3">
+      <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 24px;">topic</span>
+      <h3 class="text-lg font-semibold text-brandcolor-secondary font-sans flex-1">
+        {{ caseTitle() }}
+      </h3>
+    </div>
+    
+    <!-- Case Details - Single Line (below heading) -->
+    <div class="flex items-center gap-4 font-sans mb-4">
+      <!-- Tag -->
+      <div class="flex items-center gap-1.5 whitespace-nowrap">
+        <span class="material-symbols-outlined icon-16 mr-1 text-brandcolor-strokestrong" style="font-size: 18px;">tag</span>
+        <span class="text-sm text-brandcolor-textstrong font-sans">{{ caseTag() }}</span>
+      </div>
+      
+      <!-- Court -->
+      <div class="flex items-center gap-1.5 whitespace-nowrap">
+        <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 18px;">account_balance</span>
+        <span class="text-sm text-brandcolor-textstrong font-sans">{{ courtName() }}</span>
+      </div>
+      
+      <!-- Date -->
+      <div class="flex items-center gap-1.5 whitespace-nowrap">
+        <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 18px;">calendar_month</span>
+        <span class="text-sm text-brandcolor-textstrong font-sans">{{ filingDate() }}</span>
+      </div>
+      
+      <!-- Area of Law -->
+      <div class="flex items-center gap-1.5 whitespace-nowrap">
+        <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 18px;">list_alt</span>
+        <span class="text-sm text-brandcolor-textstrong font-sans">{{ areaOfLaw() }}</span>
+      </div>
+      
+      <!-- Status -->
+      <div class="flex items-center gap-1.5 whitespace-nowrap">
+        <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 18px;">timelapse</span>
+        <span class="text-sm text-brandcolor-textstrong font-sans">{{ caseStatus() }}</span>
+      </div>
+    </div>
+    
+    <!-- Badges -->
+    <div class="flex items-center gap-2 mt-4">
+      <div class="flex items-center gap-1 px-2 py-1 bg-brandcolor-fill rounded-large">
+        <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 24px;">person</span>
+        <span class="text-brandcolor-textstrong font-semibold font-sans" style="font-size: 14px;">Attorney</span>
+      </div>
+      <span class="text-xs text-brandcolor-textstrong font-semibold font-sans">{{ attorneyName() }}</span>
+    </div>
+  </div>
+}

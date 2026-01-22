@@ -1,11 +1,70 @@
-<div class="h-full w-full bg-brandcolor-results-bg flex">
+<div class="min-h-full w-full bg-brandcolor-results-bg flex">
   <!-- Left: Side Filter -->
-  <div class="w-full max-w-[18%] overflow-y-auto opacity-100 duration-300 c_md:max-w-[20%] c_xl:max-w-[18%]">
+  <div class="w-full max-w-[18%] opacity-100 duration-300 c_md:max-w-[20%] c_xl:max-w-[18%]">
     <app-side-filter></app-side-filter>
   </div>
   
   <!-- Right: Case Results -->
-  <div class="flex-1 overflow-y-auto">
-    <app-case-results></app-case-results>
+  <div class="flex-1 p-6">
+    @if (searchQuery()) {
+      @if (isLoading()) {
+        <!-- Loading State with Spinner and Skeleton Cards -->
+        <div class="flex flex-col items-center justify-center py-8">
+          <div class="mb-6">
+            <svg class="animate-spin h-8 w-8 text-brandcolor-secondary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </div>
+          <div class="w-full space-y-4">
+            @for (item of [1,2,3,4,5]; track item) {
+              <app-case-card [isLoading]="true"></app-case-card>
+            }
+          </div>
+        </div>
+      } @else if (hasResults()) {
+        <!-- Header: Case results heading, divider, and results info in same line -->
+        <div class="flex items-center gap-4 mb-4">
+          <h2 class="text-brandcolor-textstrong font-semibold text-lg font-sans">Case results</h2>
+          <div class="flex-1 h-px bg-brandcolor-strokeweak"></div>
+          <div class="flex items-center gap-1.5 text-sm text-brandcolor-textstrong font-sans">
+            <span class="text-brandcolor-textweak">Showing</span>
+            <span class="px-2 py-0.5 bg-brandcolor-white rounded-large">1-10</span>
+            <span>of</span>
+            <span class="px-2 py-0.5 bg-brandcolor-white rounded-large">30,12424</span>
+            <span class="text-brandcolor-textweak">results</span>
+          </div>
+        </div>
+        
+        <div class="space-y-4 mb-6">
+          @for (caseItem of cases; track caseItem.caseTag) {
+            <app-case-card
+              [caseTitle]="caseItem.caseTitle"
+              [caseTag]="caseItem.caseTag"
+              [courtName]="caseItem.courtName"
+              [filingDate]="caseItem.filingDate"
+              [areaOfLaw]="caseItem.areaOfLaw"
+              [caseStatus]="caseItem.caseStatus"
+              [attorneyName]="caseItem.attorneyName">
+            </app-case-card>
+          }
+        </div>
+        
+        <!-- Bottom: Results info on left, Pagination on right -->
+        <div class="pt-4">
+          <app-pagination [currentPage]="1" [totalPages]="100" [pageSize]="10" [totalResults]="3012424"></app-pagination>
+        </div>
+      } @else {
+        <!-- Empty State - Centered -->
+        <div class="flex items-center justify-center min-h-[400px]">
+          <app-empty-state [scenario]="emptyStateScenario()"></app-empty-state>
+        </div>
+      }
+    } @else {
+      <!-- Empty State - No search term entered -->
+      <div class="flex items-center justify-center min-h-[400px]">
+        <app-empty-state [scenario]="'empty-search'"></app-empty-state>
+      </div>
+    }
   </div>
 </div>

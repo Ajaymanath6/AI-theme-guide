@@ -1,0 +1,37 @@
+{
+  "no-results": {
+    "icon": "search_off",
+    "title": "No results found",
+    "content": "We did not find any relevant research papers related to your search term. It appears to be a random string or an identifier that does not match current academic topics or standard terminology."
+  },
+  "not-a-question": {
+    "icon": "help_outline",
+    "title": "Search term not a question",
+    "content": "Without a clear, legible research question, I cannot formulate a meaningful response. Please try rephrasing your search as a question."
+  },
+  "typo": {
+    "icon": "spellcheck",
+    "title": "Possible typo detected",
+    "content": "It looks like there might be a typo in your search. Please check your spelling and try again."
+  },
+  "not-in-database": {
+    "icon": "database_off",
+    "title": "Not found in database",
+    "content": "We couldn't find any matches for your search in our database. Try using different keywords or check your search term."
+  },
+  "error-500": {
+    "icon": "error_outline",
+    "title": "Server error",
+    "content": "We encountered an error processing your request. Please try again in a few moments."
+  },
+  "error-generic": {
+    "icon": "warning",
+    "title": "Something went wrong",
+    "content": "An unexpected error occurred. Please try again or contact support if the problem persists."
+  },
+  "empty-search": {
+    "icon": "search",
+    "title": "Start your search",
+    "content": "Enter a search term to find relevant information."
+  }
+}

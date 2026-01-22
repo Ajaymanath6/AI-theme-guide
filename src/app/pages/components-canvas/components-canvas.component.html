@@ -28,13 +28,36 @@
       </button>
     </div>
     
-    <!-- Save to Project Button (RIGHT) -->
-    <button (click)="exportCatalog()"
-            class="flex items-center gap-2 px-4 py-2 bg-brandcolor-primary text-white rounded-lg hover:bg-brandcolor-primaryhover transition-colors shadow-md"
-            title="💡 Saves directly to your project folder (first time: select folder)">
-      <span class="material-symbols-outlined" style="font-size: 20px;">save</span>
-      <span class="text-sm font-medium">Save to Project</span>
-    </button>
+    <!-- Action Buttons (RIGHT) -->
+    <div class="flex items-center gap-2">
+      <!-- Auto-Sync Toggle Button -->
+      <button (click)="toggleAutoSync()"
+              [class.bg-brandcolor-secondary]="autoSyncEnabled"
+              [class.bg-brandcolor-strokeweak]="!autoSyncEnabled"
+              [class.text-white]="autoSyncEnabled"
+              [class.text-brandcolor-textstrong]="!autoSyncEnabled"
+              class="flex items-center gap-2 px-4 py-2 rounded-lg hover:opacity-80 transition-colors shadow-md"
+              [title]="autoSyncEnabled ? '⏸️ Disable auto-sync' : '▶️ Enable auto-sync (checks every ' + autoSyncIntervalSeconds + ' seconds)'">
+        <span class="material-symbols-outlined" style="font-size: 20px;">{{ autoSyncEnabled ? 'pause' : 'play_arrow' }}</span>
+        <span class="text-sm font-medium">{{ autoSyncEnabled ? 'Auto-Sync ON' : 'Auto-Sync OFF' }}</span>
+      </button>
+      
+      <!-- Sync from Project Button -->
+      <button (click)="syncFromProjectFiles()"
+              class="flex items-center gap-2 px-4 py-2 bg-brandcolor-secondary text-white rounded-lg hover:bg-brandcolor-secondaryhover transition-colors shadow-md"
+              title="🔄 Pull all changes from project component files to canvas">
+        <span class="material-symbols-outlined" style="font-size: 20px;">sync</span>
+        <span class="text-sm font-medium">Sync from Project</span>
+      </button>
+      
+      <!-- Save to Project Button -->
+      <button (click)="exportCatalog()"
+              class="flex items-center gap-2 px-4 py-2 bg-brandcolor-primary text-white rounded-lg hover:bg-brandcolor-primaryhover transition-colors shadow-md"
+              title="💡 Saves directly to your project folder (first time: select folder)">
+        <span class="material-symbols-outlined" style="font-size: 20px;">save</span>
+        <span class="text-sm font-medium">Save to Project</span>
+      </button>
+    </div>
   </div>
   
   <!-- Canvas Area -->
@@ -373,6 +396,33 @@
           <!-- Side Filter Component -->
           @if (element.type === 'side-filter') {
             <app-side-filter></app-side-filter>
+          }
+          
+          <!-- Case Card Component -->
+          @if (element.type === 'case-card') {
+            <app-case-card
+              [caseTitle]="'STATE OF OHIO vs. Danowski, JR, Joseph John'"
+              [caseTag]="'2026 TR D 00045 E'"
+              [courtName]="'Ohio County Courts - Eastern Division, Ashtabula County Court'"
+              [filingDate]="'21 January 2026'"
+              [areaOfLaw]="'Traffic'"
+              [caseStatus]="'Open'"
+              [attorneyName]="'MCGHEE JOHN EDWARD JR'">
+            </app-case-card>
+          }
+          
+          <!-- Empty State Component -->
+          @if (element.type === 'empty-state') {
+            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg w-full max-w-md">
+              <app-empty-state [scenario]="'no-results'"></app-empty-state>
+            </div>
+          }
+          
+          <!-- Pagination Component -->
+          @if (element.type === 'pagination') {
+            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-4 w-full max-w-4xl">
+              <app-pagination [currentPage]="1" [totalPages]="100" [pageSize]="10" [totalResults]="3012424"></app-pagination>
+            </div>
           }
           
           <!-- Dropdown Component: Header, 5 Options, Divider, and Two Buttons -->

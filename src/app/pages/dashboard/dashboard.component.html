@@ -18,24 +18,28 @@
     <div class="flex-1 flex flex-col overflow-hidden bg-brandcolor-white">
       
       <!-- TOP: Search Bar Header (Fixed) -->
-      <header class="flex-shrink-0 bg-brandcolor-white overflow-visible relative z-10 pb-2">
+      <header class="flex-shrink-0 bg-brandcolor-white overflow-visible relative z-10" #headerElement>
         <div class="space-y-4 overflow-visible">
-          <!-- Banner Info (full width above search) -->
+          <!-- Banner Info (full width above search) - Hidden on scroll -->
           @if (showBetaBanner) {
-            <app-banner-info (cancel)="onBannerDismiss()"></app-banner-info>
+            <div [class.opacity-0]="isBannerHidden" [class.max-h-0]="isBannerHidden" [class.overflow-hidden]="isBannerHidden" class="transition-all duration-300 ease-in-out">
+              <app-banner-info (cancel)="onBannerDismiss()"></app-banner-info>
+            </div>
           }
 
-          <!-- Account Header (full width) -->
-          <app-account-header></app-account-header>
+          <!-- Account Header (full width) - Collapsible on scroll -->
+          <div [class.opacity-0]="isAccountHeaderHidden" [class.max-h-0]="isAccountHeaderHidden" [class.overflow-hidden]="isAccountHeaderHidden" class="transition-all duration-300 ease-in-out">
+            <app-account-header></app-account-header>
+          </div>
 
           <!-- Search Section (full width) -->
           <app-search-section (search)="onSearch($event)"></app-search-section>
         </div>
       </header>
 
-      <!-- BOTTOM: Case Results Layout (below search section) -->
-      <main class="flex-1 overflow-hidden">
-        <app-case-results-layout></app-case-results-layout>
+      <!-- BOTTOM: Case Results Layout (scrollable, can scroll under search section) -->
+      <main class="flex-1 overflow-y-auto" #scrollContainer (scroll)="onScroll($event)">
+        <app-case-results-layout [searchQuery]="currentSearchQuery" [isLoading]="isSearchLoading"></app-case-results-layout>
       </main>
       
       <!-- Primary Button Variants Component -->

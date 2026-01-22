@@ -1,7 +1,7 @@
 {
   "catalogId": "design-system-v1",
   "version": "1.0.0",
-  "lastUpdated": "2026-01-21T11:34:39.137Z",
+  "lastUpdated": "2026-01-22T07:31:30.635Z",
   "registeredComponents": {
     "sidebar": {
       "id": "sidebar",
@@ -10,349 +10,34 @@
       "description": "Collapsible navigation sidebar with logo, dropdown, menu items, and toggle button",
       "htmlSelector": "[title='sidebar']",
       "status": "active",
-      "registeredAt": "2026-01-16T09:31:18.413Z",
+      "registeredAt": "2026-01-22T07:24:53.884Z",
       "isSharedComponent": true,
       "componentPath": "src/app/components/sidebar/sidebar.component.ts",
       "componentTag": "<app-sidebar></app-sidebar>"
     },
-    "secondary-button": {
-      "id": "secondary-button",
-      "displayName": "secondary-button",
+    "side-filter": {
+      "id": "side-filter",
+      "displayName": "side-filter",
       "category": "general",
-      "description": "Component: secondary-button",
-      "htmlSelector": "[title='secondary-button']",
+      "description": "Component: side-filter",
+      "htmlSelector": "[title='side-filter']",
       "status": "active",
-      "registeredAt": "2026-01-16T11:19:18.757Z",
+      "registeredAt": "2026-01-22T07:24:53.885Z",
       "isSharedComponent": true,
-      "componentPath": "src/app/components/secondary-button/secondary-button.component.ts",
-      "componentTag": "<app-secondary-button></app-secondary-button>"
+      "componentPath": "src/app/components/side-filter/side-filter.component.ts",
+      "componentTag": "<app-side-filter></app-side-filter>"
     },
-    "secondary-outline-button": {
-      "id": "secondary-outline-button",
-      "displayName": "secondary-outline-button",
+    "case-card": {
+      "id": "case-card",
+      "displayName": "case-card",
       "category": "general",
-      "description": "Component: secondary-outline-button",
-      "htmlSelector": "[title='secondary-outline-button']",
+      "description": "Component: case-card",
+      "htmlSelector": "[title='case-card']",
       "status": "active",
-      "registeredAt": "2026-01-16T11:19:30.988Z",
+      "registeredAt": "2026-01-22T07:31:27.525Z",
       "isSharedComponent": true,
-      "componentPath": "src/app/components/secondary-outline-button/secondary-outline-button.component.ts",
-      "componentTag": "<app-secondary-outline-button></app-secondary-outline-button>"
-    },
-    "app-secondary-button-variants": {
-      "id": "app-secondary-button-variants",
-      "displayName": "app-secondary-button-variants",
-      "category": "super-components",
-      "description": "Style variation super component wrapping: secondary-button, secondary-outline-button",
-      "htmlSelector": "app-secondary-button-variants",
-      "status": "active",
-      "registeredAt": "2026-01-16T11:26:57.477Z",
-      "isSuperComponent": true,
-      "wraps": [
-        "secondary-button",
-        "secondary-outline-button"
-      ],
-      "variants": [
-        "1",
-        "2"
-      ],
-      "componentPath": "src/app/components/app-secondary-button-variants/app-secondary-button-variants.component.ts",
-      "componentTag": "<app-secondary-button-variants></app-secondary-button-variants>"
-    },
-    "app-card-variants": {
-      "id": "app-card-variants",
-      "displayName": "app-card-variants",
-      "category": "super-components",
-      "description": "Full component wrapping super component wrapping: card, card-secondary, card-tertiary",
-      "htmlSelector": "app-card-variants",
-      "status": "active",
-      "registeredAt": "2026-01-16T12:32:53.024Z",
-      "isSuperComponent": true,
-      "wraps": [
-        "card-case",
-        "card-tertiary"
-      ],
-      "variants": [
-        "1",
-        "2",
-        "3"
-      ],
-      "componentPath": "src/app/components/app-card-variants/app-card-variants.component.ts",
-      "componentTag": "<app-card-variants></app-card-variants>"
-    },
-    "card-case": {
-      "id": "card-case",
-      "displayName": "card-case",
-      "category": "general",
-      "description": "Component: card-case",
-      "htmlSelector": "[title='card-case']",
-      "status": "active",
-      "registeredAt": "2026-01-19T05:56:20.509Z",
-      "isSharedComponent": true,
-      "componentPath": "src/app/components/card-case/card-case.component.ts",
-      "componentTag": "<app-card-case></app-card-case>"
-    },
-    "app-primary-button-variants": {
-      "id": "app-primary-button-variants",
-      "displayName": "app-primary-button-variants",
-      "category": "super-components",
-      "description": "Full component wrapping super component wrapping: primary-button, primary-outline-button, neutral-button, ghost-button, text-button, primary-text-button",
-      "htmlSelector": "app-primary-button-variants",
-      "status": "active",
-      "registeredAt": "2026-01-19T11:38:10.105Z",
-      "isSuperComponent": true,
-      "wraps": [
-        "primary-button",
-        "primary-outline-button",
-        "neutral-button",
-        "ghost-button",
-        "text-button",
-        "primary-text-button"
-      ],
-      "variants": [
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6"
-      ],
-      "componentPath": "src/app/components/app-primary-button-variants/app-primary-button-variants.component.ts",
-      "componentTag": "<app-primary-button-variants></app-primary-button-variants>"
-    },
-    "primary-button": {
-      "id": "primary-button",
-      "displayName": "primary-button",
-      "category": "general",
-      "description": "Button component with custom properties",
-      "htmlSelector": "[title='primary-button']",
-      "status": "active",
-      "registeredAt": "2026-01-19T11:36:36.156Z",
-      "isSharedComponent": true,
-      "componentPath": "src/app/components/primary-button/primary-button.component.ts",
-      "componentTag": "<app-primary-button></app-primary-button>",
-      "properties": {
-        "inputs": {
-          "label": true,
-          "disabled": false,
-          "loading": false,
-          "icon": false,
-          "iconRight": false,
-          "type": false,
-          "size": false,
-          "fullWidth": false,
-          "ariaLabel": false,
-          "tooltip": false
-        },
-        "outputs": {
-          "buttonClick": true,
-          "buttonFocus": false,
-          "buttonBlur": false,
-          "buttonMouseEnter": false,
-          "buttonMouseLeave": false
-        }
-      }
-    },
-    "primary-outline-button": {
-      "id": "primary-outline-button",
-      "displayName": "primary-outline-button",
-      "category": "general",
-      "description": "Button component with custom properties",
-      "htmlSelector": "[title='primary-outline-button']",
-      "status": "active",
-      "registeredAt": "2026-01-19T11:36:53.690Z",
-      "isSharedComponent": true,
-      "componentPath": "src/app/components/primary-outline-button/primary-outline-button.component.ts",
-      "componentTag": "<app-primary-outline-button></app-primary-outline-button>",
-      "properties": {
-        "inputs": {
-          "label": true,
-          "disabled": false,
-          "loading": false,
-          "icon": false,
-          "iconRight": false,
-          "type": false,
-          "size": false,
-          "fullWidth": false,
-          "ariaLabel": false,
-          "tooltip": false
-        },
-        "outputs": {
-          "buttonClick": true,
-          "buttonFocus": false,
-          "buttonBlur": false,
-          "buttonMouseEnter": false,
-          "buttonMouseLeave": false
-        }
-      }
-    },
-    "neutral-button": {
-      "id": "neutral-button",
-      "displayName": "neutral-button",
-      "category": "general",
-      "description": "Button component with custom properties",
-      "htmlSelector": "[title='neutral-button']",
-      "status": "active",
-      "registeredAt": "2026-01-19T12:01:37.083Z",
-      "isSharedComponent": true,
-      "componentPath": "src/app/components/neutral-button/neutral-button.component.ts",
-      "componentTag": "<app-neutral-button></app-neutral-button>",
-      "properties": {
-        "inputs": {
-          "label": true,
-          "disabled": false,
-          "loading": false,
-          "icon": false,
-          "iconRight": false,
-          "type": false,
-          "size": false,
-          "fullWidth": false,
-          "ariaLabel": false,
-          "tooltip": false
-        },
-        "outputs": {
-          "buttonClick": true,
-          "buttonFocus": false,
-          "buttonBlur": false,
-          "buttonMouseEnter": false,
-          "buttonMouseLeave": false
-        }
-      }
-    },
-    "ghost-button": {
-      "id": "ghost-button",
-      "displayName": "ghost-button",
-      "category": "general",
-      "description": "Button component with custom properties",
-      "htmlSelector": "[title='ghost-button']",
-      "status": "active",
-      "registeredAt": "2026-01-19T12:26:42.758Z",
-      "isSharedComponent": true,
-      "componentPath": "src/app/components/ghost-button/ghost-button.component.ts",
-      "componentTag": "<app-ghost-button></app-ghost-button>",
-      "properties": {
-        "inputs": {
-          "label": true,
-          "disabled": false,
-          "loading": false,
-          "icon": false,
-          "iconRight": false,
-          "type": false,
-          "size": false,
-          "fullWidth": false,
-          "ariaLabel": false,
-          "tooltip": false
-        },
-        "outputs": {
-          "buttonClick": true,
-          "buttonFocus": false,
-          "buttonBlur": false,
-          "buttonMouseEnter": false,
-          "buttonMouseLeave": false
-        }
-      }
-    },
-    "text-button": {
-      "id": "text-button",
-      "displayName": "text-button",
-      "category": "general",
-      "description": "Button component with custom properties",
-      "htmlSelector": "[title='text-button']",
-      "status": "active",
-      "registeredAt": "2026-01-19T12:35:23.122Z",
-      "isSharedComponent": true,
-      "componentPath": "src/app/components/text-button/text-button.component.ts",
-      "componentTag": "<app-text-button></app-text-button>",
-      "properties": {
-        "inputs": {
-          "label": true,
-          "disabled": false,
-          "loading": false,
-          "icon": false,
-          "iconRight": false,
-          "type": false,
-          "size": false,
-          "fullWidth": false,
-          "ariaLabel": false,
-          "tooltip": false
-        },
-        "outputs": {
-          "buttonClick": true,
-          "buttonFocus": false,
-          "buttonBlur": false,
-          "buttonMouseEnter": false,
-          "buttonMouseLeave": false
-        }
-      }
-    },
-    "primary-text-button": {
-      "id": "primary-text-button",
-      "displayName": "primary-text-button",
-      "category": "general",
-      "description": "Button component with custom properties",
-      "htmlSelector": "[title='primary-text-button']",
-      "status": "active",
-      "registeredAt": "2026-01-19T12:45:29.565Z",
-      "isSharedComponent": true,
-      "componentPath": "src/app/components/primary-text-button/primary-text-button.component.ts",
-      "componentTag": "<app-primary-text-button></app-primary-text-button>",
-      "properties": {
-        "inputs": {
-          "label": true,
-          "disabled": false,
-          "loading": false,
-          "icon": false,
-          "iconRight": false,
-          "type": false,
-          "size": false,
-          "fullWidth": false,
-          "ariaLabel": false,
-          "tooltip": false
-        },
-        "outputs": {
-          "buttonClick": true,
-          "buttonFocus": false,
-          "buttonBlur": false,
-          "buttonMouseEnter": false,
-          "buttonMouseLeave": false
-        }
-      }
-    },
-    "banner-info": {
-      "id": "banner-info",
-      "displayName": "banner-info",
-      "category": "general",
-      "description": "Component: banner-info",
-      "htmlSelector": "[title='banner-info']",
-      "status": "active",
-      "registeredAt": "2026-01-21T10:55:22.922Z",
-      "isSharedComponent": true,
-      "componentPath": "src/app/components/banner-info/banner-info.component.ts",
-      "componentTag": "<app-banner-info></app-banner-info>"
-    },
-    "account-header": {
-      "id": "account-header",
-      "displayName": "account-header",
-      "category": "general",
-      "description": "Component: account-header",
-      "htmlSelector": "[title='account-header']",
-      "status": "active",
-      "registeredAt": "2026-01-21T11:09:57.748Z",
-      "isSharedComponent": true,
-      "componentPath": "src/app/components/account-header/account-header.component.ts",
-      "componentTag": "<app-account-header></app-account-header>"
-    },
-    "search-section": {
-      "id": "search-section",
-      "displayName": "search-section",
-      "category": "general",
-      "description": "Component: search-section",
-      "htmlSelector": "[title='search-section']",
-      "status": "active",
-      "registeredAt": "2026-01-21T11:34:35.467Z",
-      "isSharedComponent": true,
-      "componentPath": "src/app/components/search-section/search-section.component.ts",
-      "componentTag": "<app-search-section></app-search-section>"
+      "componentPath": "src/app/components/case-card/case-card.component.ts",
+      "componentTag": "<app-case-card></app-case-card>"
     }
   }
 }

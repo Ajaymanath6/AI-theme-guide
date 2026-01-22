@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, AfterViewInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +8,9 @@ import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { AppSecondaryButtonVariantsComponent } from '../../components/app-secondary-button-variants/app-secondary-button-variants.component';
 import { PrimaryButtonVariantsComponent } from '../../components/app-primary-button-variants/app-primary-button-variants.component';
 import { SideFilterComponent } from '../../components/side-filter/side-filter.component';
+import { CaseCardComponent } from '../../components/case-card/case-card.component';
+import { EmptyStateComponent } from '../../components/empty-state/empty-state.component';
+import { PaginationComponent } from '../../components/pagination/pagination.component';
 declare var initFlowbite: () => void;
 
 
@@ -26,11 +29,11 @@ interface CanvasElement {
 
 @Component({
   selector: 'app-components-canvas',
-  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, AppSecondaryButtonVariantsComponent, PrimaryButtonVariantsComponent, SideFilterComponent],
+  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, AppSecondaryButtonVariantsComponent, PrimaryButtonVariantsComponent, SideFilterComponent, CaseCardComponent, EmptyStateComponent, PaginationComponent],
   templateUrl: './components-canvas.component.html',
   styleUrl: './components-canvas.component.scss'
 })
-export class ComponentsCanvasComponent implements AfterViewInit {
+export class ComponentsCanvasComponent implements AfterViewInit, OnDestroy {
   canvasElements: CanvasElement[] = [
     { id: 'sidebar1', type: 'sidebar', x: 0, y: 60, content: 'Sidebar', isSharedComponent: true },
     { id: 'side-filter1', type: 'side-filter', x: 0, y: 400, content: 'Side Filter', isSharedComponent: true },
@@ -47,7 +50,10 @@ export class ComponentsCanvasComponent implements AfterViewInit {
     { id: 'banner-warning1', type: 'banner-warning', x: 200, y: 750, content: 'Warning Banner' },
     { id: 'app-primary-button-variants1', type: 'app-primary-button-variants', x: 200, y: 300, content: 'Primary Button Variants', isSharedComponent: true },
     { id: 'secondary-button1', type: 'secondary-button', x: 600, y: 200, content: 'Secondary Button' },
-    { id: 'secondary-outline-button1', type: 'secondary-outline-button', x: 800, y: 200, content: 'Secondary Outline Button' }
+    { id: 'secondary-outline-button1', type: 'secondary-outline-button', x: 800, y: 200, content: 'Secondary Outline Button' },
+    { id: 'case-card1', type: 'case-card', x: 300, y: 900, content: 'Case Card', isSharedComponent: true },
+    { id: 'empty-state1', type: 'empty-state', x: 600, y: 1200, content: 'Empty State', isSharedComponent: true },
+    { id: 'pagination1', type: 'pagination', x: 300, y: 1300, content: 'Pagination', isSharedComponent: true }
   ];
 
   isSidebarCollapsed = false;
@@ -105,6 +111,11 @@ export class ComponentsCanvasComponent implements AfterViewInit {
   panStartY = 0;
   panStartCanvasX = 0;
   panStartCanvasY = 0;
+
+  // Auto-sync state
+  private autoSyncInterval: any = null;
+  autoSyncEnabled = false;
+  autoSyncIntervalSeconds = 30; // Default: check every 30 seconds
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -286,6 +297,9 @@ export class ComponentsCanvasComponent implements AfterViewInit {
     const sharedComponents = [
       { id: 'sidebar', componentPath: 'src/app/components/sidebar/sidebar.component.ts', componentTag: '<app-sidebar></app-sidebar>' },
       { id: 'side-filter', componentPath: 'src/app/components/side-filter/side-filter.component.ts', componentTag: '<app-side-filter></app-side-filter>' },
+      { id: 'case-card', componentPath: 'src/app/components/case-card/case-card.component.ts', componentTag: '<app-case-card></app-case-card>' },
+      { id: 'empty-state', componentPath: 'src/app/components/empty-state/empty-state.component.ts', componentTag: '<app-empty-state></app-empty-state>' },
+      { id: 'pagination', componentPath: 'src/app/components/pagination/pagination.component.ts', componentTag: '<app-pagination></app-pagination>' },
     ];
 
     let hasChanges = false;
@@ -332,6 +346,65 @@ export class ComponentsCanvasComponent implements AfterViewInit {
   ngAfterViewInit() {
     if (typeof initFlowbite === 'function') {
       initFlowbite();
+    }
+    
+    // Start auto-sync if enabled (check localStorage for preference)
+    const autoSyncPref = localStorage.getItem('canvasAutoSync');
+    if (autoSyncPref === 'true') {
+      this.autoSyncEnabled = true;
+      this.startAutoSync();
+    }
+  }
+
+  ngOnDestroy() {
+    // Clean up auto-sync interval
+    if (this.autoSyncInterval) {
+      clearInterval(this.autoSyncInterval);
+      this.autoSyncInterval = null;
+    }
+  }
+
+  /**
+   * Toggle auto-sync on/off
+   */
+  toggleAutoSync(): void {
+    this.autoSyncEnabled = !this.autoSyncEnabled;
+    localStorage.setItem('canvasAutoSync', this.autoSyncEnabled.toString());
+    
+    if (this.autoSyncEnabled) {
+      this.startAutoSync();
+      this.showToast(`✅ Auto-sync enabled (checks every ${this.autoSyncIntervalSeconds} seconds)`);
+    } else {
+      this.stopAutoSync();
+      this.showToast('⏸️ Auto-sync disabled');
+    }
+  }
+
+  /**
+   * Start auto-sync interval
+   */
+  private startAutoSync(): void {
+    if (this.autoSyncInterval) {
+      clearInterval(this.autoSyncInterval);
+    }
+    
+    this.autoSyncInterval = setInterval(() => {
+      if (this.autoSyncEnabled) {
+        console.log('🔄 Auto-sync: Checking for changes from project files...');
+        this.syncFromProjectFiles().catch(err => {
+          console.warn('Auto-sync error:', err);
+        });
+      }
+    }, this.autoSyncIntervalSeconds * 1000);
+  }
+
+  /**
+   * Stop auto-sync interval
+   */
+  private stopAutoSync(): void {
+    if (this.autoSyncInterval) {
+      clearInterval(this.autoSyncInterval);
+      this.autoSyncInterval = null;
     }
   }
 
@@ -1572,8 +1645,8 @@ ${cases}
    * Shows popover for user confirmation
    */
   makeSharedComponent(componentId: string): void {
-    // Special case: sidebar and side-filter already exist as shared components
-    if (componentId === 'sidebar' || componentId === 'side-filter') {
+    // Special case: sidebar, side-filter, and case-card already exist as shared components
+    if (componentId === 'sidebar' || componentId === 'side-filter' || componentId === 'case-card') {
       // Update catalog with shared component metadata
       const entry: CatalogEntry = {
         id: componentId,
@@ -2232,6 +2305,41 @@ export class ${this.toClassName(componentId)} {
     
     console.log('Detected available properties from catalog:', result);
     return result;
+  }
+
+  /**
+   * Sync changes from project component files to canvas
+   * This reloads the catalog and refreshes all shared components on canvas
+   */
+  async syncFromProjectFiles(): Promise<void> {
+    try {
+      this.showToast('🔄 Syncing from project files...');
+      
+      // Reload catalog from JSON file (this will pick up any changes)
+      await this.catalogService.loadCatalogFromJson();
+      
+      // Sync shared components from files
+      const needsSync = this.syncCatalogToLocalStorage();
+      
+      // Reload shared component status (this applies changes to canvas)
+      await this.loadSharedComponentStatus();
+      
+      // Force change detection to update UI
+      this.cdr.detectChanges();
+      
+      if (needsSync) {
+        // Export updated catalog if new components were found
+        await this.exportCatalog();
+        this.showToast('✅ Sync complete! New components added to catalog.');
+      } else {
+        this.showToast('✅ Sync complete! All components are up to date.');
+      }
+      
+      console.log('✅ Sync from project files completed');
+    } catch (error) {
+      console.error('Error syncing from project files:', error);
+      this.showToast('❌ Failed to sync from project files. Check console for details.');
+    }
   }
 
   /**

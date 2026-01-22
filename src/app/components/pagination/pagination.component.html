@@ -1,0 +1,44 @@
+<div class="flex items-center justify-between w-full font-sans">
+  <!-- Left: Results Info -->
+  <div class="flex items-center gap-1.5 text-sm text-brandcolor-textstrong font-sans">
+    <span class="text-brandcolor-textweak">Showing</span>
+    <span class="px-2 py-0.5 bg-brandcolor-white rounded-large">{{ startIndex }}-{{ endIndex }}</span>
+    <span>of</span>
+    <span class="px-2 py-0.5 bg-brandcolor-white rounded-large">{{ totalResults().toLocaleString() }}</span>
+    <span class="text-brandcolor-textweak">results</span>
+  </div>
+  
+  <!-- Right: Pagination Controls -->
+  <div class="flex items-center gap-2">
+    <!-- Previous Button -->
+    <button
+      type="button"
+      [disabled]="currentPage() === 1"
+      class="flex items-center justify-center w-8 h-8 rounded-md text-brandcolor-strokestrong hover:bg-brandcolor-fill disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+      <span class="material-symbols-outlined" style="font-size: 20px;">chevron_left</span>
+    </button>
+    
+    <!-- Page Numbers -->
+    @for (page of pagesToShow; track page) {
+      @if (page === -1) {
+        <!-- Ellipsis -->
+        <span class="text-brandcolor-textweak px-2">...</span>
+      } @else {
+        <button
+          type="button"
+          [class.bg-brandcolor-white]="page === currentPage()"
+          class="flex items-center justify-center min-w-[32px] h-8 px-2 rounded-md font-medium text-brandcolor-secondary hover:bg-brandcolor-fill transition-colors">
+          {{ page }}
+        </button>
+      }
+    }
+    
+    <!-- Next Button -->
+    <button
+      type="button"
+      [disabled]="currentPage() === totalPages()"
+      class="flex items-center justify-center w-8 h-8 rounded-md text-brandcolor-strokestrong hover:bg-brandcolor-fill disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+      <span class="material-symbols-outlined" style="font-size: 20px;">chevron_right</span>
+    </button>
+  </div>
+</div>
