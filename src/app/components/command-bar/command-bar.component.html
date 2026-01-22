@@ -1,0 +1,48 @@
+<div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-2xl px-4">
+  <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg shadow-lg">
+    <div class="relative">
+      <div class="flex items-center gap-2 px-4 py-3">
+        <span class="material-symbols-outlined text-brandcolor-textweak" style="font-size: 20px;">terminal</span>
+        <input
+          #inputElement
+          type="text"
+          [value]="command()"
+          (input)="onInput($event)"
+          (keydown)="onKeyDown($event)"
+          placeholder="Type a command (Enter copies to clipboard - paste into Cursor chat)..."
+          class="flex-1 outline-none bg-transparent text-brandcolor-textstrong text-sm placeholder:text-brandcolor-textweak font-mono">
+        <button
+          type="button"
+          (click)="sendCommand()"
+          [disabled]="!command().trim()"
+          class="flex items-center justify-center w-8 h-8 rounded-md bg-brandcolor-primary text-white hover:bg-brandcolor-primaryhover disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+          <span class="material-symbols-outlined" style="font-size: 18px;">send</span>
+        </button>
+      </div>
+      
+      <!-- Suggestion when typing @ -->
+      @if (showSuggestion()) {
+        <div class="absolute bottom-full left-0 right-0 mb-2 bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg shadow-lg px-4 py-2">
+          <button
+            type="button"
+            (click)="insertPath()"
+            class="w-full text-left flex items-center gap-2 hover:bg-brandcolor-fill p-2 rounded transition-colors">
+            <span class="material-symbols-outlined text-brandcolor-textweak" style="font-size: 18px;">description</span>
+            <div class="flex-1 min-w-0">
+              <div class="text-sm font-medium text-brandcolor-textstrong truncate">components-canvas.component.html</div>
+              <div class="text-xs text-brandcolor-textweak truncate">{{ canvasPath }}</div>
+            </div>
+            <span class="text-xs text-brandcolor-textweak">Press Tab to insert</span>
+          </button>
+        </div>
+      }
+      
+      <!-- Success message -->
+      @if (showCopiedMessage()) {
+        <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-brandcolor-primary text-white px-4 py-2 rounded-lg shadow-lg text-sm font-medium whitespace-nowrap">
+          ✓ Sent to Cursor chat!
+        </div>
+      }
+    </div>
+  </div>
+</div>

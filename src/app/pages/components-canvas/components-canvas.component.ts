@@ -11,6 +11,7 @@ import { SideFilterComponent } from '../../components/side-filter/side-filter.co
 import { CaseCardComponent } from '../../components/case-card/case-card.component';
 import { EmptyStateComponent } from '../../components/empty-state/empty-state.component';
 import { PaginationComponent } from '../../components/pagination/pagination.component';
+import { CommandBarComponent } from '../../components/command-bar/command-bar.component';
 declare var initFlowbite: () => void;
 
 
@@ -29,7 +30,7 @@ interface CanvasElement {
 
 @Component({
   selector: 'app-components-canvas',
-  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, AppSecondaryButtonVariantsComponent, PrimaryButtonVariantsComponent, SideFilterComponent, CaseCardComponent, EmptyStateComponent, PaginationComponent],
+  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, AppSecondaryButtonVariantsComponent, PrimaryButtonVariantsComponent, SideFilterComponent, CaseCardComponent, EmptyStateComponent, PaginationComponent, CommandBarComponent],
   templateUrl: './components-canvas.component.html',
   styleUrl: './components-canvas.component.scss'
 })
@@ -2373,5 +2374,11 @@ export class ${this.toClassName(componentId)} {
       console.warn('Could not verify component exists:', error);
       // Continue - update script will handle it
     }
+  }
+  
+  onCommandSent(command: string): void {
+    console.log("Command sent from command bar:", command);
+    // The command is already formatted with @path and sent to Cursor
+    // This method can be used for additional handling if needed
   }
 }

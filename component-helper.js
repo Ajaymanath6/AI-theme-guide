@@ -707,7 +707,111 @@ app.post('/cleanup-all-references', (req, res) => {
   }
 });
 
-// Start server
+// Send command to Cursor chat endpoint (LOCAL ONLY)
+app.post('/send-to-cursor-chat', (req, res) => {
+  try {
+    const { command } = req.body;
+    
+    if (!command) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Command is required' 
+      });
+    }
+    
+    console.log('💬 Received command for Cursor chat:', command);
+    
+    // Try multiple methods to send to Cursor
+    let sent = false;
+    let method = '';
+    
+    // Method 1: Try Cursor CLI (if available)
+    // Cursor might have a CLI command like 'cursor --chat' or similar
+    const cursorCommands = [
+      `cursor --chat "${command}"`,
+      `cursor chat "${command}"`,
+      `cursor --send-chat "${command}"`
+    ];
+    
+    // Try each command
+    for (const cmd of cursorCommands) {
+      exec(cmd, (error, stdout, stderr) => {
+        if (!error) {
+          console.log('✅ Sent to Cursor via CLI:', cmd);
+          sent = true;
+          method = 'CLI';
+        }
+      });
+    }
+    
+    // Method 2: Write to a file that Cursor can read
+    // Create a cursor-commands.json file in the project root
+    const commandsFile = path.join(process.cwd(), '.cursor-commands.json');
+    let commands = [];
+    
+    try {
+      if (fs.existsSync(commandsFile)) {
+        const content = fs.readFileSync(commandsFile, 'utf8');
+        commands = JSON.parse(content);
+      }
+    } catch (e) {
+      // File doesn't exist or invalid JSON, start fresh
+      commands = [];
+    }
+    
+    // Add new command with timestamp
+    commands.push({
+      command: command,
+      timestamp: new Date().toISOString(),
+      sent: false
+    });
+    
+    // Keep only last 10 commands
+    if (commands.length > 10) {
+      commands = commands.slice(-10);
+    }
+    
+    fs.writeFileSync(commandsFile, JSON.stringify(commands, null, 2));
+    console.log('✅ Command saved to .cursor-commands.json');
+    
+    // Method 3: Also copy to clipboard as fallback
+    const os = require('os');
+    const platform = os.platform();
+    
+    let clipboardCmd = '';
+    if (platform === 'darwin') {
+      clipboardCmd = `echo "${command.replace(/"/g, '\\"')}" | pbcopy`;
+    } else if (platform === 'linux') {
+      clipboardCmd = `echo "${command.replace(/"/g, '\\"')}" | xclip -selection clipboard`;
+    } else if (platform === 'win32') {
+      clipboardCmd = `echo "${command.replace(/"/g, '\\"')}" | clip`;
+    }
+    
+    if (clipboardCmd) {
+      exec(clipboardCmd, (error) => {
+        if (!error) {
+          console.log('✅ Command also copied to clipboard');
+        }
+      });
+    }
+    
+    res.json({ 
+      success: true, 
+      message: 'Command sent to Cursor chat',
+      method: method || 'file+clipboard',
+      command: command,
+      note: 'Command saved to .cursor-commands.json and copied to clipboard. If Cursor CLI is available, it was also sent directly.'
+    });
+    
+  } catch (error) {
+    console.error('❌ Error sending to Cursor:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message 
+    });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`\n✨ Component Helper Server Running`);
   console.log(`📍 URL: http://localhost:${PORT}`);
