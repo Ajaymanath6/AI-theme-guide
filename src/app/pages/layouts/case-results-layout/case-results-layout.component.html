@@ -29,15 +29,15 @@
           <div class="flex-1 h-px bg-brandcolor-strokeweak"></div>
           <div class="flex items-center gap-1.5 text-sm text-brandcolor-textstrong font-sans">
             <span class="text-brandcolor-textweak">Showing</span>
-            <span class="px-2 py-0.5 bg-brandcolor-white rounded-large">1-10</span>
+            <span class="px-2 py-0.5 bg-brandcolor-white rounded-large">{{ startIndex() }}-{{ endIndex() }}</span>
             <span>of</span>
-            <span class="px-2 py-0.5 bg-brandcolor-white rounded-large">30,12424</span>
+            <span class="px-2 py-0.5 bg-brandcolor-white rounded-large">{{ totalCases().toLocaleString() }}</span>
             <span class="text-brandcolor-textweak">results</span>
           </div>
         </div>
         
         <div class="space-y-4 mb-6">
-          @for (caseItem of cases; track caseItem.caseTag) {
+          @for (caseItem of cases(); track caseItem.caseTag) {
             <app-case-card
               [caseTitle]="caseItem.caseTitle"
               [caseTag]="caseItem.caseTag"
@@ -52,7 +52,7 @@
         
         <!-- Bottom: Results info on left, Pagination on right -->
         <div class="pt-4">
-          <app-pagination [currentPage]="1" [totalPages]="100" [pageSize]="10" [totalResults]="3012424"></app-pagination>
+          <app-pagination [currentPage]="currentPage()" [totalPages]="totalPages()" [pageSize]="pageSize" [totalResults]="totalCases()"></app-pagination>
         </div>
       } @else {
         <!-- Empty State - Centered -->
