@@ -15,6 +15,7 @@ import { PaginationComponent } from '../../components/pagination/pagination.comp
 import { CommandBarComponent } from '../../components/command-bar/command-bar.component';
 import { ProjectCardComponent } from '../projects/components/project-card/project-card.component';
 import { SelectUsersModalComponent } from '../../components/select-users-modal/select-users-modal.component';
+import { WelcomeSectionComponent } from '../../components/welcome-section/welcome-section.component';
 declare var initFlowbite: () => void;
 
 
@@ -33,7 +34,7 @@ interface CanvasElement {
 
 @Component({
   selector: 'app-components-canvas',
-  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, AppSecondaryButtonVariantsComponent, PrimaryButtonVariantsComponent, SideFilterComponent, ProjectFilterComponent, CaseCardComponent, EmptyStateComponent, PaginationComponent, CommandBarComponent, ProjectCardComponent, SelectUsersModalComponent],
+  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, AppSecondaryButtonVariantsComponent, PrimaryButtonVariantsComponent, SideFilterComponent, ProjectFilterComponent, CaseCardComponent, EmptyStateComponent, PaginationComponent, CommandBarComponent, ProjectCardComponent, SelectUsersModalComponent, WelcomeSectionComponent],
   templateUrl: './components-canvas.component.html',
   styleUrl: './components-canvas.component.scss'
 })
@@ -45,6 +46,7 @@ export class ComponentsCanvasComponent implements AfterViewInit, OnDestroy {
     { id: 'select-users-modal1', type: 'select-users-modal', x: 500, y: 1900, content: 'Select Users Modal', isSharedComponent: true },
     { id: 'account-header1', type: 'account-header', x: 300, y: 60, content: 'Account Header' },
     { id: 'search-section1', type: 'search-section', x: 300, y: 150, content: 'Search Section' },
+    { id: 'welcome-section1', type: 'welcome-section', x: 300, y: 350, content: 'Welcome Section' },
     { id: 'primary-button1', type: 'primary-button', x: 200, y: 200, content: 'Primary Button' },
     { id: 'primary-outline-button1', type: 'primary-outline-button', x: 400, y: 200, content: 'Primary Outline Button' },
     { id: 'primary-text-button1', type: 'primary-text-button', x: 1600, y: 200, content: 'Primary Text Button' },
@@ -60,12 +62,22 @@ export class ComponentsCanvasComponent implements AfterViewInit, OnDestroy {
     { id: 'case-card1', type: 'case-card', x: 300, y: 900, content: 'Case Card', isSharedComponent: true },
     { id: 'empty-state1', type: 'empty-state', x: 600, y: 1200, content: 'Empty State', isSharedComponent: true },
     { id: 'pagination1', type: 'pagination', x: 300, y: 1300, content: 'Pagination', isSharedComponent: true },
-    { id: 'project-card1', type: 'project-card', x: 900, y: 900, content: 'Project Card', isSharedComponent: true }
+    { id: 'project-card1', type: 'project-card', x: 900, y: 900, content: 'Project Card', isSharedComponent: true },
+    { id: 'visits-tabs1', type: 'visits-tabs', x: 300, y: 520, content: 'Visits Tabs' },
+    { id: 'activity-card1', type: 'activity-card', x: 300, y: 600, content: 'Activity Card' }
   ];
+
+  // Visits tab UI (Searches, visited profile, etc.): which option is selected
+  visitsTabSelected = 'Searches';
+  visitsTabOptions: string[] = ['Searches', 'visited profile', 'visited projects', 'saved Search', 'documents', 'order'];
 
   isSidebarCollapsed = false;
   activeMenuItem: string | null = null;
   selectedDropdownOption: string | null = null;
+
+  // Welcome-section search bar dropdown (same options as search-section)
+  welcomeSectionSearchType = 'Natural language';
+  welcomeSectionDropdownOpen = false;
 
   // File System Access API - store directory handle
   private directoryHandle: any = null;
@@ -300,15 +312,27 @@ export class ComponentsCanvasComponent implements AfterViewInit, OnDestroy {
    * Returns true if any components were added/updated
    */
   private syncCatalogToLocalStorage(): boolean {
-    // List of components that have been created as shared components
+    // Cross-check: every component that exists as a folder in the project should show as shared on canvas.
+    // Add any id that has src/app/components/<id>/ (or project-card under projects/components).
     const sharedComponents = [
       { id: 'sidebar', componentPath: 'src/app/components/sidebar/sidebar.component.ts', componentTag: '<app-sidebar></app-sidebar>' },
       { id: 'side-filter', componentPath: 'src/app/components/side-filter/side-filter.component.ts', componentTag: '<app-side-filter></app-side-filter>' },
+      { id: 'project-filter', componentPath: 'src/app/components/project-filter/project-filter.component.ts', componentTag: '<app-project-filter></app-project-filter>' },
       { id: 'case-card', componentPath: 'src/app/components/case-card/case-card.component.ts', componentTag: '<app-case-card></app-case-card>' },
       { id: 'empty-state', componentPath: 'src/app/components/empty-state/empty-state.component.ts', componentTag: '<app-empty-state></app-empty-state>' },
       { id: 'pagination', componentPath: 'src/app/components/pagination/pagination.component.ts', componentTag: '<app-pagination></app-pagination>' },
       { id: 'project-card', componentPath: 'src/app/pages/projects/components/project-card/project-card.component.ts', componentTag: '<app-project-card></app-project-card>' },
       { id: 'select-users-modal', componentPath: 'src/app/components/select-users-modal/select-users-modal.component.ts', componentTag: '<app-select-users-modal></app-select-users-modal>' },
+      { id: 'search-section', componentPath: 'src/app/components/search-section/search-section.component.ts', componentTag: '<app-search-section></app-search-section>' },
+      // Button components (all made shared in project)
+      { id: 'primary-button', componentPath: 'src/app/components/primary-button/primary-button.component.ts', componentTag: '<app-primary-button></app-primary-button>' },
+      { id: 'primary-outline-button', componentPath: 'src/app/components/primary-outline-button/primary-outline-button.component.ts', componentTag: '<app-primary-outline-button></app-primary-outline-button>' },
+      { id: 'primary-text-button', componentPath: 'src/app/components/primary-text-button/primary-text-button.component.ts', componentTag: '<app-primary-text-button></app-primary-text-button>' },
+      { id: 'secondary-button', componentPath: 'src/app/components/secondary-button/secondary-button.component.ts', componentTag: '<app-secondary-button></app-secondary-button>' },
+      { id: 'secondary-outline-button', componentPath: 'src/app/components/secondary-outline-button/secondary-outline-button.component.ts', componentTag: '<app-secondary-outline-button></app-secondary-outline-button>' },
+      { id: 'neutral-button', componentPath: 'src/app/components/neutral-button/neutral-button.component.ts', componentTag: '<app-neutral-button></app-neutral-button>' },
+      { id: 'ghost-button', componentPath: 'src/app/components/ghost-button/ghost-button.component.ts', componentTag: '<app-ghost-button></app-ghost-button>' },
+      { id: 'text-button', componentPath: 'src/app/components/text-button/text-button.component.ts', componentTag: '<app-text-button></app-text-button>' },
     ];
 
     let hasChanges = false;
@@ -2320,8 +2344,10 @@ export class ${this.toClassName(componentId)} {
   }
 
   /**
-   * Sync changes from project component files to canvas
-   * This reloads the catalog and refreshes all shared components on canvas
+   * Sync changes from project component files to canvas.
+   * Cross-check: any component that exists as shared in the project (see syncCatalogToLocalStorage)
+   * is marked in the catalog, then loadSharedComponentStatus applies that to canvas elements
+   * so they show as shared (badge, etc.).
    */
   async syncFromProjectFiles(): Promise<void> {
     try {
@@ -2330,10 +2356,10 @@ export class ${this.toClassName(componentId)} {
       // Reload catalog from JSON file (this will pick up any changes)
       await this.catalogService.loadCatalogFromJson();
       
-      // Sync shared components from files
+      // Cross-check: register project-filter, all buttons, sidebar, etc. as shared if they exist in project
       const needsSync = this.syncCatalogToLocalStorage();
       
-      // Reload shared component status (this applies changes to canvas)
+      // Apply shared status to canvas elements from catalog (canvas reflects catalog)
       await this.loadSharedComponentStatus();
       
       // Force change detection to update UI

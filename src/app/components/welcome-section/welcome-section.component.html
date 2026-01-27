@@ -1,0 +1,57 @@
+<!-- Welcome Section: gradient, title (32px), subtitle, tabs, search bar -->
+<section
+  class="w-full rounded-lg border border-brandcolor-strokeweak pt-8 px-8 pb-10"
+  style="background: linear-gradient(to right, #EAEFFF 0%, #ACBEFF 100%);">
+  <!-- Title (32px) + subtitle centred at top -->
+  <div class="text-center mb-6">
+    <h2 class="text-brandcolor-textstrong font-lora font-semibold mb-1" style="font-size: 32px;">Hello, Michel!</h2>
+    <p class="text-brandcolor-textweak text-sm">What would you like to do today?</p>
+  </div>
+  <!-- Tabs: Cases active = secondary color + underline only on selected tab -->
+  <div class="flex items-center gap-6 pb-3">
+    <button type="button" class="text-sm font-medium text-brandcolor-secondary border-b-2 border-brandcolor-secondary pb-1 -mb-[9px]">Cases</button>
+    <button type="button" class="text-sm font-medium text-brandcolor-textweak hover:text-brandcolor-textstrong pb-1">Attorney</button>
+    <button type="button" class="text-sm font-medium text-brandcolor-textweak hover:text-brandcolor-textstrong pb-1">Law Firm</button>
+    <button type="button" class="text-sm font-medium text-brandcolor-textweak hover:text-brandcolor-textstrong pb-1">Judges</button>
+    <button type="button" class="text-sm font-medium text-brandcolor-textweak hover:text-brandcolor-textstrong pb-1">Parties</button>
+  </div>
+  <!-- 18px gap between tabs and search bar -->
+  <div class="mb-[18px]" role="separator" aria-hidden="true"></div>
+  <!-- Search bar: dropdown same options as search-section (Natural language, Filter, Advanced) -->
+  <div class="flex items-center gap-3">
+    <div class="flex-1 flex items-center border border-brandcolor-strokeweak focus-within:border-brandcolor-strokestrong rounded-md bg-brandcolor-white px-2 py-2 gap-3 transition-colors">
+      <div class="relative">
+        <button type="button"
+                (click)="toggleDropdown()"
+                class="flex items-center gap-2 pl-[10px] pr-[12px] py-3 border border-brandcolor-strokeweak rounded-md text-brandcolor-textstrong text-sm bg-brandcolor-white">
+          <span class="material-symbols-outlined text-brandcolor-textstrong" style="font-size: 18px;">{{ getSearchTypeIcon() }}</span>
+          <span>{{ searchType }}</span>
+          <span class="material-symbols-outlined text-brandcolor-textweak" style="font-size: 18px;">expand_more</span>
+        </button>
+        @if (dropdownOpen) {
+          <div class="absolute top-full left-0 mt-1 z-50 bg-brandcolor-white border border-brandcolor-strokeweak rounded-md shadow-lg min-w-[200px] py-1">
+            <button type="button" (click)="selectSearchType('Natural language')" class="w-full flex items-center gap-2 px-4 py-2 text-brandcolor-textstrong text-sm hover:bg-brandcolor-fill">
+              <span class="material-symbols-outlined text-brandcolor-textstrong" style="font-size: 18px;">psychology</span>
+              <span>Natural language</span>
+            </button>
+            <button type="button" (click)="selectSearchType('Filter')" class="w-full flex items-center gap-2 px-4 py-2 text-brandcolor-textstrong text-sm hover:bg-brandcolor-fill">
+              <span class="material-symbols-outlined text-brandcolor-textstrong" style="font-size: 18px;">tune</span>
+              <span>Filter</span>
+            </button>
+            <button type="button" (click)="selectSearchType('Advanced')" class="w-full flex items-center gap-2 px-4 py-2 text-brandcolor-textstrong text-sm hover:bg-brandcolor-fill">
+              <span class="material-symbols-outlined text-brandcolor-textstrong" style="font-size: 18px;">settings</span>
+              <span>Advanced</span>
+            </button>
+          </div>
+        }
+      </div>
+      <div class="h-6 w-px bg-brandcolor-strokeweak"></div>
+      <input type="text" [(ngModel)]="searchQuery" placeholder="Use natural language to find your case..." class="flex-1 outline-none focus:outline-none focus:ring-0 bg-transparent text-brandcolor-textstrong text-sm placeholder:text-brandcolor-textweak border-0">
+      <button type="button" class="text-brandcolor-secondary bg-transparent hover:bg-brandcolor-fill rounded-md px-4 py-2 font-medium text-sm">Clear</button>
+      <button type="button" class="ml-auto flex items-center gap-2 pl-[10px] pr-[12px] py-3 border-[1.5px] border-transparent bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover rounded-md text-sm font-medium">
+        <span class="material-symbols-outlined" style="font-size: 18px;">search</span>
+        <span>Search</span>
+      </button>
+    </div>
+  </div>
+</section>

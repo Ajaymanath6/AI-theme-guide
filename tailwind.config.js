@@ -40,6 +40,7 @@ module.exports = {
         'border-inset-secondary': 'inset 0 0 0 1.5px #2F55D9',
         'border-inset-secondary-press': 'inset 0 0 0 1.5px #2F55D9, inset 3px 3px 10px 0px rgba(0, 26, 49, 0.33)',
         'header': '0px 4px 4px 0px rgba(115, 115, 115, 0.05)',
+        'tab-option': '0 1px 5px 0 rgba(0, 0, 0, 0.2)',
       },
       borderWidth: {
         '1.5': '1.5px',

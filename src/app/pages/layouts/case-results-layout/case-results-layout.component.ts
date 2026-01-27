@@ -27,6 +27,10 @@ export class CaseResultsLayoutComponent {
   isLoading = input<boolean>(false);
   currentPage = input<number>(1);
   pageSize = 10;
+  /** When false, hide the side-filter column (e.g. on dashboard2). */
+  showSideFilter = input<boolean>(true);
+  /** When false, hide empty-state blocks (e.g. on dashboard2). */
+  showEmptyState = input<boolean>(true);
 
   // Sample case data - Generate more cases for pagination demo
   allCases: CaseData[] = [

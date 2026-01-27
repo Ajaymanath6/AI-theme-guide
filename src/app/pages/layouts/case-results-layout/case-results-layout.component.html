@@ -1,8 +1,10 @@
 <div class="min-h-full w-full bg-brandcolor-results-bg flex">
+  @if (showSideFilter()) {
   <!-- Left: Side Filter -->
   <div class="w-full max-w-[18%] opacity-100 duration-300 c_md:max-w-[20%] c_xl:max-w-[18%]">
     <app-side-filter></app-side-filter>
   </div>
+  }
   
   <!-- Right: Case Results -->
   <div class="flex-1 p-6">
@@ -54,13 +56,13 @@
         <div class="pt-4">
           <app-pagination [currentPage]="currentPage()" [totalPages]="totalPages()" [pageSize]="pageSize" [totalResults]="totalCases()"></app-pagination>
         </div>
-      } @else {
+      } @else if (showEmptyState()) {
         <!-- Empty State - Centered -->
         <div class="flex items-center justify-center min-h-[400px]">
           <app-empty-state [scenario]="emptyStateScenario()"></app-empty-state>
         </div>
       }
-    } @else {
+    } @else if (showEmptyState()) {
       <!-- Empty State - No search term entered -->
       <div class="flex items-center justify-center min-h-[400px]">
         <app-empty-state [scenario]="'empty-search'"></app-empty-state>

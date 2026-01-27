@@ -1,0 +1,22 @@
+<!-- Activity Card: badge (w 40px, h 60px) icon-only; left = badge + title (strong "Project" + secondary underline suffix) + subtitle; right = "Run Search" secondary-outline + ghost 3-dots; padding 6px -->
+<div class="flex items-center justify-between gap-4 p-[6px] h-[72px] rounded-lg border border-brandcolor-strokeweak bg-brandcolor-white min-w-[400px]">
+  <!-- Left: badge icon only (w 40px, h 60px) + title & subtitle (left-aligned) -->
+  <div class="flex items-center gap-3 flex-1 min-w-0">
+    <span class="flex items-center justify-center shrink-0 h-[60px] w-[40px] rounded-md bg-brandcolor-fill text-brandcolor-textstrong">
+      <span class="material-symbols-outlined" style="font-size: 24px;">{{ badgeIcon() }}</span>
+    </span>
+    <div class="flex flex-col min-w-0 text-left">
+      <span class="text-sm truncate"><span class="text-brandcolor-textstrong font-semibold">{{ projectLabel() }}</span><span class="text-brandcolor-secondary font-medium underline">{{ titleSuffix() }}</span></span>
+      <span class="text-brandcolor-textweak text-xs truncate">{{ subtitle() }}</span>
+    </div>
+  </div>
+  <!-- Right: secondary-outline "Run Search" + ghost button 3-dots -->
+  <div class="flex items-center gap-2 shrink-0">
+    <button type="button" (click)="onRunSearch.emit()" class="flex items-center gap-2 px-4 py-2 border-[1.5px] border-brandcolor-strokelight text-brandcolor-secondary bg-brandcolor-white hover:bg-brandcolor-neutralhover rounded-md font-medium text-sm">
+      Run Search
+    </button>
+    <button type="button" (click)="onMenuClick.emit()" class="flex items-center justify-center w-9 h-9 text-brandcolor-textstrong bg-transparent hover:bg-brandcolor-fill rounded-md">
+      <span class="material-symbols-outlined" style="font-size: 20px;">more_vert</span>
+    </button>
+  </div>
+</div>

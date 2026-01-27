@@ -154,7 +154,57 @@
             </header>
           }
 
-          <!-- Search Section Component -->
+          <!-- Welcome Section: real component (title 32px, gradient, tabs, search) -->
+          @if (element.type === 'welcome-section') {
+            <div class="min-w-[700px]">
+              <app-welcome-section></app-welcome-section>
+            </div>
+          }
+
+          <!-- Visits Tab UI: border strokelight (#C5C5C5), bg neutralhover (#EFEFEF), tab shadow 0 1px 5px rgba(0,0,0,0.2) -->
+          @if (element.type === 'visits-tabs') {
+            <div class="flex items-center gap-1 rounded-lg border border-brandcolor-strokelight bg-brandcolor-neutralhover p-1 min-w-[700px]">
+              @for (tab of visitsTabOptions; track tab) {
+                <button
+                  type="button"
+                  (click)="visitsTabSelected = tab; $event.stopPropagation()"
+                  [class.bg-brandcolor-white]="visitsTabSelected === tab"
+                  [class.text-brandcolor-secondary]="visitsTabSelected === tab"
+                  [class.shadow-tab-option]="visitsTabSelected === tab"
+                  [class.bg-transparent]="visitsTabSelected !== tab"
+                  [class.text-brandcolor-textstrong]="visitsTabSelected !== tab"
+                  class="rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
+                  {{ tab }}
+                </button>
+              }
+            </div>
+          }
+
+          <!-- Activity Card: badge icon-only (h 60px); right = "Run Search" secondary-outline + ghost 3-dots -->
+          @if (element.type === 'activity-card') {
+            <div class="flex items-center justify-between gap-4 p-[6px] h-[72px] rounded-lg border border-brandcolor-strokeweak bg-brandcolor-white min-w-[400px]">
+              <!-- Left: badge icon only (w 40px, h 60px) + title & subtitle (left-aligned) -->
+              <div class="flex items-center gap-3 flex-1 min-w-0">
+                <span class="flex items-center justify-center shrink-0 h-[60px] w-[40px] rounded-md bg-brandcolor-fill text-brandcolor-textstrong">
+                  <span class="material-symbols-outlined" style="font-size: 24px;">search</span>
+                </span>
+                <div class="flex flex-col min-w-0 text-left">
+                  <span class="text-sm truncate"><span class="text-brandcolor-textstrong font-semibold">Project</span><span class="text-brandcolor-secondary font-medium underline"> : Google cases</span></span>
+                  <span class="text-brandcolor-textweak text-xs truncate">some criteria</span>
+                </div>
+              </div>
+              <!-- Right: secondary-outline "Run Search" + ghost button 3-dots -->
+              <div class="flex items-center gap-2 shrink-0">
+                <button type="button" class="flex items-center gap-2 px-4 py-2 border-[1.5px] border-brandcolor-strokelight text-brandcolor-secondary bg-brandcolor-white hover:bg-brandcolor-neutralhover rounded-md font-medium text-sm">
+                  Run Search
+                </button>
+                <button type="button" class="flex items-center justify-center w-9 h-9 text-brandcolor-textstrong bg-transparent hover:bg-brandcolor-fill rounded-md">
+                  <span class="material-symbols-outlined" style="font-size: 20px;">more_vert</span>
+                </button>
+              </div>
+            </div>
+          }
+
           @if (element.type === 'search-section') {
             <div class="bg-brandcolor-white rounded-lg shadow-header min-w-[700px] px-6 py-5 space-y-4">
               <!-- Top: FILTER PILLS -->

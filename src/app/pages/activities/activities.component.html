@@ -1,0 +1,22 @@
+<!-- Activities: 32px padding sides/top, 80px bottom; bg matches dashboard2 main area -->
+<div class="pt-8 px-8 pb-20 bg-brandcolor-results-bg">
+  <!-- Same line: title "Recent activities" (semi-bold) + visits-tabs, 12px gap -->
+  <div class="flex flex-wrap items-center justify-start gap-3 mb-6">
+    <h2 class="text-brandcolor-textstrong font-semibold text-lg">Recent activities</h2>
+    <app-visits-tabs></app-visits-tabs>
+  </div>
+
+  <!-- Activity cards list: loop 4 cards -->
+  <div class="flex flex-col gap-3">
+    @for (card of activityCards; track card.id) {
+      <app-activity-card
+        [badgeIcon]="card.badgeIcon"
+        [projectLabel]="card.projectLabel"
+        [titleSuffix]="card.titleSuffix"
+        [subtitle]="card.subtitle"
+        (onRunSearch)="onActivityRunSearch(card)"
+        (onMenuClick)="onActivityMenuClick(card)">
+      </app-activity-card>
+    }
+  </div>
+</div>
