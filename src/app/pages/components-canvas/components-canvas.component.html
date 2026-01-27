@@ -398,6 +398,16 @@
             <app-side-filter></app-side-filter>
           }
           
+          <!-- Project Filter Component -->
+          @if (element.type === 'project-filter') {
+            <app-project-filter></app-project-filter>
+          }
+
+          <!-- Select Users Modal (canvas element: content box only, no overlay) -->
+          @if (element.type === 'select-users-modal') {
+            <app-select-users-modal [asCanvasElement]="true"></app-select-users-modal>
+          }
+          
           <!-- Case Card Component -->
           @if (element.type === 'case-card') {
             <app-case-card
@@ -422,6 +432,17 @@
           @if (element.type === 'pagination') {
             <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-4 w-full max-w-4xl">
               <app-pagination [currentPage]="1" [totalPages]="100" [pageSize]="10" [totalResults]="3012424"></app-pagination>
+            </div>
+          }
+          
+          <!-- Project Card Component -->
+          @if (element.type === 'project-card') {
+            <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg w-full max-w-sm">
+              <app-project-card
+                [projectId]="1"
+                [title]="'Legal Case Management System'"
+                [subtitle]="'Comprehensive platform for managing legal cases, documents, and client information with advanced search and filtering capabilities'">
+              </app-project-card>
             </div>
           }
           

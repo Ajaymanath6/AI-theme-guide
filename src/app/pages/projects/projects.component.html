@@ -5,65 +5,108 @@
 
   <!-- Main Content - Scrollable -->
   <main class="flex-1 overflow-y-auto bg-brandcolor-white">
-    <div class="container mx-auto px-4 py-8">
-      <!-- Title and Subtitle -->
-      <div class="mb-6 text-center">
-        <h1 class="text-brandcolor-textstrong text-3xl font-bold mb-2">Projects</h1>
-        <p class="text-brandcolor-textweak">Organise and manage your projects</p>
+    <!-- Title and Subtitle -->
+    <div class="py-8 text-center">
+      <h1 class="font-lora text-brandcolor-textstrong text-3xl font-bold mb-2">Projects</h1>
+      <p class="font-sans text-brandcolor-textweak">Organise and manage your projects</p>
+    </div>
+
+    <!-- Search Bar and New Project Button (left 80px pl-20, right 56px pr-14) -->
+    <div class="flex items-center gap-4 pl-20 pr-14 mb-8">
+      <!-- Search Bar -->
+      <div class="flex-1">
+        <input
+          type="text"
+          placeholder="Search projects..."
+          class="w-full px-4 py-2 border border-brandcolor-strokestrong rounded-lg focus:outline-none focus:border-brandcolor-textstrong focus:ring-0 bg-brandcolor-white text-brandcolor-textstrong">
       </div>
 
-      <!-- Search Bar and New Project Button -->
-      <div class="flex items-center gap-4 mb-8">
-        <!-- Search Bar -->
-        <div class="flex-1">
-          <input
-            type="text"
-            placeholder="Search projects..."
-            class="w-full px-4 py-2 border border-brandcolor-strokestrong rounded-lg focus:outline-none focus:border-brandcolor-textstrong focus:ring-0 bg-brandcolor-white text-brandcolor-textstrong">
+      <!-- Secondary Outline: List view (format_list_bulleted) -->
+      <button
+        type="button"
+        class="border-[1.5px] border-brandcolor-strokelight text-brandcolor-secondary bg-brandcolor-white hover:bg-brandcolor-neutralhover active:border-brandcolor-secondary active:text-brandcolor-secondary active:shadow-button-press rounded-md px-4 py-2 font-medium flex items-center gap-2">
+        <span class="material-symbols-outlined" style="font-size: 20px;">newsmode</span>
+        <span>Template</span>
+      </button>
+
+      <!-- New Project Button -->
+      <button
+        type="button"
+        class="bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover px-4 py-2 rounded-md flex items-center gap-2 font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        <span>New Project</span>
+      </button>
+    </div>
+
+    <!-- Two Column Layout: Filter (Left) and Projects (Right) -->
+    <div class="flex gap-8 px-[56px] pb-8">
+      <!-- Left Side: Project Filter -->
+      <aside class="w-80 flex-shrink-0">
+        <app-project-filter></app-project-filter>
+      </aside>
+
+      <!-- Right Side: Pins and My Projects Sections -->
+      <div class="flex-1 min-w-0">
+        <!-- Pins Section (only when there are pinned projects) -->
+        @if (pinnedProjects().length > 0) {
+          <div class="flex items-center gap-2 mb-6">
+            <span class="material-symbols-outlined text-brandcolor-strokestrong material-symbols-filled">push_pin</span>
+            <span class="text-brandcolor-textstrong font-medium text-lg">Pins</span>
+            <div class="flex-1 border-t border-brandcolor-strokelight ml-2"></div>
+          </div>
+          <div class="grid grid-cols-4 gap-4 mb-8">
+            @for (project of pinnedProjects(); track project.id) {
+              <app-project-card
+                [projectId]="project.id"
+                [title]="project.title"
+                [subtitle]="project.subtitle"
+                [isPinned]="true"
+                (keep)="onKeep(project.id)"
+                (pin)="onPin(project.id)"
+                (edit)="onEdit(project.id)"
+                (copyId)="onCopyId(project.id)"
+                (delete)="onDelete(project.id)">
+              </app-project-card>
+            }
+          </div>
+        }
+
+        <!-- My Projects Header -->
+        <div class="flex items-center gap-2 mb-6">
+          <span class="material-symbols-outlined text-brandcolor-strokestrong material-symbols-filled">folder</span>
+          <span class="text-brandcolor-textstrong font-medium text-lg">My Projects</span>
+          <div class="flex-1 border-t border-brandcolor-strokelight ml-2"></div>
         </div>
 
-        <!-- New Project Button -->
-        <button
-          type="button"
-          class="bg-brandcolor-primary text-brandcolor-white hover:bg-brandcolor-primaryhover px-4 py-2 rounded-md flex items-center gap-2 font-medium">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-          </svg>
-          <span>New Project</span>
-        </button>
-      </div>
+        <!-- Projects Cards Grid -->
+        <div class="grid grid-cols-4 gap-4 mb-8">
+          @for (project of unpinnedProjects(); track project.id) {
+            <app-project-card
+              [projectId]="project.id"
+              [title]="project.title"
+              [subtitle]="project.subtitle"
+              [isPinned]="false"
+              (keep)="onKeep(project.id)"
+              (pin)="onPin(project.id)"
+              (edit)="onEdit(project.id)"
+              (copyId)="onCopyId(project.id)"
+              (delete)="onDelete(project.id)">
+            </app-project-card>
+          }
+        </div>
 
-      <!-- Divider with My Projects Label -->
-      <div class="flex items-center gap-2 py-4">
-        <span class="material-symbols-outlined text-brandcolor-strokestrong material-symbols-filled">folder</span>
-        <span class="text-brandcolor-textstrong font-medium">My Projects</span>
-        <div class="flex-1 border-t border-brandcolor-strokestrong ml-2"></div>
-      </div>
-
-      <!-- Projects Cards Grid -->
-      <div class="grid grid-cols-4 gap-4 mt-6">
-        @for (project of projects; track project.id) {
-          <app-project-card
-            [projectId]="project.id"
-            [title]="project.title"
-            [subtitle]="project.subtitle"
-            (keep)="onKeep(project.id)"
-            (pin)="onPin(project.id)"
-            (edit)="onEdit(project.id)"
-            (copyId)="onCopyId(project.id)"
-            (delete)="onDelete(project.id)">
-          </app-project-card>
-        }
-      </div>
-
-      <!-- Pagination -->
-      <div class="mt-8">
-        <app-pagination
-          [currentPage]="currentPage()"
-          [totalItems]="totalItems()"
-          [itemsPerPage]="itemsPerPage()"
-          (pageChange)="onPageChange($event)">
-        </app-pagination>
+        <!-- Pagination -->
+        <div>
+          <app-pagination
+            [currentPage]="currentPage()"
+            [totalPages]="totalPages()"
+            [pageSize]="itemsPerPage()"
+            [totalResults]="totalItems()"
+            (pageChange)="onPageChange($event)">
+          </app-pagination>
+        </div>
       </div>
     </div>
   </main>

@@ -1,8 +1,9 @@
-import { Component, AfterViewInit, signal } from '@angular/core';
+import { Component, AfterViewInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProjectHeaderComponent } from './components/project-header/project-header.component';
-import { PaginationComponent } from './components/pagination/pagination.component';
+import { PaginationComponent } from '../../components/pagination/pagination.component';
 import { ProjectCardComponent } from './components/project-card/project-card.component';
+import { ProjectFilterComponent } from '../../components/project-filter/project-filter.component';
 
 declare var initFlowbite: () => void;
 
@@ -14,7 +15,7 @@ interface Project {
 
 @Component({
   selector: 'app-projects',
-  imports: [CommonModule, ProjectHeaderComponent, PaginationComponent, ProjectCardComponent],
+  imports: [CommonModule, ProjectHeaderComponent, PaginationComponent, ProjectCardComponent, ProjectFilterComponent],
   templateUrl: './projects.component.html',
   styleUrl: './projects.component.scss'
 })
@@ -22,16 +23,24 @@ export class ProjectsComponent implements AfterViewInit {
   currentPage = signal(1);
   totalItems = signal(123);
   itemsPerPage = signal(10);
+  
+  totalPages = computed(() => Math.ceil(this.totalItems() / this.itemsPerPage()));
+
+  /** Set of pinned project IDs - toggled when user clicks pin on a card */
+  pinnedIds = signal<Set<string | number>>(new Set());
+
+  pinnedProjects = computed(() => this.projects.filter(p => this.pinnedIds().has(p.id)));
+  unpinnedProjects = computed(() => this.projects.filter(p => !this.pinnedIds().has(p.id)));
 
   projects: Project[] = [
-    { id: 1, title: 'Project Title 1', subtitle: 'Project subtitle description' },
-    { id: 2, title: 'Project Title 2', subtitle: 'Project subtitle description' },
-    { id: 3, title: 'Project Title 3', subtitle: 'Project subtitle description' },
-    { id: 4, title: 'Project Title 4', subtitle: 'Project subtitle description' },
-    { id: 5, title: 'Project Title 5', subtitle: 'Project subtitle description' },
-    { id: 6, title: 'Project Title 6', subtitle: 'Project subtitle description' },
-    { id: 7, title: 'Project Title 7', subtitle: 'Project subtitle description' },
-    { id: 8, title: 'Project Title 8', subtitle: 'Project subtitle description' }
+    { id: 1, title: 'Legal Case Management System', subtitle: 'Comprehensive platform for managing legal cases, documents, and client information with advanced search and filtering capabilities' },
+    { id: 2, title: 'Client Portal Dashboard', subtitle: 'Interactive dashboard for clients to view case status, upload documents, and communicate with their legal team' },
+    { id: 3, title: 'Document Automation Suite', subtitle: 'Automated document generation and template management system for legal contracts and agreements' },
+    { id: 4, title: 'Billing & Time Tracking', subtitle: 'Track billable hours, generate invoices, and manage client billing with detailed reporting and analytics' },
+    { id: 5, title: 'Court Calendar Integration', subtitle: 'Sync with court systems to manage hearings, deadlines, and important dates across all cases' },
+    { id: 6, title: 'Legal Research Assistant', subtitle: 'AI-powered research tool to find relevant case law, statutes, and legal precedents for your cases' },
+    { id: 7, title: 'Compliance Monitoring', subtitle: 'Track regulatory compliance requirements, deadlines, and generate compliance reports automatically' },
+    { id: 8, title: 'Client Relationship Manager', subtitle: 'Manage client communications, track interactions, and maintain detailed client profiles and history' }
   ];
 
   ngAfterViewInit() {
@@ -51,8 +60,13 @@ export class ProjectsComponent implements AfterViewInit {
   }
 
   onPin(projectId: string | number): void {
-    console.log('Pin project:', projectId);
-    // TODO: Implement pin functionality
+    const current = new Set(this.pinnedIds());
+    if (current.has(projectId)) {
+      current.delete(projectId);
+    } else {
+      current.add(projectId);
+    }
+    this.pinnedIds.set(current);
   }
 
   onEdit(projectId: string | number): void {

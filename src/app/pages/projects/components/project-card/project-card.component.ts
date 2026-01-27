@@ -11,6 +11,8 @@ export class ProjectCardComponent {
   projectId = input.required<string | number>();
   title = input.required<string>();
   subtitle = input<string>('');
+  createdDate = input<string>('Jan 3, 2024');
+  isPinned = input<boolean>(false);
 
   keep = output<void>();
   pin = output<void>();

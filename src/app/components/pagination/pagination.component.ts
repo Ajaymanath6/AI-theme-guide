@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -12,6 +12,10 @@ export class PaginationComponent {
   totalPages = input<number>(100);
   pageSize = input<number>(10);
   totalResults = input<number>(3012424);
+  /** When true (default), pagination sits on white surface: badges use bg-brandcolor-fill for contrast */
+  surfaceIsWhite = input<boolean>(true);
+  
+  pageChange = output<number>();
   
   get startIndex(): number {
     return (this.currentPage() - 1) * this.pageSize() + 1;
@@ -60,5 +64,23 @@ export class PaginationComponent {
     }
     
     return pages;
+  }
+  
+  onPageClick(page: number): void {
+    if (page !== this.currentPage() && page >= 1 && page <= this.totalPages()) {
+      this.pageChange.emit(page);
+    }
+  }
+  
+  onPrevious(): void {
+    if (this.currentPage() > 1) {
+      this.pageChange.emit(this.currentPage() - 1);
+    }
+  }
+  
+  onNext(): void {
+    if (this.currentPage() < this.totalPages()) {
+      this.pageChange.emit(this.currentPage() + 1);
+    }
   }
 }

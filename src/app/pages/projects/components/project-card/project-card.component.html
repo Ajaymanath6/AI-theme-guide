@@ -1,20 +1,27 @@
 <div class="bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg p-4 relative">
-  <!-- Card Header - 3 Dots Icon with Dropdown -->
-  <div class="flex justify-end mb-3">
+  <!-- Card Header - Pin Icon and 3 Dots Icon with Dropdown -->
+  <div class="flex justify-end items-center gap-1 mb-3">
+    <button
+      type="button"
+      (click)="onPin($event); $event.stopPropagation()"
+      class="flex items-center justify-center w-8 h-8 hover:bg-brandcolor-fill border border-transparent active:border-brandcolor-strokeweak rounded-lg"
+      [title]="isPinned() ? 'Move back to My Projects' : 'Pin'">
+      <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">{{ isPinned() ? 'keep_off' : 'push_pin' }}</span>
+    </button>
     <div class="relative">
       <button 
-        [id]="'dropdown-button-' + projectId" 
-        [attr.data-dropdown-toggle]="'dropdown-menu-' + projectId" 
+        [id]="'dropdown-button-' + projectId()" 
+        [attr.data-dropdown-toggle]="'dropdown-menu-' + projectId()" 
         type="button" 
         (click)="$event.stopPropagation()"
-        class="p-1 hover:bg-brandcolor-fill border border-transparent active:border-brandcolor-strokeweak rounded-lg">
+        class="flex items-center justify-center w-8 h-8 hover:bg-brandcolor-fill border border-transparent active:border-brandcolor-strokeweak rounded-lg">
         <svg class="w-5 h-5 text-brandcolor-strokestrong" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
         </svg>
       </button>
       <!-- Dropdown Menu -->
       <div 
-        [id]="'dropdown-menu-' + projectId" 
+        [id]="'dropdown-menu-' + projectId()" 
         class="hidden z-50 bg-brandcolor-white border border-brandcolor-strokeweak rounded-lg shadow-lg min-w-[200px] absolute top-8 right-0">
         <ul class="py-2 text-sm text-brandcolor-textstrong">
           <li>
@@ -52,8 +59,12 @@
     </div>
   </div>
   <!-- Card Content - Title and Subtitle (Clickable) -->
-  <a [routerLink]="['/dashboard', projectId]" class="block cursor-pointer hover:opacity-80 transition-opacity">
-    <h3 class="text-brandcolor-textstrong font-semibold text-lg mb-1">{{ title }}</h3>
-    <p class="text-brandcolor-textweak text-sm">{{ subtitle }}</p>
+  <a [routerLink]="['/dashboard', projectId()]" class="block cursor-pointer hover:opacity-80 transition-opacity">
+    <h3 class="text-brandcolor-textstrong font-semibold text-lg mb-1">{{ title() }}</h3>
+    <p class="text-brandcolor-textweak text-sm line-clamp-2">{{ subtitle() }}</p>
   </a>
+  <!-- Created date - bottom right -->
+  <div class="flex justify-end mt-2">
+    <span class="text-brandcolor-textweak text-xs">Created {{ createdDate() }}</span>
+  </div>
 </div>

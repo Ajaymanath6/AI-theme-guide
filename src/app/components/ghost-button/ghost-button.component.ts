@@ -9,6 +9,8 @@ import { Component, input, output } from '@angular/core';
 })
 export class GhostButtonComponent {
   label = input<string>('Ghost');
-  
+  /** When true, button takes full width of container and text is centered. */
+  fullWidth = input<boolean>(false);
+
   buttonClick = output<MouseEvent>();
 }

@@ -1,6 +1,8 @@
 <button
   type="button"
   (click)="buttonClick.emit($event)"
-  class="text-brandcolor-secondary bg-transparent hover:bg-brandcolor-fill active:bg-brandcolor-fill disabled:opacity-50 rounded-md px-4 py-2 font-medium">
+  class="text-brandcolor-secondary bg-transparent hover:bg-brandcolor-fill active:bg-brandcolor-fill disabled:opacity-50 rounded-md px-4 py-2 font-medium"
+  [class.w-full]="fullWidth()"
+  [class.text-center]="fullWidth()">
   {{ label() }}
 </button>

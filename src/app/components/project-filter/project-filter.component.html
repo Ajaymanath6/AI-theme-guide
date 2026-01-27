@@ -1,0 +1,132 @@
+<div class="bg-brandcolor-white font-sans h-full w-full overflow-hidden p-6">
+  <!-- Heading -->
+  <h2 class="text-brandcolor-textstrong font-semibold text-lg mb-4 font-sans">Filter your projects</h2>
+
+  <!-- Accordion Container -->
+  <div id="accordion-collapse" class="font-sans">
+      
+      <!-- Status Accordion -->
+      <h3 id="accordion-collapse-heading-status">
+        <button type="button" 
+                (click)="onAccordionClick('status', $event)"
+                class="flex items-center justify-between w-full p-3 font-medium text-left text-brandcolor-textstrong bg-transparent hover:bg-brandcolor-fill transition-colors font-sans"
+                data-accordion-target="#accordion-collapse-body-status" 
+                aria-expanded="false" 
+                aria-controls="accordion-collapse-body-status">
+          <span class="font-sans">Status</span>
+          <svg class="w-5 h-5 shrink-0 transition-transform duration-200 text-brandcolor-textstrong" data-accordion-icon fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+      </h3>
+      <div id="accordion-collapse-body-status" class="hidden" aria-labelledby="accordion-collapse-heading-status">
+        <div class="pt-3 px-3 pb-0 font-sans space-y-2">
+          @if (accordionStates['status'].isLoading) {
+            <div class="flex items-center justify-center py-4">
+              <svg class="animate-spin h-6 w-6 text-brandcolor-secondary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </div>
+          } @else {
+            @for (item of getVisibleItems('status'); track item.label) {
+              <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
+                <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
+                <span class="text-sm text-brandcolor-textstrong font-sans">{{ item.label }}</span>
+                <span class="text-sm text-brandcolor-textweak font-sans ml-auto">({{ item.count }})</span>
+              </label>
+            }
+            @if (hasMoreItems('status') && !accordionStates['status'].showAll) {
+              <div class="pt-2 pb-1">
+                <app-ghost-button label="Show more" (buttonClick)="showMore('status')"></app-ghost-button>
+              </div>
+            }
+          }
+        </div>
+      </div>
+      <!-- Divider below Status accordion -->
+      <div class="w-full h-px bg-brandcolor-strokeweak"></div>
+
+      <!-- Users Accordion -->
+      <h3 id="accordion-collapse-heading-users">
+        <button type="button" 
+                (click)="onAccordionClick('users', $event)"
+                class="flex items-center justify-between w-full p-3 font-medium text-left text-brandcolor-textstrong bg-transparent hover:bg-brandcolor-fill transition-colors font-sans"
+                data-accordion-target="#accordion-collapse-body-users" 
+                aria-expanded="false" 
+                aria-controls="accordion-collapse-body-users">
+          <span class="font-sans">Users</span>
+          <svg class="w-5 h-5 shrink-0 transition-transform duration-200 text-brandcolor-textstrong" data-accordion-icon fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+      </h3>
+      <div id="accordion-collapse-body-users" class="hidden" aria-labelledby="accordion-collapse-heading-users">
+        <div class="pt-3 px-3 pb-0 font-sans space-y-2">
+          @if (accordionStates['users'].isLoading) {
+            <div class="flex items-center justify-center py-4">
+              <svg class="animate-spin h-6 w-6 text-brandcolor-secondary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </div>
+          } @else {
+            @for (item of getVisibleItems('users'); track item.label) {
+              @if (item.label === 'Projects') {
+                <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
+                  <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
+                  <span class="text-sm text-brandcolor-textstrong font-sans">{{ item.label }}</span>
+                  <span class="text-sm text-brandcolor-textweak font-sans ml-auto">({{ item.count }})</span>
+                </label>
+              }
+              @if (item.label === 'User Projects') {
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2 w-full cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
+                    <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
+                    <span class="text-sm text-brandcolor-textstrong font-sans flex-1">{{ item.label }}</span>
+                    <span class="text-sm text-brandcolor-textweak font-sans">({{ item.count }})</span>
+                    <button type="button" 
+                            (click)="toggleUserProjects(); $event.stopPropagation()"
+                            class="p-1 hover:bg-brandcolor-strokeweak rounded">
+                      <svg class="w-4 h-4 shrink-0 transition-transform duration-200 text-brandcolor-textstrong" 
+                           [class.rotate-90]="userProjects[0]?.isExpanded"
+                           fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                      </svg>
+                    </button>
+                  </div>
+                  <!-- Nested Project List -->
+                  @if (userProjects[0]?.isExpanded) {
+                    <div class="ml-6 space-y-1 ">
+                      @for (project of getVisibleUserProjects(); track project.name) {
+                        <label class="flex items-center gap-2 cursor-pointer hover:bg-brandcolor-fill p-2 rounded font-sans">
+                          <input type="checkbox" class="w-4 h-4 text-brandcolor-primary border-brandcolor-strokeweak rounded focus:ring-brandcolor-primary checked:bg-brandcolor-primary checked:border-brandcolor-primary">
+                          <span class="text-sm text-brandcolor-textstrong font-sans flex-1">{{ project.name }}</span>
+                          <span class="text-sm text-brandcolor-textweak font-sans">({{ project.count }})</span>
+                        </label>
+                      }
+                      @if (hasMoreUserProjects()) {
+                        <div class=" pb-1 w-full">
+                          <app-ghost-button label="Show more" [fullWidth]="showMoreButtonFullWidth" (buttonClick)="openUsersModal()"></app-ghost-button>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+            }
+            @if (hasMoreItems('users') && !accordionStates['users'].showAll) {
+              <div class="pt-2 pb-1">
+                <app-ghost-button label="Show more" (buttonClick)="showMore('users')"></app-ghost-button>
+              </div>
+            }
+          }
+        </div>
+      </div>
+      <!-- Divider below Users accordion -->
+      <div class="w-full h-px bg-brandcolor-strokeweak"></div>
+  </div>
+
+  <!-- Select Users Modal (opens from User Projects "Show more") -->
+  <app-select-users-modal [isOpen]="showUsersModal()" (closed)="closeUsersModal()"></app-select-users-modal>
+</div>

@@ -519,9 +519,11 @@
       "implementation": "Add CSS rule: button[data-dropdown-toggle][aria-expanded='true'] { background-color: #F5F5F5 !important; border-color: #DDDDDD !important; }"
     },
     "divider": {
-      "description": "Dividers use weak stroke",
-      "classes": "border-t border-brandcolor-strokeweak",
-      "logic": "Light dividers for subtle separation"
+      "description": "Dividers use strokelight (#C5C5C5) for section headers; strokeweak for general light separators",
+      "classes": "border-t border-brandcolor-strokelight (section dividers e.g. Pins, My Projects)",
+      "alternateClasses": "border-t border-brandcolor-strokeweak (general light dividers)",
+      "logic": "Projects page section dividers (Pins, My Projects) use border-brandcolor-strokelight (#C5C5C5). Utility: border-brandcolor-strokelight.",
+      "projectsPageDividers": "Section headers like 'Pins' and 'My Projects' use: flex items-center gap-2, icon on left, label, then <div class=\"flex-1 border-t border-brandcolor-strokelight ml-2\"></div>"
     },
     "sidebar": {
       "description": "Sidebar borders always use strong stroke",

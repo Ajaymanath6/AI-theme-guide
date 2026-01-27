@@ -12,6 +12,7 @@ module.exports = {
       },
       fontFamily: {
         'sans': ['IBM Plex Sans', 'sans-serif'],
+        'lora': ['Lora', 'serif'],
       },
       colors: {
         'brandcolor-primary': '#008B31',

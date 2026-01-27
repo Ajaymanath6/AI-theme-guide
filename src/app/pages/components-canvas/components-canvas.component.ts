@@ -8,10 +8,13 @@ import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { AppSecondaryButtonVariantsComponent } from '../../components/app-secondary-button-variants/app-secondary-button-variants.component';
 import { PrimaryButtonVariantsComponent } from '../../components/app-primary-button-variants/app-primary-button-variants.component';
 import { SideFilterComponent } from '../../components/side-filter/side-filter.component';
+import { ProjectFilterComponent } from '../../components/project-filter/project-filter.component';
 import { CaseCardComponent } from '../../components/case-card/case-card.component';
 import { EmptyStateComponent } from '../../components/empty-state/empty-state.component';
 import { PaginationComponent } from '../../components/pagination/pagination.component';
 import { CommandBarComponent } from '../../components/command-bar/command-bar.component';
+import { ProjectCardComponent } from '../projects/components/project-card/project-card.component';
+import { SelectUsersModalComponent } from '../../components/select-users-modal/select-users-modal.component';
 declare var initFlowbite: () => void;
 
 
@@ -30,7 +33,7 @@ interface CanvasElement {
 
 @Component({
   selector: 'app-components-canvas',
-  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, AppSecondaryButtonVariantsComponent, PrimaryButtonVariantsComponent, SideFilterComponent, CaseCardComponent, EmptyStateComponent, PaginationComponent, CommandBarComponent],
+  imports: [CommonModule, DragDropModule, RouterLink, FormsModule, SidebarComponent, AppSecondaryButtonVariantsComponent, PrimaryButtonVariantsComponent, SideFilterComponent, ProjectFilterComponent, CaseCardComponent, EmptyStateComponent, PaginationComponent, CommandBarComponent, ProjectCardComponent, SelectUsersModalComponent],
   templateUrl: './components-canvas.component.html',
   styleUrl: './components-canvas.component.scss'
 })
@@ -38,6 +41,8 @@ export class ComponentsCanvasComponent implements AfterViewInit, OnDestroy {
   canvasElements: CanvasElement[] = [
     { id: 'sidebar1', type: 'sidebar', x: 0, y: 60, content: 'Sidebar', isSharedComponent: true },
     { id: 'side-filter1', type: 'side-filter', x: 0, y: 400, content: 'Side Filter', isSharedComponent: true },
+    { id: 'project-filter1', type: 'project-filter', x: 0, y: 1600, content: 'Project Filter', isSharedComponent: true },
+    { id: 'select-users-modal1', type: 'select-users-modal', x: 500, y: 1900, content: 'Select Users Modal', isSharedComponent: true },
     { id: 'account-header1', type: 'account-header', x: 300, y: 60, content: 'Account Header' },
     { id: 'search-section1', type: 'search-section', x: 300, y: 150, content: 'Search Section' },
     { id: 'primary-button1', type: 'primary-button', x: 200, y: 200, content: 'Primary Button' },
@@ -54,7 +59,8 @@ export class ComponentsCanvasComponent implements AfterViewInit, OnDestroy {
     { id: 'secondary-outline-button1', type: 'secondary-outline-button', x: 800, y: 200, content: 'Secondary Outline Button' },
     { id: 'case-card1', type: 'case-card', x: 300, y: 900, content: 'Case Card', isSharedComponent: true },
     { id: 'empty-state1', type: 'empty-state', x: 600, y: 1200, content: 'Empty State', isSharedComponent: true },
-    { id: 'pagination1', type: 'pagination', x: 300, y: 1300, content: 'Pagination', isSharedComponent: true }
+    { id: 'pagination1', type: 'pagination', x: 300, y: 1300, content: 'Pagination', isSharedComponent: true },
+    { id: 'project-card1', type: 'project-card', x: 900, y: 900, content: 'Project Card', isSharedComponent: true }
   ];
 
   isSidebarCollapsed = false;
@@ -301,6 +307,8 @@ export class ComponentsCanvasComponent implements AfterViewInit, OnDestroy {
       { id: 'case-card', componentPath: 'src/app/components/case-card/case-card.component.ts', componentTag: '<app-case-card></app-case-card>' },
       { id: 'empty-state', componentPath: 'src/app/components/empty-state/empty-state.component.ts', componentTag: '<app-empty-state></app-empty-state>' },
       { id: 'pagination', componentPath: 'src/app/components/pagination/pagination.component.ts', componentTag: '<app-pagination></app-pagination>' },
+      { id: 'project-card', componentPath: 'src/app/pages/projects/components/project-card/project-card.component.ts', componentTag: '<app-project-card></app-project-card>' },
+      { id: 'select-users-modal', componentPath: 'src/app/components/select-users-modal/select-users-modal.component.ts', componentTag: '<app-select-users-modal></app-select-users-modal>' },
     ];
 
     let hasChanges = false;
@@ -1537,7 +1545,8 @@ ${cases}
   private getDisplayName(componentId: string): string {
     const displayNames: Record<string, string> = {
       'sidebar': 'Navigation Sidebar',
-      'dropdown': 'Action Dropdown Menu'
+      'dropdown': 'Action Dropdown Menu',
+      'select-users-modal': 'Select Users Modal'
     };
     return displayNames[componentId] || componentId;
   }
@@ -1548,6 +1557,7 @@ ${cases}
   private getCategory(componentId: string): string {
     if (componentId === 'sidebar') return 'navigation';
     if (componentId === 'dropdown') return 'menus';
+    if (componentId === 'select-users-modal') return 'modals';
     return 'general';
   }
 
@@ -1557,7 +1567,8 @@ ${cases}
   private getDescription(componentId: string): string {
     const descriptions: Record<string, string> = {
       'sidebar': 'Collapsible navigation sidebar with logo, dropdown, menu items, and toggle button',
-      'dropdown': 'Dropdown menu with header, 5 options, divider, and action buttons (primary & neutral)'
+      'dropdown': 'Dropdown menu with header, 5 options, divider, and action buttons (primary & neutral)',
+      'select-users-modal': 'Select users modal with search bar and user grid (3 per row, 8 rows)'
     };
     return descriptions[componentId] || `Component: ${componentId}`;
   }
@@ -1646,8 +1657,8 @@ ${cases}
    * Shows popover for user confirmation
    */
   makeSharedComponent(componentId: string): void {
-    // Special case: sidebar, side-filter, and case-card already exist as shared components
-    if (componentId === 'sidebar' || componentId === 'side-filter' || componentId === 'case-card') {
+    // Special case: sidebar, side-filter, case-card, select-users-modal already exist as shared components
+    if (componentId === 'sidebar' || componentId === 'side-filter' || componentId === 'case-card' || componentId === 'select-users-modal') {
       // Update catalog with shared component metadata
       const entry: CatalogEntry = {
         id: componentId,

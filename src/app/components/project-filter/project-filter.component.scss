@@ -1,0 +1,19 @@
+// Rotate chevron when accordion is open
+button[aria-expanded="true"] [data-accordion-icon] {
+  transform: rotate(180deg);
+}
+
+// Show bg-fill on accordion header when open
+button[aria-expanded="true"] {
+  @apply bg-brandcolor-fill;
+}
+
+// Checkbox active/checked state - use brand primary color
+input[type="checkbox"]:checked {
+  @apply bg-brandcolor-primary border-brandcolor-primary;
+}
+
+// Ensure all text uses IBM Plex Sans
+.font-sans {
+  font-family: 'IBM Plex Sans', sans-serif;
+}
