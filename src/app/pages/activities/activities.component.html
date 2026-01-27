@@ -19,4 +19,45 @@
       </app-activity-card>
     }
   </div>
+
+  <!-- Section: Tracking – 10 Cases with Updates; white div with 5 visible cards, scrollable; Show All ghost at bottom right -->
+  <h2 class="text-brandcolor-textstrong font-semibold text-lg mt-8 mb-4">Tracking – 10 Cases with Updates</h2>
+  <div class="bg-brandcolor-white rounded-lg pl-4 pr-5 pt-4 pb-4" style="padding-left: 16px; padding-right: 20px;">
+    <!-- Scrollable area: show ~5 cards then scroll (lean modern scroll); expands when showAllTrackingCards -->
+    <div class="flex flex-col gap-3 overflow-y-auto tracking-cards-scroll transition-[max-height] duration-300 ease-out"
+         [style.max-height.px]="showAllTrackingCards ? 900 : 420">
+      @for (card of trackingCards; track card.id) {
+        <app-tracking-case-card></app-tracking-case-card>
+      }
+    </div>
+    <div class="flex justify-end mt-3">
+      <button type="button"
+              (click)="showAllTrackingCards = !showAllTrackingCards"
+              class="text-brandcolor-secondary bg-transparent hover:bg-brandcolor-fill active:bg-brandcolor-fill rounded-md px-4 py-2 font-medium text-sm">
+        {{ showAllTrackingCards ? 'Show less' : 'Show All' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Pinns: title + visits-tabs same line, 12px gap; then 3 project-tile-cards per row, Show All ghost bottom right -->
+  <div class="flex flex-wrap items-center justify-start gap-3 mt-8 mb-4">
+    <h2 class="text-brandcolor-textstrong font-semibold text-lg">Pinns</h2>
+    <app-visits-tabs [tabOptions]="pinsTabOptions"></app-visits-tabs>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    @for (card of showAllPins ? pinCards : pinCards.slice(0, 3); track card.id) {
+      <app-project-tile-card
+        [projectName]="card.projectName"
+        [description]="card.description"
+        [createdDate]="card.createdDate">
+      </app-project-tile-card>
+    }
+  </div>
+  <div class="flex justify-end mt-3">
+    <button type="button"
+            (click)="showAllPins = !showAllPins"
+            class="text-brandcolor-secondary bg-transparent hover:bg-brandcolor-fill active:bg-brandcolor-fill rounded-md px-4 py-2 font-medium text-sm">
+      {{ showAllPins ? 'Show less' : 'Show All' }}
+    </button>
+  </div>
 </div>

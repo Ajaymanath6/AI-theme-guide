@@ -7,13 +7,12 @@ import { AccountHeaderComponent } from '../../components/account-header/account-
 import { WelcomeSectionComponent } from '../../components/welcome-section/welcome-section.component';
 import { ActivitiesComponent } from '../activities/activities.component';
 import { CaseResultsLayoutComponent } from '../layouts/case-results-layout/case-results-layout.component';
-import { ProjectHeaderComponent } from '../projects/components/project-header/project-header.component';
 
 declare var initFlowbite: () => void;
 
 @Component({
   selector: 'app-dashboard2',
-  imports: [CommonModule, SidebarComponent, BannerInfoComponent, AccountHeaderComponent, WelcomeSectionComponent, ActivitiesComponent, CaseResultsLayoutComponent, ProjectHeaderComponent],
+  imports: [CommonModule, SidebarComponent, BannerInfoComponent, AccountHeaderComponent, WelcomeSectionComponent, ActivitiesComponent, CaseResultsLayoutComponent],
   templateUrl: './dashboard2.component.html',
   styleUrl: './dashboard2.component.scss'
 })
@@ -26,7 +25,6 @@ export class Dashboard2Component implements AfterViewInit {
   currentSearchQuery: string = '';
   isAccountHeaderHidden: boolean = false;
   isBannerHidden: boolean = false;
-  isProjectHeaderHidden: boolean = false;
   isSearchLoading: boolean = false;
   
   // Sidebar state – Home selected when hosting dashboard2
@@ -100,9 +98,7 @@ export class Dashboard2Component implements AfterViewInit {
     const target = event.target as HTMLElement;
     const scrollTop = target.scrollTop;
     
-    // Hide project header when scrolling down, show when at top
-    this.isProjectHeaderHidden = scrollTop > 50;
-    // Hide account header when scrolling down, show when at top
+    // Collapse account header when scrolling the main content
     this.isAccountHeaderHidden = scrollTop > 50;
     
     // Hide banner when scrolling (permanently hidden once scrolled)

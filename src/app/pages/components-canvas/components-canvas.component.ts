@@ -63,8 +63,10 @@ export class ComponentsCanvasComponent implements AfterViewInit, OnDestroy {
     { id: 'empty-state1', type: 'empty-state', x: 600, y: 1200, content: 'Empty State', isSharedComponent: true },
     { id: 'pagination1', type: 'pagination', x: 300, y: 1300, content: 'Pagination', isSharedComponent: true },
     { id: 'project-card1', type: 'project-card', x: 900, y: 900, content: 'Project Card', isSharedComponent: true },
+    { id: 'project-tile-card1', type: 'project-tile-card', x: 900, y: 1020, content: 'Project Tile Card (no border)' },
     { id: 'visits-tabs1', type: 'visits-tabs', x: 300, y: 520, content: 'Visits Tabs' },
-    { id: 'activity-card1', type: 'activity-card', x: 300, y: 600, content: 'Activity Card' }
+    { id: 'activity-card1', type: 'activity-card', x: 300, y: 600, content: 'Activity Card' },
+    { id: 'tracking-case-card1', type: 'tracking-case-card', x: 300, y: 690, content: 'Tracking Case Card' }
   ];
 
   // Visits tab UI (Searches, visited profile, etc.): which option is selected
@@ -1769,12 +1771,66 @@ ${cases}
   }
 
   /**
-   * Extract HTML content for a component from canvas
+   * Extract HTML content for a component from canvas.
+   * When creating a shared component, this HTML is written to the generated .component.html file.
+   * Add entries here for each canvas-only component type so they get real canvas markup, not placeholder.
    */
   private extractComponentHTML(componentId: string): string {
-    const htmlTemplates: Record<string, string> = {};
+    const htmlTemplates: Record<string, string> = {
+      'tracking-case-card': `<div class="flex items-center justify-between gap-4 py-4 border-b border-brandcolor-strokeweak bg-brandcolor-white min-w-[500px]">
+  <!-- Left: badge (bell icon + number, p-[6px], number not semibold) + Case name same line; below: google cases + Last Update; Created by: date only -->
+  <div class="flex items-start gap-3 flex-1 min-w-0">
+    <span class="flex items-center gap-1 shrink-0 p-[6px] rounded-md bg-brandcolor-fill text-brandcolor-textstrong">
+      <span class="material-symbols-outlined" style="font-size: 18px;">notifications</span>
+      <span class="text-sm">1</span>
+    </span>
+    <div class="flex flex-col min-w-0 text-left gap-0.5">
+      <span class="text-brandcolor-textstrong font-semibold text-sm">STATE OF OHIO vs. Danowski, JR, Joseph John</span>
+      <span class="text-sm flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+        <span class="text-brandcolor-secondary font-medium underline">Google cases</span>
+        <span class="text-brandcolor-textstrong font-semibold">Last Update:</span>
+        <span class="text-brandcolor-textstrong">2025/02/18</span>
+      </span>
+      <span class="text-sm"><span class="text-brandcolor-textstrong font-semibold">Created by:</span> <span class="text-brandcolor-textstrong">2025/01/2026</span></span>
+    </div>
+  </div>
+  <!-- Right end: text_snippet icon + View button + Alert button (timer icon) – both secondary-outline -->
+  <div class="flex items-center gap-2 shrink-0 ml-auto">
+    <span class="material-symbols-outlined text-brandcolor-strokestrong" style="font-size: 20px;">text_snippet</span>
+    <button type="button" class="flex items-center gap-2 px-4 py-2 border-[1.5px] border-brandcolor-strokelight text-brandcolor-secondary bg-brandcolor-white hover:bg-brandcolor-neutralhover rounded-md font-medium text-sm">
+      View
+    </button>
+    <button type="button" class="flex items-center gap-2 px-4 py-2 border-[1.5px] border-brandcolor-strokelight text-brandcolor-secondary bg-brandcolor-white hover:bg-brandcolor-neutralhover rounded-md font-medium text-sm">
+      <span class="material-symbols-outlined" style="font-size: 18px;">timer</span>
+      Alert
+    </button>
+  </div>
+</div>`
+    };
 
-    return htmlTemplates[componentId] || `<p>${componentId} works!</p>`;
+    return htmlTemplates[componentId] ?? `<p>${componentId} works!</p>`;
+  }
+
+  /**
+   * Extract TypeScript content for a component from canvas.
+   * When creating a shared component, this TS is written to the generated .component.ts file.
+   * Return undefined to keep the default from ng generate.
+   */
+  private extractComponentTS(componentId: string): string | undefined {
+    const tsTemplates: Record<string, string> = {
+      'tracking-case-card': `import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-tracking-case-card',
+  standalone: true,
+  imports: [],
+  templateUrl: './tracking-case-card.component.html',
+  styleUrl: './tracking-case-card.component.scss'
+})
+export class TrackingCaseCardComponent {
+}`
+    };
+    return tsTemplates[componentId];
   }
 
   /**
@@ -1933,9 +1989,10 @@ export class ${this.toClassName(componentId)} {
       console.log('✓ Shared component marked:', componentId);
       console.log('💡 Component tag:', `<app-${componentId}></app-${componentId}>`);
       
-      // Step 6: Extract HTML and trigger CLI command execution with HTML content
+      // Step 6: Extract HTML and TS from canvas and trigger CLI command so generated files get real code
       const htmlContent = this.extractComponentHTML(componentId);
-      await this.executeCliCommand(componentId, htmlContent);
+      const tsContent = this.extractComponentTS(componentId);
+      await this.executeCliCommand(componentId, htmlContent, tsContent);
 
       // Step 7: Automatically save to project file
       console.log('💾 Auto-saving catalog to project file...');
@@ -2039,13 +2096,18 @@ export class ${this.toClassName(componentId)} {
   }
 
   /**
-   * Execute CLI command to generate Angular component via helper service
+   * Execute CLI command to generate Angular component via helper service.
+   * When htmlContent and/or tsContent are provided, they are written to the generated files
+   * so the new component contains real canvas code instead of placeholder.
    */
-  private async executeCliCommand(componentId: string, htmlContent?: string): Promise<void> {
+  private async executeCliCommand(componentId: string, htmlContent?: string, tsContent?: string): Promise<void> {
     try {
       console.log(`🚀 Calling component helper service for ${componentId}...`);
       if (htmlContent) {
         console.log(`📝 Sending HTML content to be written automatically`);
+      }
+      if (tsContent) {
+        console.log(`📝 Sending TypeScript content to be written automatically`);
       }
       
       // Call the component helper service running on localhost:4202
@@ -2054,7 +2116,7 @@ export class ${this.toClassName(componentId)} {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ componentId, htmlContent })
+        body: JSON.stringify({ componentId, htmlContent, tsContent })
       });
 
       const result = await response.json();

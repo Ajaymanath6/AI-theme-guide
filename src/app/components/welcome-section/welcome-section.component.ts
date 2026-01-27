@@ -25,9 +25,23 @@ export class WelcomeSectionComponent {
 
   getSearchTypeIcon(): string {
     switch (this.searchType) {
-      case 'Filter': return 'tune';
-      case 'Advanced': return 'settings';
-      default: return 'psychology';
+      case 'Natural language': return 'auto_awesome';
+      case 'Filter': return 'search';
+      case 'Advanced': return 'account_tree';
+      default: return 'auto_awesome';
+    }
+  }
+
+  getSearchPlaceholder(): string {
+    switch (this.searchType) {
+      case 'Natural language':
+        return 'Use natural language to find your case. Example: "Cases where John Smith is a defendant in California"';
+      case 'Filter':
+        return 'Add one or more filters to refine your search...';
+      case 'Advanced':
+        return 'Search using UniCourt\'s advanced query language or open the query builder to construct your search...';
+      default:
+        return 'Use natural language to find your case. Example: "Cases where John Smith is a defendant in California"';
     }
   }
 }

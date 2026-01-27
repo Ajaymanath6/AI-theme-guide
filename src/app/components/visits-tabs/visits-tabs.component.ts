@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, input, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+const DEFAULT_TAB_OPTIONS = ['Searches', 'visited profile', 'visited projects', 'saved Search', 'documents', 'order'];
 
 @Component({
   selector: 'app-visits-tabs',
@@ -9,6 +11,17 @@ import { CommonModule } from '@angular/common';
   styleUrl: './visits-tabs.component.scss'
 })
 export class VisitsTabsComponent {
+  /** Tab labels; when provided, overrides default. */
+  tabOptions = input<string[]>(DEFAULT_TAB_OPTIONS);
+
   selectedTab = 'Searches';
-  tabOptions: string[] = ['Searches', 'visited profile', 'visited projects', 'saved Search', 'documents', 'order'];
+
+  constructor() {
+    effect(() => {
+      const opts = this.tabOptions();
+      if (opts?.length && !opts.includes(this.selectedTab)) {
+        this.selectedTab = opts[0];
+      }
+    });
+  }
 }

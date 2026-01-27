@@ -1,4 +1,4 @@
-<!-- Dashboard Page -->
+<!-- Dashboard Page: right side scrollable like dashboard; account header on top, collapses when main scrolls -->
 <div class="h-screen flex flex-col bg-brandcolor-fill">
   <!-- Main Container: Left + Right -->
   <div class="flex flex-1 overflow-hidden">
@@ -14,49 +14,37 @@
       (dropdownOptionSelect)="selectedDropdownOption = $event">
     </app-sidebar>
     
-    <!-- RIGHT PART: Main Content Area (bg matches empty-state area: bg-brandcolor-results-bg) -->
+    <!-- RIGHT PART: Main Content Area (scrollable like dashboard) -->
     <div class="flex-1 flex flex-col overflow-hidden bg-brandcolor-results-bg">
       
-      <!-- TOP: Search Bar Header (Fixed) -->
-      <header class="flex-shrink-0 bg-brandcolor-white overflow-visible relative z-10" #headerElement>
-        <div class="space-y-4 overflow-visible">
-          <!-- Project Header - Collapses on scroll -->
-          <div [class.opacity-0]="isProjectHeaderHidden" [class.max-h-0]="isProjectHeaderHidden" [class.overflow-hidden]="isProjectHeaderHidden" class="transition-all duration-300 ease-in-out">
-            <app-project-header></app-project-header>
-          </div>
-
-          <!-- Banner Info (full width above search) - Hidden on scroll -->
+      <!-- TOP: Account header only (fixed) – collapses when main scrolls -->
+      <header class="flex-shrink-0 bg-brandcolor-white overflow-visible relative z-10">
+        <div class="overflow-visible">
           @if (showBetaBanner) {
             <div [class.opacity-0]="isBannerHidden" [class.max-h-0]="isBannerHidden" [class.overflow-hidden]="isBannerHidden" class="transition-all duration-300 ease-in-out">
               <app-banner-info (cancel)="onBannerDismiss()"></app-banner-info>
             </div>
           }
-
-          <!-- Account Header (full width) - Collapsible on scroll -->
+          <!-- Account Header – collapsible on scroll -->
           <div [class.opacity-0]="isAccountHeaderHidden" [class.max-h-0]="isAccountHeaderHidden" [class.overflow-hidden]="isAccountHeaderHidden" class="transition-all duration-300 ease-in-out">
             <app-account-header></app-account-header>
           </div>
-
-          <!-- Welcome Section (replaces search-section) -->
-          <app-welcome-section></app-welcome-section>
-
-          <!-- Activities (Recent activities + visits-tabs, below welcome-section) -->
-          <app-activities></app-activities>
         </div>
       </header>
 
-      <!-- BOTTOM: Case Results Layout (no side-filter, no empty-state; scrollable) -->
-      <main class="flex-1 overflow-y-auto" #scrollContainer (scroll)="onScroll($event)">
-        <app-case-results-layout
+      <!-- SCROLLABLE: welcome-section, activities, case-results -->
+      <main class="flex-1 overflow-y-auto bg-brandcolor-results-bg" #scrollContainer (scroll)="onScroll($event)">
+        <div class="space-y-4">
+          <app-welcome-section></app-welcome-section>
+          <app-activities></app-activities>
+          <app-case-results-layout
           [searchQuery]="currentSearchQuery"
           [isLoading]="isSearchLoading"
           [showSideFilter]="false"
           [showEmptyState]="false">
-        </app-case-results-layout>
+          </app-case-results-layout>
+        </div>
       </main>
-      
-      <!-- Primary Button Variants Component -->
-      
       
     </div>
     

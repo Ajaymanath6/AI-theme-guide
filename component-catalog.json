@@ -1,7 +1,7 @@
 {
   "catalogId": "design-system-v1",
   "version": "1.0.0",
-  "lastUpdated": "2026-01-27T09:31:57.639Z",
+  "lastUpdated": "2026-01-27T10:50:53.775Z",
   "registeredComponents": {
     "sidebar": {
       "id": "sidebar",
@@ -230,6 +230,42 @@
       "isSharedComponent": true,
       "componentPath": "src/app/components/visits-tabs/visits-tabs.component.ts",
       "componentTag": "<app-visits-tabs></app-visits-tabs>"
+    },
+    "activity-card": {
+      "id": "activity-card",
+      "displayName": "activity-card",
+      "category": "general",
+      "description": "Component: activity-card",
+      "htmlSelector": "[title='activity-card']",
+      "status": "active",
+      "registeredAt": "2026-01-27T10:05:24.491Z",
+      "isSharedComponent": true,
+      "componentPath": "src/app/components/activity-card/activity-card.component.ts",
+      "componentTag": "<app-activity-card></app-activity-card>"
+    },
+    "tracking-case-card": {
+      "id": "tracking-case-card",
+      "displayName": "tracking-case-card",
+      "category": "general",
+      "description": "Component: tracking-case-card",
+      "htmlSelector": "[title='tracking-case-card']",
+      "status": "active",
+      "registeredAt": "2026-01-27T10:40:13.559Z",
+      "isSharedComponent": true,
+      "componentPath": "src/app/components/tracking-case-card/tracking-case-card.component.ts",
+      "componentTag": "<app-tracking-case-card></app-tracking-case-card>"
+    },
+    "project-tile-card": {
+      "id": "project-tile-card",
+      "displayName": "project-tile-card",
+      "category": "general",
+      "description": "Component: project-tile-card",
+      "htmlSelector": "[title='project-tile-card']",
+      "status": "active",
+      "registeredAt": "2026-01-27T10:50:50.759Z",
+      "isSharedComponent": true,
+      "componentPath": "src/app/components/project-tile-card/project-tile-card.component.ts",
+      "componentTag": "<app-project-tile-card></app-project-tile-card>"
     }
   }
 }

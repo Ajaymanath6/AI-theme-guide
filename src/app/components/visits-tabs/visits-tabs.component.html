@@ -1,6 +1,6 @@
 <!-- Visits Tab UI: border strokelight (#C5C5C5), bg neutralhover (#EFEFEF), tab shadow-tab-option -->
-<div title="visits-tabs" class="flex items-center gap-1 rounded-lg border border-brandcolor-strokelight bg-brandcolor-neutralhover p-1">
-  @for (tab of tabOptions; track tab) {
+<div title="visits-tabs" class="flex items-center gap-1 rounded-lg border border-brandcolor-strokelight bg-brandcolor-neutralhover p-1 h-[36px]">
+  @for (tab of tabOptions(); track tab) {
     <button
       type="button"
       (click)="selectedTab = tab"
@@ -9,7 +9,7 @@
       [class.shadow-tab-option]="selectedTab === tab"
       [class.bg-transparent]="selectedTab !== tab"
       [class.text-brandcolor-textstrong]="selectedTab !== tab"
-      class="rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
+      class="rounded-md px-4 h-[28px] flex items-center justify-center text-sm font-medium transition-colors">
       {{ tab }}
     </button>
   }

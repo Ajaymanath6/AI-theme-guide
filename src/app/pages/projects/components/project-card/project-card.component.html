@@ -58,13 +58,15 @@
       </div>
     </div>
   </div>
-  <!-- Card Content - Title and Subtitle (Clickable) -->
-  <a [routerLink]="['/dashboard', projectId()]" class="block cursor-pointer hover:opacity-80 transition-opacity">
-    <h3 class="text-brandcolor-textstrong font-semibold text-lg mb-1">{{ title() }}</h3>
-    <p class="text-brandcolor-textweak text-sm line-clamp-2">{{ subtitle() }}</p>
-  </a>
-  <!-- Created date - bottom right -->
-  <div class="flex justify-end mt-2">
-    <span class="text-brandcolor-textweak text-xs">Created {{ createdDate() }}</span>
+  <!-- Card Content: only the name (title) is clickable, navigates to dashboard2 -->
+  <div class="mb-1">
+    <a [routerLink]="['/dashboard2', projectId()]" class="text-brandcolor-textstrong font-semibold text-lg cursor-pointer hover:opacity-80 transition-opacity">
+      {{ title() }}
+    </a>
+  </div>
+  <p class="text-brandcolor-textweak text-sm line-clamp-2">{{ subtitle() }}</p>
+  <!-- Created date - left side, IBM Plex -->
+  <div class="text-left mt-2">
+    <span class="text-brandcolor-textweak text-xs font-sans">Created {{ createdDate() }}</span>
   </div>
 </div>

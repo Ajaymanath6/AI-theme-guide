@@ -1,1 +1,24 @@
 // Activities page styles (Tailwind used for layout)
+
+// Lean modern scroll for tracking cards (thin, rounded scrollbar)
+.tracking-cards-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #a3a3a3 transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #a3a3a3;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #737373;
+  }
+}

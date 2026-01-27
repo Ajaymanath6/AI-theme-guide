@@ -1,0 +1,26 @@
+<div class="bg-brandcolor-white rounded-lg p-4 w-full">
+  <div class="flex justify-between items-center gap-2">
+    <div class="flex items-center gap-2 shrink-0 rounded-md bg-brandcolor-fill px-2.5 py-1.5">
+      <span class="material-symbols-outlined text-brandcolor-textstrong" style="font-size: 18px;">folder</span>
+      <span class="text-brandcolor-textstrong text-sm font-medium">Projects</span>
+    </div>
+    <div class="flex items-center gap-1 shrink-0">
+      <button type="button" class="flex items-center justify-center w-8 h-8 hover:bg-brandcolor-fill rounded-lg text-brandcolor-strokestrong">
+        <span class="material-symbols-outlined" style="font-size: 20px;">push_pin</span>
+      </button>
+      <button type="button" class="flex items-center justify-center w-8 h-8 hover:bg-brandcolor-fill rounded-lg text-brandcolor-strokestrong">
+        <span class="material-symbols-outlined" style="font-size: 20px;">folder_special</span>
+      </button>
+      <button type="button" class="flex items-center justify-center w-8 h-8 hover:bg-brandcolor-fill rounded-lg text-brandcolor-strokestrong">
+        <span class="material-symbols-outlined" style="font-size: 20px;">more_vert</span>
+      </button>
+    </div>
+  </div>
+  <div class="mt-3 text-left min-w-0">
+    <h3 class="text-brandcolor-textstrong font-semibold truncate" style="font-size: 18px;">{{ projectName() }}</h3>
+    <p class="text-brandcolor-textweak font-normal truncate mt-0.5" style="font-size: 14px;">{{ description() }}</p>
+  </div>
+  <div class="mt-3 text-left">
+    <span class="text-brandcolor-textweak text-xs">Created {{ createdDate() }}</span>
+  </div>
+</div>
